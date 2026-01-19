@@ -12,6 +12,18 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.*
+!/.env.example
+
+# Mobile specific
+mobile/.expo/
+mobile/node_modules/
+
+#- Test coverage
+coverage/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

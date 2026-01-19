@@ -101,18 +101,18 @@ const VisorDeRuta: React.FC<VisorProps> = ({ logs }) => {
   }, [logs]);
 
   return (
-    <div style={{ height: '100%', width: '100%', borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0', zIndex: 0 }}>
+    <div style={{ height: '100%', width: '100%', borderRadius: '12px', overflow: 'hidden', border: '1px solid #30363D', zIndex: 0 }}>
       <MapContainer center={centroMapa} zoom={13} style={{ height: '100%', width: '100%' }}>
         <TileLayer 
             attribution='&copy; OSM'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" 
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
         
         {/* DIBUJO DE LA RUTA */}
         {segmentos.map((seg, i) => (
             <Polyline key={i} positions={seg.positions} pathOptions={{ color: seg.color, weight: 6, opacity: 0.8 }}>
                 <Tooltip sticky>
-                    <div className="text-xs font-bold text-slate-700">
+                    <div className="text-xs font-bold text-on-surface-primary">
                         Velocidad prom: {seg.avgSpeed} km/h
                     </div>
                 </Tooltip>
@@ -121,13 +121,13 @@ const VisorDeRuta: React.FC<VisorProps> = ({ logs }) => {
 
         {/* DIBUJO DE LAS PARADAS */}
         {paradas.map((p, i) => (
-            <CircleMarker key={i} center={[p.lat, p.lng]} radius={10} pathOptions={{ color: '#b91c1c', fillColor: '#fca5a5', fillOpacity: 0.9, weight: 2 }}>
+            <CircleMarker key={i} center={[p.lat, p.lng]} radius={10} pathOptions={{ color: '#ef4444', fillColor: '#fca5a5', fillOpacity: 0.9, weight: 2 }}>
                 <Tooltip direction="top" offset={[0, -10]} opacity={1}>
                     <div className="text-center">
-                        <strong className="block text-red-600 uppercase">🛑 Parada Detectada</strong>
-                        <span className="text-slate-800 font-bold">{p.duration} min</span>
+                        <strong className="block text-red-400 uppercase">🛑 Parada Detectada</strong>
+                        <span className="text-on-surface-primary font-bold">{p.duration} min</span>
                         <br/>
-                        <span className="text-xs text-gray-500">Hora: {p.hora}</span>
+                        <span className="text-xs text-on-surface-secondary">Hora: {p.hora}</span>
                     </div>
                 </Tooltip>
             </CircleMarker>

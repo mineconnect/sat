@@ -16,6 +16,12 @@ export interface UserProfile {
   full_name: string;
 }
 
+export interface Alert {
+  message: string;
+  timestamp: string;
+  severity: 'low' | 'medium' | 'high';
+}
+
 export interface Trip {
   id: string;
   driver_id: string;
@@ -23,18 +29,20 @@ export interface Trip {
   vehicle_id: string;
   status: 'active' | 'delayed' | 'completed' | 'sos';
   last_ping: string; // ISO date
+  created_at: string;
   current_lat: number;
   current_lng: number;
   destination?: string;
   battery_level: number;
   speed_kmh?: number;
+  address?: string;
   // --- CAMPOS ADICIONALES OBSERVADOS EN USO ---
   duration_seconds?: number;
   distance_meters?: number;
   max_speed?: number;
   start_address?: string;
   end_address?: string;
-  alerts?: any[]; // Puede ser un array de objetos de alerta
+  alerts?: Alert[];
 }
 
 export interface TripLog {

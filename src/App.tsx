@@ -38,17 +38,17 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-      <div className="bg-gray-900 border border-gray-700 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl relative h-[640px] flex flex-col font-sans">
+      <div className="bg-surface-primary border border-border-primary w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl relative h-[640px] flex flex-col font-sans">
         {/* Notch */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
         
-        <div className="flex-1 p-6 flex flex-col items-center justify-center text-white relative">
+        <div className="flex-1 p-6 flex flex-col items-center justify-center text-on-surface-primary relative">
           <div className="absolute top-4 right-4 text-xs font-mono text-green-400">5G</div>
           
-          <Globe className="w-16 h-16 text-blue-500 mb-6" />
+          <Globe className="w-16 h-16 text-primary mb-6" />
           <h2 className="text-2xl font-bold mb-2">MineConnect Driver</h2>
-          <p className="text-gray-400 text-sm mb-1">Usuario: {user.email}</p>
-          <p className="text-gray-500 text-xs mb-8">Empresa ID: {user.company_id?.substring(0,8) || 'N/A'}</p>
+          <p className="text-on-surface-secondary text-sm mb-1">Usuario: {user.email}</p>
+          <p className="text-on-surface-secondary text-xs mb-8">Empresa ID: {user.company_id?.substring(0,8) || 'N/A'}</p>
 
           <button
              onClick={toggleTracking}
@@ -62,13 +62,13 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
             </div>
           </button>
 
-          <div className="w-full mt-8 bg-black/60 rounded-lg p-3 h-36 overflow-hidden font-mono text-xs text-green-300 border border-gray-800">
+          <div className="w-full mt-8 bg-black/60 rounded-lg p-3 h-36 overflow-hidden font-mono text-xs text-green-300 border border-border-secondary">
             {logs.map((l, i) => <div key={i} className="whitespace-nowrap">{l}</div>)}
             {logs.length === 0 && <span className="opacity-50">Esperando inicio...</span>}
           </div>
         </div>
 
-        <button onClick={onClose} className="bg-gray-800 text-white py-4 font-bold hover:bg-gray-700 transition-colors">
+        <button onClick={onClose} className="bg-surface-secondary text-on-surface-primary py-4 font-bold hover:bg-border-secondary transition-colors">
           Cerrar Simulación
         </button>
       </div>
@@ -99,23 +99,23 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-brand-gray-50 text-brand-gray-900 font-sans overflow-hidden">
+    <div className="flex h-screen bg-background text-on-surface-primary font-sans overflow-hidden">
       {showSimulator && currentUser && <DriverSimulator onClose={() => setShowSimulator(false)} user={currentUser} />}
 
       {/* Sidebar */}
-      <aside className="w-20 lg:w-64 bg-brand-gray-900 text-white flex flex-col transition-all duration-300 flex-shrink-0 z-50">
-        <div className="p-6 flex items-center gap-3 h-16 border-b border-brand-gray-800">
-          <div className="w-8 h-8 bg-brand-blue rounded-lg flex items-center justify-center flex-shrink-0">
+      <aside className="w-20 lg:w-64 bg-surface-primary text-on-surface-primary flex flex-col transition-all duration-300 flex-shrink-0 z-50">
+        <div className="p-6 flex items-center gap-3 h-16 border-b border-border-primary">
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
             <Globe className="w-5 h-5 text-white" />
           </div>
-          <span className="font-bold text-xl tracking-tight hidden lg:block text-white">MineConnect<span className="text-brand-blue">SAT</span></span>
+          <span className="font-bold text-xl tracking-tight hidden lg:block text-white">MineConnect<span className="text-primary">SAT</span></span>
         </div>
 
         <nav className="flex-1 px-4 space-y-2 mt-4">
           <button
             onClick={() => setView('dashboard')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
-              view === 'dashboard' ? 'bg-brand-blue text-white shadow-lg' : 'text-gray-400 hover:bg-brand-gray-800 hover:text-white'
+              view === 'dashboard' ? 'bg-primary text-white shadow-lg' : 'text-on-surface-secondary hover:bg-surface-secondary hover:text-on-surface-primary'
             }`}
           >
             <LayoutDashboard className="w-5 h-5" />
@@ -125,7 +125,7 @@ const App: React.FC = () => {
           <button
             onClick={() => setView('admin')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
-              view === 'admin' ? 'bg-brand-blue text-white shadow-lg' : 'text-gray-400 hover:bg-brand-gray-800 hover:text-white'
+              view === 'admin' ? 'bg-primary text-white shadow-lg' : 'text-on-surface-secondary hover:bg-surface-secondary hover:text-on-surface-primary'
             }`}
           >
             <Shield className="w-5 h-5" />
@@ -137,7 +137,7 @@ const App: React.FC = () => {
           <button
             onClick={() => setShowTools(!showTools)}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
-              showTools ? 'bg-purple-600 text-white shadow-lg' : 'text-gray-400 hover:bg-brand-gray-800 hover:text-white'
+              showTools ? 'bg-purple-600 text-white shadow-lg' : 'text-on-surface-secondary hover:bg-surface-secondary hover:text-on-surface-primary'
             }`}
           >
             <Settings className="w-5 h-5" />
@@ -146,20 +146,20 @@ const App: React.FC = () => {
 
            <button
             onClick={() => setShowSimulator(true)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all text-green-400 hover:bg-brand-gray-800 hover:text-green-300 mt-4 border border-green-500/30`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all text-green-400 hover:bg-surface-secondary hover:text-green-300 mt-4 border border-green-500/30`}
           >
             <Smartphone className="w-5 h-5" />
             <span className="hidden lg:block">App Conductor</span>
           </button>
         </nav>
 
-        <div className="p-4 border-t border-brand-gray-800">
+        <div className="p-4 border-t border-border-primary">
           <div className="mb-4 px-2 hidden lg:block">
-              <p className="text-xs text-gray-400">Logueado como:</p>
-              <p className="text-sm font-bold text-white truncate">{currentUser?.full_name || currentUser?.email}</p>
-              <p className="text-xs text-brand-blue uppercase mt-1 font-semibold tracking-wider">{currentUser?.role.replace('_', ' ')}</p>
+              <p className="text-xs text-on-surface-secondary">Logueado como:</p>
+              <p className="text-sm font-bold text-on-surface-primary truncate">{currentUser?.full_name || currentUser?.email}</p>
+              <p className="text-xs text-primary uppercase mt-1 font-semibold tracking-wider">{currentUser?.role.replace('_', ' ')}</p>
           </div>
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2 text-gray-400 hover:text-white hover:bg-brand-gray-800 rounded-lg transition-colors">
+          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2 text-on-surface-secondary hover:text-on-surface-primary hover:bg-surface-secondary rounded-lg transition-colors">
             <LogOut className="w-5 h-5" />
             <span className="hidden lg:block font-medium">Cerrar Sesión</span>
           </button>
@@ -169,24 +169,24 @@ const App: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-full overflow-hidden">
         {/* Header */}
-        <header className="h-16 bg-white border-b border-brand-gray-200 flex items-center justify-between px-6 flex-shrink-0">
-          <h1 className="text-2xl font-bold text-brand-gray-900">
+        <header className="h-16 bg-surface-primary border-b border-border-primary flex items-center justify-between px-6 flex-shrink-0">
+          <h1 className="text-2xl font-bold text-on-surface-primary">
             {view === 'dashboard' ? 'Centro de Control Satelital' : (currentUser?.role === 'super_admin' ? 'Super Admin Panel' : 'Gestión de Flota')}
           </h1>
           <div className="flex items-center gap-4">
              {currentUser?.company_id && (
-                 <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-bold">
+                 <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold">
                      ID: {currentUser.company_id}
                  </span>
              )}
-            <div className="w-10 h-10 bg-brand-gray-200 rounded-full border-2 border-white shadow-inner overflow-hidden">
-                <img src={`https://ui-avatars.com/api/?name=${currentUser?.full_name || currentUser?.email}&background=0D8ABC&color=fff&bold=true`} alt="Avatar" />
+            <div className="w-10 h-10 bg-surface-secondary rounded-full border-2 border-border-secondary shadow-inner overflow-hidden">
+                <img src={`https://ui-avatars.com/api/?name=${currentUser?.full_name || currentUser?.email}&background=2F81F7&color=fff&bold=true`} alt="Avatar" />
             </div>
           </div>
         </header>
 
         {/* Dynamic Content */}
-        <div className="flex-1 p-6 overflow-y-auto bg-brand-gray-100">
+        <div className="flex-1 p-6 overflow-y-auto bg-background">
           <div className="flex h-full gap-6">
               <div className={`flex-1 flex flex-col h-full transition-all duration-300`}>
                   <div className="flex-1 h-full overflow-y-auto">
@@ -195,7 +195,7 @@ const App: React.FC = () => {
               </div>
 
               {/* AI Tools Slide-over Panel */}
-              <div className={`fixed top-0 right-0 bottom-0 w-[450px] bg-white shadow-2xl z-[100] transform transition-transform duration-500 ease-in-out ${showTools ? 'translate-x-0' : 'translate-x-full'}`}>
+              <div className={`fixed top-0 right-0 bottom-0 w-[450px] bg-surface-primary shadow-2xl z-[100] transform transition-transform duration-500 ease-in-out ${showTools ? 'translate-x-0' : 'translate-x-full'}`}>
                  <GeminiTools />
               </div>
           </div>
