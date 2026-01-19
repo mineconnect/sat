@@ -7,6 +7,8 @@ const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 if (!apiKey) {
     console.error("FATAL ERROR: VITE_GEMINI_API_KEY is missing in the .env file");
     alert("FATAL ERROR: La configuración de Gemini AI está incompleta. Las funciones de IA no estarán disponibles.");
+} else {
+    console.log("API Key cargada");
 }
 
 const ai = new GoogleGenAI(apiKey || '');
