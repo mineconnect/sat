@@ -4,9 +4,10 @@ import { Globe, Lock, Mail, Shield, ArrowRight, Activity } from 'lucide-react';
 
 interface LoginProps {
   onLoginSuccess: (profile: any) => void;
+  theme: 'dark' | 'light';
 }
 
-const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+const Login: React.FC<LoginProps> = ({ onLoginSuccess, theme }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -40,8 +41,10 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     }
   };
 
+  const bgColor = theme === 'dark' ? 'bg-[#05070a]' : 'bg-[#f8fafc]';
+
   return (
-    <div className="min-h-screen bg-[#05070a] flex items-center justify-center p-6 relative overflow-hidden font-sans">
+    <div className={`min-h-screen ${bgColor} flex items-center justify-center p-6 relative overflow-hidden font-sans`}>
       {/* Luces Ambientales de Fondo */}
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-900/10 blur-[120px] rounded-full"></div>
