@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+:root {
+  --color-background: #f8fafc; /* bg-slate-100 */
+  --color-surface-primary: #ffffff; /* bg-white */
+  --color-surface-secondary: #f1f5f9; /* bg-slate-100 */
+  --color-on-surface-primary: #1e293b; /* text-slate-900 */
+  --color-on-surface-secondary: #475569; /* text-slate-700 */
+  --color-primary: #2563eb; /* blue-600 */
+  --color-primary-hover: #1d4ed8; /* blue-700 */
+  --color-border-primary: #e2e8f0; /* border-slate-200 */
+  --color-border-secondary: #cbd5e1; /* border-slate-300 */
+}
+
+.dark {
+  --color-background: #05070a; /* bg-[#05070a] */
+  --color-surface-primary: #0f172a; /* bg-slate-900 */
+  --color-surface-secondary: #1e293b; /* bg-slate-800 */
+  --color-on-surface-primary: #e2e8f0; /* text-slate-200 */
+  --color-on-surface-secondary: #94a3b8; /* text-slate-400 */
+  --color-primary: #3b82f6; /* blue-500 */
+  --color-primary-hover: #2563eb; /* blue-600 */
+  --color-border-primary: #334155; /* border-slate-700 */
+  --color-border-secondary: #475569; /* border-slate-600 */
+}
+
+.truck-marker-glow {
+  filter: drop-shadow(0 0 8px rgba(0, 191, 255, 0.7)); /* Cyan glow */
+}
