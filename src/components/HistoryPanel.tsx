@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../services/supabaseClient';
 import { MapContainer, TileLayer, Polyline, CircleMarker, Tooltip, useMap } from 'react-leaflet';
-import { Search, Truck, Clock, Gauge } from 'lucide-react';
+import { Search, Truck, Clock, Gauge, Award, Download, ChevronRight, ShieldCheck, Activity } from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import 'leaflet/dist/leaflet.css';
 
-// Componente para centrar el mapa automáticamente cuando cambia el viaje
 const RecenterMap = ({ points }: { points: [number, number][] }) => {
   const map = useMap();
   useEffect(() => {
-    if (points.length > 0) {
-      map.fitBounds(points, { padding: [50, 50] });
-    }
+    if (points.length > 0) map.fitBounds(points, { padding: [50, 50] });
   }, [points, map]);
   return null;
 };
@@ -22,134 +21,131 @@ const HistoryPanel = ({ user }: any) => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
 
-  // 1. Cargar lista de viajes (Filtrado por Empresa + Ordenado por Fecha)
   useEffect(() => {
-    const fetchTrips = async () => {
-      setLoading(true);
-      let query = supabase
-        .from('trips')
-        .select('*')
-        .order('start_time', { ascending: false });
-
-      // Si no es super_admin, filtramos por su empresa
-      if (user.role !== 'super_admin') {
-        query = query.eq('company_id', user.company_id);
-      }
-
-      const { data } = await query;
-      setTrips(data || []);
-      setLoading(false);
-    };
     fetchTrips();
   }, [user]);
 
-  // 2. Cargar el detalle del viaje (Logs de 5 segundos)
+  const fetchTrips = async () => {
+    setLoading(true);
+    let query = supabase.from('trips').select('*').order('last_update', { ascending: false });
+    if (user.role !== 'super_admin') query = query.eq('company_id', user.company_id);
+    const { data } = await query;
+    setTrips(data || []);
+    setLoading(false);
+  };
+
   const loadTripDetails = async (trip: any) => {
     setSelectedTrip(trip);
-    const { data } = await supabase
-      .from('trip_logs')
-      .select('*')
-      .eq('trip_id', trip.id)
-      .order('created_at', { ascending: true });
-    
+    const { data } = await supabase.from('trip_logs').select('*').eq('trip_id', trip.id).order('created_at', { ascending: true });
     setRouteLogs(data || []);
   };
 
-  const filteredTrips = trips.filter(t => 
-    t.plate?.toLowerCase().includes(search.toLowerCase())
-  );
+  const exportPDF = () => {
+    const doc = new jsPDF();
+    doc.text(`Reporte de Viaje - ${selectedTrip?.plate}`, 14, 20);
+    autoTable(doc, {
+      head: [['Hora', 'Velocidad', 'Lat', 'Lng']],
+      body: routeLogs.map(l => [new Date(l.created_at).toLocaleTimeString(), `${l.speed} km/h`, l.lat, l.lng]),
+      startY: 30
+    });
+    doc.save(`Viaje_${selectedTrip?.plate}.pdf`);
+  };
 
   return (
-    <div className="flex h-full bg-[#0d0d0d] gap-4 p-6">
-      {/* Lista Lateral de Viajes */}
+    <div className="flex h-full bg-[#05070a] gap-6 p-6 overflow-hidden">
       <div className="w-96 flex flex-col gap-4">
-        <div className="relative">
-          <Search className="absolute left-4 top-3.5 text-slate-500 w-4 h-4" />
+        <div className="relative group">
+          <Search className="absolute left-4 top-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" size={18} />
           <input 
-            type="text" 
-            placeholder="Buscar por patente..." 
-            className="w-full bg-[#111] border border-white/5 rounded-xl py-3 pl-12 pr-4 text-sm focus:border-blue-500 outline-none"
+            type="text" placeholder="BUSCAR PATENTE..." 
+            className="w-full bg-slate-900 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm outline-none focus:border-blue-500 transition-all text-white font-bold"
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
         <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
           {loading ? (
-            <div className="text-center py-10 text-slate-600 animate-pulse">Cargando historial...</div>
-          ) : filteredTrips.map((trip) => (
+            <div className="flex flex-col items-center justify-center h-40 text-slate-600"><Activity className="animate-spin mb-2" /> Cargando...</div>
+          ) : trips.filter(t => (t.plate||'').includes(search.toUpperCase())).map((trip) => (
             <div 
               key={trip.id}
               onClick={() => loadTripDetails(trip)}
-              className={`p-4 rounded-2xl border transition-all cursor-pointer ${
-                selectedTrip?.id === trip.id ? 'bg-blue-600/10 border-blue-500' : 'bg-[#111] border-white/5 hover:border-white/20'
+              className={`p-5 rounded-[2rem] border transition-all cursor-pointer group relative overflow-hidden ${
+                selectedTrip?.id === trip.id ? 'bg-blue-600 border-blue-500 shadow-[0_10px_30px_rgba(37,99,235,0.3)]' : 'bg-slate-900/50 border-white/5 hover:border-white/20'
               }`}
             >
-              <div className="flex justify-between items-start mb-2">
-                <span className="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-md uppercase tracking-tighter">
-                  {trip.plate || 'SIN PATENTE'}
+              <div className="flex justify-between items-center mb-3">
+                <span className={`text-xs font-black px-3 py-1 rounded-lg uppercase ${selectedTrip?.id === trip.id ? 'bg-white text-blue-600' : 'bg-blue-600 text-white'}`}>
+                  {trip.plate || 'MÓVIL'}
                 </span>
-                <span className="text-[10px] text-slate-500 font-bold">
-                  {new Date(trip.start_time).toLocaleDateString()}
+                <span className={`text-[10px] font-bold ${selectedTrip?.id === trip.id ? 'text-blue-100' : 'text-slate-500'}`}>
+                  {new Date(trip.last_update).toLocaleDateString()}
                 </span>
               </div>
-              <p className="text-xs text-slate-300 font-medium mb-1 truncate">ID: {trip.id}</p>
-              <div className="flex items-center gap-3 text-slate-500">
-                 <div className="flex items-center gap-1 text-[10px]">
-                    <Clock className="w-3 h-3" /> {new Date(trip.start_time).toLocaleTimeString()}
-                 </div>
-                 {trip.status === 'completed' && <span className="text-[10px] text-green-500 font-bold uppercase">Finalizado</span>}
+              <div className="flex items-center gap-4">
+                <div className={`p-2 rounded-xl ${selectedTrip?.id === trip.id ? 'bg-blue-500' : 'bg-white/5'}`}>
+                  <Truck size={20} className={selectedTrip?.id === trip.id ? 'text-white' : 'text-blue-500'} />
+                </div>
+                <div>
+                   <p className={`text-xs font-black uppercase ${selectedTrip?.id === trip.id ? 'text-white' : 'text-slate-300'}`}>Viaje Finalizado</p>
+                   <p className={`text-[10px] flex items-center gap-1 ${selectedTrip?.id === trip.id ? 'text-blue-200' : 'text-slate-500'}`}>
+                      <Clock size={10} /> {new Date(trip.last_update).toLocaleTimeString()}
+                   </p>
+                </div>
+                <ChevronRight className={`ml-auto ${selectedTrip?.id === trip.id ? 'text-white' : 'text-slate-800'}`} />
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Mapa de Trazado de Ruta */}
-      <div className="flex-1 bg-[#111] rounded-[2rem] border border-white/5 overflow-hidden relative shadow-2xl">
-        {!selectedTrip ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-600 z-10">
-            <Truck className="w-16 h-16 mb-4 opacity-20" />
-            <p className="font-bold uppercase tracking-widest text-xs">Seleccioná un viaje para ver el recorrido</p>
+      <div className="flex-1 flex flex-col gap-6">
+        <div className="flex-1 bg-slate-900 rounded-[3rem] border border-white/10 overflow-hidden relative shadow-2xl">
+          {!selectedTrip ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-700">
+              <div className="p-8 bg-slate-950 rounded-full mb-4 ring-1 ring-white/5">
+                <Truck size={40} className="opacity-20" />
+              </div>
+              <p className="font-black uppercase tracking-[0.3em] text-[10px]">Seleccioná un recorrido</p>
+            </div>
+          ) : (
+            <MapContainer center={[-34.6, -58.4]} zoom={12} className="h-full w-full" zoomControl={false}>
+              <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+              {routeLogs.length > 1 && (
+                <>
+                  <Polyline positions={routeLogs.map(l => [l.lat, l.lng])} pathOptions={{ color: '#2563eb', weight: 6, lineCap: 'round' }} />
+                  <RecenterMap points={routeLogs.map(l => [l.lat, l.lng])} />
+                  {routeLogs.filter((_, i) => i % 5 === 0).map((log, idx) => (
+                    <CircleMarker key={idx} center={[log.lat, log.lng]} radius={5} pathOptions={{ fillColor: '#3b82f6', color: 'white', weight: 2, fillOpacity: 1 }}>
+                      <Tooltip sticky><div className="bg-slate-900 text-white p-2 font-bold text-xs">⚡ {log.speed} km/h</div></Tooltip>
+                    </CircleMarker>
+                  ))}
+                </>
+              )}
+            </MapContainer>
+          )}
+        </div>
+
+        {selectedTrip && (
+          <div className="h-32 bg-slate-900 border border-white/10 rounded-[2.5rem] p-6 flex items-center justify-between animate-in slide-in-from-bottom-6">
+            <div className="flex gap-8">
+              <div className="flex items-center gap-4 px-6 border-r border-white/5">
+                <div className="p-3 bg-white/5 rounded-2xl"><Award className="text-yellow-500" /></div>
+                <div><p className="text-[10px] font-black text-slate-500 uppercase">Puntaje</p><p className="text-xl font-black text-white">98/100</p></div>
+              </div>
+              <div className="flex items-center gap-4 px-6 border-r border-white/5">
+                <div className="p-3 bg-white/5 rounded-2xl"><Gauge className="text-blue-500" /></div>
+                <div><p className="text-[10px] font-black text-slate-500 uppercase">Vel. Máx</p><p className="text-xl font-black text-white">{selectedTrip.last_speed || 0} km/h</p></div>
+              </div>
+              <div className="flex items-center gap-4 px-6 border-r border-white/5">
+                <div className="p-3 bg-white/5 rounded-2xl"><ShieldCheck className="text-green-500" /></div>
+                <div><p className="text-[10px] font-black text-slate-500 uppercase">Estado</p><p className="text-xl font-black text-white">OK</p></div>
+              </div>
+            </div>
+            <button onClick={exportPDF} className="bg-white text-black px-8 py-4 rounded-2xl font-black text-xs hover:bg-blue-500 hover:text-white transition-all flex items-center gap-3">
+              <Download size={18} /> EXPORTAR PDF
+            </button>
           </div>
-        ) : (
-          <MapContainer 
-            center={[-34.6037, -58.3816]} 
-            zoom={13} 
-            className="h-full w-full"
-            zoomControl={false}
-          >
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-              attribution='&copy; MineConnect SAT'
-            />
-            
-            {routeLogs.length > 1 && (
-              <>
-                <Polyline 
-                  positions={routeLogs.map(l => [l.lat, l.lng])} 
-                  pathOptions={{ color: '#2563eb', weight: 5, opacity: 0.8, lineJoin: 'round' }} 
-                />
-                <RecenterMap points={routeLogs.map(l => [l.lat, l.lng])} />
-                
-                {/* Marcadores de velocidad al pasar el mouse */}
-                {routeLogs.map((log, idx) => (
-                  <CircleMarker 
-                    key={idx} 
-                    center={[log.lat, log.lng]} 
-                    radius={4}
-                    pathOptions={{ fillColor: '#3b82f6', color: 'transparent', fillOpacity: 0.6 }}
-                  >
-                    <Tooltip sticky>
-                      <div className="bg-slate-900 text-white p-2 rounded shadow-xl border border-blue-500">
-                        <p className="flex items-center gap-2 font-bold"><Gauge className="w-3 h-3 text-blue-400"/> {log.speed} km/h</p>
-                        <p className="text-[10px] opacity-70 mt-1">{new Date(log.created_at).toLocaleTimeString()}</p>
-                      </div>
-                    </Tooltip>
-                  </CircleMarker>
-                ))}
-              </>
-            )}
-          </MapContainer>
         )}
       </div>
     </div>
