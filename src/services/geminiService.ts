@@ -2,7 +2,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { ImageSize } from "../types";
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const apiKey = "AIzaSyDSEzifQdcZ4mReF5Imk1XW0l8g0uxIGEU";
 
 if (!apiKey) {
     console.error("FATAL ERROR: VITE_GEMINI_API_KEY is missing in the .env file");
@@ -11,7 +11,7 @@ if (!apiKey) {
     console.log("API Key cargada");
 }
 
-const ai = new GoogleGenAI(apiKey || '');
+const ai = new GoogleGenAI({ apiKey: apiKey || '' });
 
 // Helper to encode file to base64
 export const fileToGenerativePart = async (file: File): Promise<{ inlineData: { data: string; mimeType: string } }> => {
