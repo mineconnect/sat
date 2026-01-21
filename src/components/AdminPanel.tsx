@@ -24,25 +24,22 @@ const AdminPanel = ({ currentUser, theme }: { currentUser: any, theme: 'dark' | 
     setLoading(false);
   };
 
-  const bgColor = theme === 'dark' ? 'bg-transparent' : 'bg-transparent';
-  const textColor = theme === 'dark' ? 'text-slate-300' : 'text-slate-800';
-  const cardBg = theme === 'dark' ? 'bg-slate-900/40' : 'bg-slate-100/80';
-  const borderColor = theme === 'dark' ? 'border-white/10' : 'border-slate-200';
+
 
   return (
-    <div className={`h-full p-8 overflow-y-auto custom-scrollbar ${bgColor} ${textColor}`}>
+    <div className={`h-full p-8 overflow-y-auto custom-scrollbar bg-background text-on-surface-primary`}>
       {/* Header del Panel */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
         <div>
-          <h2 className={`text-4xl font-black tracking-tighter uppercase ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Administración</h2>
-          <p className="text-blue-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-2 flex items-center gap-2">
+          <h2 className={`text-4xl font-black tracking-tighter uppercase text-on-surface-primary`}>Administración</h2>
+          <p className="text-primary font-bold text-[10px] uppercase tracking-[0.3em] mt-2 flex items-center gap-2">
             <Zap className="w-3 h-3 fill-current" /> 
             {role === 'super_admin' ? 'Control Maestro Global' : `Gestión Corporativa`}
           </p>
         </div>
 
         {/* Tabs */}
-        <div className={`flex p-1.5 rounded-2xl border ${borderColor} ${theme === 'dark' ? 'bg-slate-800/20' : 'bg-slate-200/50'} backdrop-blur-md`}>
+        <div className={`flex p-1.5 rounded-2xl border border-border-primary bg-surface-secondary/20 backdrop-blur-md`}>
           <TabBtn theme={theme} active={activeTab === 'overview'} onClick={() => setActiveTab('overview')} icon={<BarChart3 size={14}/>} label="Resumen" />
           {role === 'super_admin' && (
             <TabBtn theme={theme} active={activeTab === 'companies'} onClick={() => setActiveTab('companies')} icon={<Building2 size={14}/>} label="Empresas" />
@@ -61,15 +58,15 @@ const AdminPanel = ({ currentUser, theme }: { currentUser: any, theme: 'dark' | 
               <StatCard theme={theme} label="Estado del Servidor" value="ONLINE" icon={<ShieldCheck />} />
             </div>
             
-            <div className={`${cardBg} border ${borderColor} rounded-[2.5rem] p-8 backdrop-blur-xl`}>
-              <h3 className={`text-xl font-black ${theme === 'dark' ? 'text-white' : 'text-slate-800'} mb-6 flex items-center gap-3`}>
-                <Activity className="text-blue-500" /> ACTIVIDAD DEL SISTEMA
+            <div className={`bg-surface-primary border border-border-primary rounded-[2.5rem] p-8 backdrop-blur-xl`}>
+              <h3 className={`text-xl font-black text-on-surface-primary mb-6 flex items-center gap-3`}>
+                <Activity className="text-primary" /> ACTIVIDAD DEL SISTEMA
               </h3>
               <div className="space-y-4">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className={`flex items-center justify-between py-4 border-b ${borderColor} group ${theme === 'dark' ? 'hover:bg-white/[0.02]' : 'hover:bg-black/[0.02]'} transition-all px-4 rounded-xl`}>
-                    <span className={`${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'} text-sm`}>Sincronización de flota para <b className={`${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Transporte Andino</b></span>
-                    <span className="text-[10px] font-mono text-blue-500/50 uppercase font-bold">Hace {i * 5} min</span>
+                  <div key={i} className={`flex items-center justify-between py-4 border-b border-border-primary group hover:bg-surface-secondary/50 transition-all px-4 rounded-xl`}>
+                    <span className={`text-on-surface-secondary text-sm`}>Sincronización de flota para <b className={`text-on-surface-primary`}>Transporte Andino</b></span>
+                    <span className="text-[10px] font-mono text-primary/50 uppercase font-bold">Hace {i * 5} min</span>
                   </div>
                 ))}
               </div>
@@ -78,28 +75,28 @@ const AdminPanel = ({ currentUser, theme }: { currentUser: any, theme: 'dark' | 
         )}
 
         {activeTab === 'companies' && role === 'super_admin' && (
-          <div className={`${cardBg} border ${borderColor} rounded-[2.5rem] overflow-hidden backdrop-blur-xl`}>
-            <div className={`p-8 border-b ${borderColor} flex justify-between items-center ${theme === 'dark' ? 'bg-white/[0.02]' : 'bg-black/[0.01]'}`}>
-              <h3 className={`font-black ${theme === 'dark' ? 'text-white' : 'text-slate-800'} uppercase tracking-tight`}>Directorio de Empresas</h3>
-              <button className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2">
+          <div className={`bg-surface-primary border border-border-primary rounded-[2.5rem] overflow-hidden backdrop-blur-xl`}>
+            <div className={`p-8 border-b border-border-primary flex justify-between items-center bg-surface-secondary/20`}>
+              <h3 className={`font-black text-on-surface-primary uppercase tracking-tight`}>Directorio de Empresas</h3>
+              <button className="bg-primary hover:bg-primary-hover text-on-surface-primary px-5 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2">
                 <Plus size={16} /> NUEVA EMPRESA
               </button>
             </div>
             <table className="w-full text-left">
-              <thead className={`text-[10px] ${theme === 'dark' ? 'text-slate-500 bg-black/20' : 'text-slate-600 bg-black/5'} uppercase font-black tracking-[0.2em]`}>
+              <thead className={`text-[10px] text-on-surface-secondary bg-surface-secondary/20 uppercase font-black tracking-[0.2em]`}>
                 <tr>
                   <th className="px-8 py-5">Nombre Corporativo</th>
                   <th className="px-8 py-5">Plan</th>
                   <th className="px-8 py-5">Estado</th>
                 </tr>
               </thead>
-              <tbody className={`divide-y ${theme === 'dark' ? 'divide-white/5' : 'divide-slate-200'}`}>
+              <tbody className={`divide-y divide-border-primary`}>
                 {loading ? (
-                  <tr><td colSpan={3} className="p-20 text-center"><Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto" /></td></tr>
+                  <tr><td colSpan={3} className="p-20 text-center"><Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" /></td></tr>
                 ) : companies.map(c => (
-                  <tr key={c.id} className={`${theme === 'dark' ? 'hover:bg-white/[0.02]' : 'hover:bg-black/[0.02]'} transition-colors`}>
-                    <td className={`px-8 py-6 font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} uppercase tracking-tight`}>{c.name}</td>
-                    <td className="px-8 py-6"><span className="text-blue-500 dark:text-blue-400 text-xs font-mono">{c.plan || 'PRO'}</span></td>
+                  <tr key={c.id} className={`hover:bg-surface-secondary/50 transition-colors`}>
+                    <td className={`px-8 py-6 font-bold text-on-surface-primary uppercase tracking-tight`}>{c.name}</td>
+                    <td className="px-8 py-6"><span className="text-primary dark:text-primary-hover text-xs font-mono">{c.plan || 'PRO'}</span></td>
                     <td className="px-8 py-6"><span className="bg-green-500/10 text-green-500 px-3 py-1 rounded-full text-[10px] font-black border border-green-500/20">ACTIVO</span></td>
                   </tr>
                 ))}
@@ -109,10 +106,10 @@ const AdminPanel = ({ currentUser, theme }: { currentUser: any, theme: 'dark' | 
         )}
 
         {activeTab === 'users' && (
-          <div className={`flex flex-col items-center justify-center p-20 ${cardBg} border ${borderColor} rounded-[3rem]`}>
-            <Users className={`w-16 h-16 ${theme === 'dark' ? 'text-slate-800' : 'text-slate-400'} mb-4`} />
-            <h3 className={`text-xl font-black ${theme === 'dark' ? 'text-white' : 'text-slate-800'} mb-2`}>GESTIÓN DE USUARIOS</h3>
-            <p className={`${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'} text-sm`}>Este módulo está en desarrollo.</p>
+          <div className={`flex flex-col items-center justify-center p-20 bg-surface-primary border border-border-primary rounded-[3rem]`}>
+            <Users className={`w-16 h-16 text-on-surface-secondary opacity-40 mb-4`} />
+            <h3 className={`text-xl font-black text-on-surface-primary mb-2`}>GESTIÓN DE USUARIOS</h3>
+            <p className={`text-on-surface-secondary text-sm`}>Este módulo está en desarrollo.</p>
           </div>
         )}
       </div>
@@ -125,8 +122,8 @@ const TabBtn = ({ theme, active, onClick, icon, label }: any) => (
     onClick={onClick}
     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${
       active 
-        ? 'bg-blue-600 text-white shadow-[0_10px_20px_rgba(37,99,235,0.3)]' 
-        : `${theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-black'}`
+        ? 'bg-primary text-on-surface-primary shadow-lg shadow-primary/30' 
+        : `text-on-surface-secondary hover:text-on-surface-primary`
     }`}
   >
     {icon} {label}
@@ -134,12 +131,12 @@ const TabBtn = ({ theme, active, onClick, icon, label }: any) => (
 );
 
 const StatCard = ({ theme, label, value, icon }: any) => (
-  <div className={`${theme === 'dark' ? 'bg-slate-900/60' : 'bg-white/60'} border ${theme === 'dark' ? 'border-white/5 hover:border-blue-500/30' : 'border-slate-200/80 hover:border-blue-500/50'} p-8 rounded-[2.5rem] relative overflow-hidden group transition-all`}>
+  <div className={`bg-surface-secondary/50 border border-border-primary p-8 rounded-[2.5rem] relative overflow-hidden group transition-all hover:border-primary/50`}>
     <div className="flex items-center gap-4 mb-4">
-      <div className={`p-3 ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} rounded-2xl text-blue-500`}>{icon}</div>
-      <p className={`text-[10px] font-black ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'} uppercase tracking-widest`}>{label}</p>
+      <div className={`p-3 bg-surface-secondary/20 rounded-2xl text-blue-500`}>{icon}</div>
+      <p className={`text-[10px] font-black text-on-surface-secondary uppercase tracking-widest`}>{label}</p>
     </div>
-    <p className={`text-4xl font-black ${theme === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tighter`}>{value}</p>
+    <p className={`text-4xl font-black text-on-surface-primary tracking-tighter`}>{value}</p>
   </div>
 );
 

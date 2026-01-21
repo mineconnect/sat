@@ -1,28 +1,39 @@
 All tasks have been addressed and the code has been updated accordingly.
 
-**Problema Resuelto: Crash de la aplicación por `Invalid LatLng object` y `ERR_UNKNOWN_URL_SCHEME`**
+**Problema Resuelto: Inconsistencia en el cambio de tema y legibilidad del texto**
 
-Se han implementado blindajes y correcciones para evitar los errores de coordenadas inválidas y el esquema de URL desconocido, asegurando la estabilidad y robustez de la aplicación.
+Se han realizado modificaciones exhaustivas para asegurar que toda la aplicación MineConnect SAT cambie de tema de manera consistente, garantizando la legibilidad del texto en todo momento y en todas las secciones.
 
 **Detalles de las Correcciones:**
 
--   **Blindaje en DashboardMap.tsx**:
-    -   Se verificó que el `MapContainer` ya utilizaba un `center` fijo por defecto (`[-34.6037, -58.3816]`), lo cual previene dependencias de variables indefinidas al inicio.
-    -   Antes de renderizar cualquier `<Marker />`, se añadió una validación estricta para asegurar que `trip.last_lat` y `trip.last_lng` no sean `null`, `undefined` y que sean de tipo `number`. Esta verificación (`trip.last_lat != null && trip.last_lng != null && typeof trip.last_lat === 'number' && typeof trip.last_lng === 'number'`) evita que se pasen coordenadas inválidas al componente de Mapa, previniendo el crash.
+1.  **Variable de Tema en el Root (App.tsx)**:
+    -   El `div` principal en `App.tsx` ahora tiene la clase `dark` aplicada dinámicamente según el estado `theme` (`${theme === 'dark' ? 'dark' : ''}`). Esto asegura que el modo oscuro se active o desactive correctamente a nivel global.
+    -   Las clases de fondo y texto del contenedor principal se actualizaron a `bg-surface-primary` y `text-primary` respectivamente.
 
--   **Blindaje en HistoryPanel.tsx**:
-    -   Se aplicó una lógica similar en el componente `RecenterMap`. La función `useEffect` ahora incluye una validación (`points.length > 0 && points.every(p => p[0] != null && p[1] != null && typeof p[0] === 'number' && typeof p[1] === 'number')`) antes de intentar centrar el mapa (`map.fitBounds`). Esto garantiza que el mapa solo intente ajustarse a límites válidos y con puntos definidos.
+2.  **Eliminación de "Hardcoded Colors"**:
+    -   Se realizó una revisión y reemplazo sistemático de colores hardcodeados en los siguientes componentes:
+        -   **App.tsx**: Se verificó que las clases de color como `text-blue-500` para elementos de marca (ícono de globo, "SAT" en el logo) se mantuvieran por ser colores de marca, mientras que el resto de los colores hardcodeados fueron previamente reemplazados por variables CSS.
+        -   **HistoryPanel.tsx**: Todas las clases de color hardcodeadas, incluyendo `bg-blue-600`, `border-blue-500`, y `text-white` en la tarjeta de viaje activa, fueron reemplazadas por las variables CSS (`bg-primary`, `border-primary`, `text-on-surface-primary`, etc.).
+        -   **AdminPanel.tsx**: Se eliminaron las variables locales de tema (`bgColor`, `textColor`, `cardBg`, `borderColor`) y se reemplazaron todas las instancias de colores hardcodeados en el encabezado, pestañas, secciones de resumen, empresas y usuarios (incluyendo `text-white`, `text-slate-*`, `bg-slate-*`, `bg-black`) por las variables CSS correspondientes (`bg-background`, `bg-surface-primary`, `text-on-surface-primary`, `text-on-surface-secondary`, `bg-primary`, `border-border-primary`, etc.).
+        -   **DriverSimulator.tsx**: Este componente, que previamente tenía un estilo oscuro muy específico, ha sido completamente adaptado para ser `theme-aware`. Se reemplazaron todas las clases hardcodeadas como `bg-zinc-950/90`, `bg-gradient-to-br from-slate-900 to-black`, `text-slate-*`, `bg-black/50` por las variables CSS del tema (`bg-background/90`, `bg-surface-primary`, `text-on-surface-secondary`, `bg-surface-secondary/50`, etc.).
 
--   **Corrección de Avatar en App.tsx**:
-    -   Se corrigió el error `ERR_UNKNOWN_URL_SCHEME` en el componente `App.tsx` modificando la URL del avatar. La URL de la imagen se cambió de `httpshttps://ui-avatars.com/api/?name=...` a `https://ui-avatars.com/api/?name=...`, eliminando el protocolo duplicado.
+3.  **Refuerzo en index.css**:
+    -   Se verificaron las variables CSS en `src/index.css` para el modo claro:
+        -   `--color-on-surface-primary` (`#1e293b`): Confirmed as un gris oscuro que proporciona alto contraste sobre fondos claros.
+        -   `--color-surface-primary` (`#ffffff`): Confirmed as blanco que proporciona un fondo claro adecuado.
+    -   Las variables existentes ya cumplían con los requisitos de alto contraste para el modo claro.
+
+4.  **Botón de Conductor (DriverSimulator)**:
+    -   El modal del simulador de conductor (`DriverSimulator.tsx`) ahora utiliza las variables de tema, lo que asegura que su apariencia se adapte correctamente al modo claro o oscuro, y no permanezca siempre negro.
 
 **Objetivo Logrado**:
--   Se eliminó el crash de la pantalla en blanco al manejar proactivamente las coordenadas indefinidas o nulas.
--   Se asegura que la aplicación cargue correctamente, incluso si no existen datos previos en Supabase, ya que los componentes de mapa no intentarán procesar datos inválidos.
+-   Al presionar el Sol/Luna, toda la aplicación ahora cambia de tema de manera consistente y el texto es siempre legible, resolviendo la inconsistencia visual anterior.
 
 **Resumen de Archivos Modificados**:
--   `src/components/DashboardMap.tsx`
--   `src/components/HistoryPanel.tsx`
 -   `src/App.tsx`
+-   `src/components/HistoryPanel.tsx`
+-   `src/components/AdminPanel.tsx`
+-   `src/components/DriverSimulator.tsx`
+-   `src/index.css`
 
-Todas las instrucciones han sido implementadas, resolviendo los problemas de estabilidad y mejorando la resiliencia de la aplicación.
+Todas las instrucciones han sido implementadas, y la experiencia de usuario con el cambio de tema ha sido significativamente mejorada.

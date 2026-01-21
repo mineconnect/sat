@@ -78,27 +78,27 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
   }, [isTracking, currentTripId, plate, user.company_id, speed]);
 
   return (
-    <div className="fixed inset-0 bg-zinc-950/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div className="bg-gradient-to-br from-slate-900 to-black border border-blue-500/50 w-full max-w-md rounded-xl shadow-2xl shadow-blue-500/20 flex flex-col max-h-[90vh] relative overflow-hidden">
-        <button onClick={onClose} className="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors z-10">
+    <div className="fixed inset-0 bg-background/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+      <div className="bg-surface-primary border border-border-primary w-full max-w-md rounded-xl shadow-2xl shadow-primary/20 flex flex-col max-h-[90vh] relative overflow-hidden">
+        <button onClick={onClose} className="absolute top-4 right-4 text-on-surface-secondary hover:text-on-surface-primary transition-colors z-10">
           <X size={24} />
         </button>
         <div className="flex-shrink-0 p-6 pt-8 text-center">
-            <Smartphone className="w-10 h-10 text-blue-400 mb-2 mx-auto" />
-            <h2 className="text-lg font-bold text-white uppercase">Terminal de Conductor</h2>
+            <Smartphone className="w-10 h-10 text-primary mb-2 mx-auto" />
+            <h2 className="text-lg font-bold text-on-surface-primary uppercase">Terminal de Conductor</h2>
         </div>
 
         <div className="flex-grow p-6 flex flex-col items-center overflow-y-auto custom-scrollbar">
           <input 
             type="text" value={plate} onChange={handlePlateChange} disabled={isTracking} placeholder="PATENTE"
-            className="w-full bg-black/50 border-2 border-blue-600/50 rounded-lg py-3 text-center text-xl font-mono font-bold text-blue-300 mb-6 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-all"
+            className="w-full bg-surface-secondary/50 border-2 border-border-primary rounded-lg py-3 text-center text-xl font-mono font-bold text-on-surface-primary mb-6 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
           />
           <button onClick={toggleTracking} className={`w-48 h-48 rounded-full border-4 flex flex-col items-center justify-center text-2xl font-black transition-all transform hover:scale-105 active:scale-95 ${isTracking ? 'border-red-600 bg-red-800/30 text-red-400 shadow-lg shadow-red-500/20' : 'border-green-600 bg-green-800/30 text-green-400 shadow-lg shadow-green-500/20'}`}>
             <span>{isTracking ? 'DETENER' : 'INICIAR'}</span>
             <span className="text-lg font-bold">VIAJE</span>
           </button>
-          <div className="w-full mt-6 bg-black/40 rounded-xl p-3 text-xs font-mono text-slate-400 border border-blue-500/10 h-40 overflow-y-auto">
-            {logs.map((l, i) => <div key={i} className="border-b border-white/5 py-1 animate-in fade-in">{l}</div>)}
+          <div className="w-full mt-6 bg-surface-secondary/40 rounded-xl p-3 text-xs font-mono text-on-surface-secondary border border-border-primary h-40 overflow-y-auto">
+            {logs.map((l, i) => <div key={i} className="border-b border-border-primary py-1 animate-in fade-in">{l}</div>)}
           </div>
         </div>
       </div>

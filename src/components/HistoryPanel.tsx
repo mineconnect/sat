@@ -146,7 +146,7 @@ const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) =
               onClick={() => loadTripDetails(trip)}
               className={`p-5 rounded-[1.25rem] border transition-all cursor-pointer group relative overflow-hidden ${
                 selectedTrip?.id === trip.id 
-                ? 'bg-blue-600 border-blue-500 shadow-[0_10px_30px_rgba(37,99,235,0.3)] text-white' 
+                ? 'bg-primary border-primary shadow-lg shadow-primary/30 text-on-surface-primary' 
                 : `bg-surface-primary border border-border-primary hover:border-border-secondary`
               }`}
             >

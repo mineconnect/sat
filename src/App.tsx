@@ -92,7 +92,7 @@ const App: React.FC = () => {
   if (!isAuthenticated || !currentUser) return <Login onLoginSuccess={handleLoginSuccess} theme={theme} />;
 
   return (
-    <div className={`flex h-screen font-sans overflow-hidden dark bg-background text-on-surface-secondary`}>
+    <div className={`flex h-screen font-sans overflow-hidden ${theme === 'dark' ? 'dark' : ''} bg-surface-primary text-primary`}>
       {showSimulator && <DriverSimulator onClose={() => setShowSimulator(false)} user={currentUser} />}
       
       <aside className={`w-20 lg:w-72 flex flex-col z-50 transition-colors duration-300 bg-background border-r border-border-primary`}>
