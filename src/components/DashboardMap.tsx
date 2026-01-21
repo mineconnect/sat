@@ -4,6 +4,17 @@ import L from 'leaflet';
 import type { Trip } from '../types';
 import { supabase } from '../services/supabaseClient';
 
+interface LiveTrip {
+  id: string;
+  last_lat: number;
+  last_lng: number;
+  last_speed: number;
+  plate: string;
+  company_id?: string;
+  last_update: string;
+  driver_id: string;
+}
+
 const truckIcon = new L.Icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/128/6134/6134825.png',
   iconSize: [40, 40],
@@ -13,8 +24,7 @@ const truckIcon = new L.Icon({
 });
 
 const DashboardMap: React.FC = () => {
-  const [trips, setTrips] = useState<Trip[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [trips, setTrips] = useState<LiveTrip[]>([]);
 
   useEffect(() => {
     fetchTrips();
@@ -37,22 +47,20 @@ const DashboardMap: React.FC = () => {
       
       if (data) {
         // Group by driver_id and get the latest trip for each driver
-        const latestTrips = data.reduce((acc: { [key: string]: Trip }, currentTrip: Trip) => {
+        const latestTrips = data.reduce((acc: { [key: string]: any }, currentTrip: any) => {
           // Ensure driver_id is a string, if it's not already
           const driverId = String(currentTrip.driver_id);
-          if (!acc[driverId] || new Date(currentTrip.timestamp) > new Date(acc[driverId].timestamp)) {
+          if (!acc[driverId] || new Date(currentTrip.last_update) > new Date(acc[driverId].last_update)) {
             acc[driverId] = currentTrip;
           }
           return acc;
         }, {});
-        setTrips(Object.values(latestTrips));
+        setTrips(Object.values(latestTrips) as LiveTrip[]);
       }
 
     } catch (e) {
       console.warn("Supabase fetch failed.", e);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   return (
@@ -64,20 +72,20 @@ const DashboardMap: React.FC = () => {
             attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           />
-          {trips.map(trip => (
+          {trips.map((trip: LiveTrip) => (
             <Marker
-              key={trip.trip_id}
-              position={[trip.lat, trip.lng]}
+              key={trip.id}
+              position={[trip.last_lat, trip.last_lng]}
               icon={truckIcon}
             >
               <Popup>
                 <div className="font-sans min-w-[150px]">
                   <strong className="block text-sm text-on-surface-primary mb-1">{trip.plate}</strong>
                   <div className="grid grid-cols-2 gap-2 text-xs text-on-surface-secondary">
-                     <span className="text-cyan-500">Vel: {trip.speed || 0} km/h</span>
+                     <span className="text-cyan-500">Vel: {trip.last_speed || 0} km/h</span>
                   </div>
                   <div className="mt-2 text-xs text-on-surface-secondary/70">
-                    Último Ping: {new Date(trip.timestamp).toLocaleTimeString()}
+                    Último Ping: {new Date(trip.last_update).toLocaleTimeString()}
                   </div>
                 </div>
               </Popup>
