@@ -1,29 +1,52 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Inicialización del cliente de Supabase
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.error("FATAL ERROR: Supabase URL or Anon Key is missing in the .env file");
-    alert("FATAL ERROR: La configuración de Supabase está incompleta. La aplicación no puede funcionar.");
-}
+// Exportamos 'supabase' para que App.tsx lo encuentre
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
+/**
+ * Función para guardar la ubicación cada 5 segundos.
+ * Ahora incluye Patente y Company ID para el aislamiento.
+ */
+export const saveLocationUpdate = async (
+  tripId: string, 
+  lat: number, 
+  lng: number, 
+  speed: number, 
+  plate?: string, 
+  companyId?: string
+) => {
+  try {
+    // 1. Guardamos el rastro histórico (para el trazado de ruta)
+    await supabase
+      .from('trip_logs')
+      .insert([
+        { 
+          trip_id: tripId, 
+          lat, 
+          lng, 
+          speed, 
+          company_id: companyId 
+        }
+      ]);
 
-export const saveLocationUpdate = async (tripId: string, lat: number, lng: number, speed: number) => {
-    const { error } = await supabase.from('trip_logs').insert({
-        trip_id: tripId,
-        lat: lat,
-        lng: lng,
-        speed: speed,
-        timestamp: new Date().toISOString()
-    });
+    // 2. Actualizamos el estado actual del vehículo (para el monitoreo en vivo)
+    await supabase
+      .from('trips')
+      .upsert({ 
+        id: tripId, 
+        last_lat: lat, 
+        last_lng: lng, 
+        last_speed: speed,
+        plate: plate,
+        company_id: companyId,
+        last_update: new Date().toISOString()
+      });
 
-    if (error) {
-        console.error("Error saving location update:", error);
-        // In a real app, you might want to queue this up for a retry.
-        throw new Error(`Failed to save location: ${error.message}`);
-    }
-    
-    console.log("📍 Location point saved:", { lat, lng, speed });
+  } catch (error) {
+    console.error("Error en la sincronización:", error);
+  }
 };
