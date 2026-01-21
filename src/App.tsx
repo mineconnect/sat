@@ -126,7 +126,7 @@ const App: React.FC = () => {
             </button>
             <div className="flex items-center gap-4 text-right">
                 <div><p className="text-[10px] text-on-surface-secondary font-bold">USUARIO ACTIVO</p><p className="text-xs font-bold text-primary">{currentUser?.full_name}</p></div>
-                <img className="w-10 h-10 rounded-full border border-blue-500/50" src={`httpshttps://ui-avatars.com/api/?name=${currentUser?.full_name}&background=1d4ed8&color=fff`} alt="Avatar" />
+                <img className="w-10 h-10 rounded-full border border-blue-500/50" src={`https://ui-avatars.com/api/?name=${currentUser?.full_name}&background=1d4ed8&color=fff`} alt="Avatar" />
             </div>
           </div>
         </header>

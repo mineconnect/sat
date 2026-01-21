@@ -17,7 +17,7 @@ const ThemedMapLayer = ({ theme }: { theme: 'dark' | 'light' }) => {
 const RecenterMap = ({ points }: { points: [number, number][] }) => {
   const map = useMap();
   useEffect(() => {
-    if (points.length > 0) {
+    if (points.length > 0 && points.every(p => p[0] != null && p[1] != null && typeof p[0] === 'number' && typeof p[1] === 'number')) {
       map.fitBounds(points, { padding: [50, 50], duration: 1 });
     }
   }, [points, map]);

@@ -72,23 +72,25 @@ const DashboardMap: React.FC = () => {
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           />
           {trips.map((trip: LiveTrip) => (
-            <Marker
-              key={trip.id}
-              position={[trip.last_lat, trip.last_lng]}
-              icon={truckIcon}
-            >
-              <Popup>
-                <div className="font-sans min-w-[150px]">
-                  <strong className="block text-sm text-on-surface-primary mb-1">{trip.plate}</strong>
-                  <div className="grid grid-cols-2 gap-2 text-xs text-on-surface-secondary">
-                     <span className="text-cyan-500">Vel: {trip.last_speed || 0} km/h</span>
+            trip.last_lat != null && trip.last_lng != null && typeof trip.last_lat === 'number' && typeof trip.last_lng === 'number' && (
+              <Marker
+                key={trip.id}
+                position={[trip.last_lat, trip.last_lng]}
+                icon={truckIcon}
+              >
+                <Popup>
+                  <div className="font-sans min-w-[150px]">
+                    <strong className="block text-sm text-on-surface-primary mb-1">{trip.plate}</strong>
+                    <div className="grid grid-cols-2 gap-2 text-xs text-on-surface-secondary">
+                       <span className="text-cyan-500">Vel: {trip.last_speed || 0} km/h</span>
+                    </div>
+                    <div className="mt-2 text-xs text-on-surface-secondary/70">
+                      Último Ping: {new Date(trip.last_update).toLocaleTimeString()}
+                    </div>
                   </div>
-                  <div className="mt-2 text-xs text-on-surface-secondary/70">
-                    Último Ping: {new Date(trip.last_update).toLocaleTimeString()}
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
+                </Popup>
+              </Marker>
+            )
           ))}
         </MapContainer>
         
