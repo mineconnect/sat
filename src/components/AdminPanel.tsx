@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { Users, Building2, ShieldCheck, Activity, Loader2, Plus, Zap, BarChart3 } from 'lucide-react';
 import { supabase } from '../services/supabaseClient';
 
@@ -7,7 +7,7 @@ const AdminPanel = ({ currentUser, theme }: { currentUser: any, theme: 'dark' | 
   const [companies, setCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Forzamos el rol a minúsculas para evitar errores
+  
   const role = (currentUser?.role || '').toLowerCase();
 
   useEffect(() => {
