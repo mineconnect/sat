@@ -6,7 +6,7 @@ import { saveLocationUpdate, supabase } from '../services/supabaseClient';
 // Simulador de Conductor Refactorizado
 const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserProfile }) => {
   const [isTracking, setIsTracking] = useState(false);
-  const [vehicle_plate, setPlate] = useState('');
+  const [plate, setPlate] = useState('');
   const [logs, setLogs] = useState<string[]>([]);
   const [currentTripId, setCurrentTripId] = useState<string | null>(null);
   const [speed, setSpeed] = useState(0);
@@ -64,15 +64,15 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
       setCurrentTripId(null);
       setSpeedHistory([]);
     } else {
-      if (vehicle_plate.length < 6) { 
+      if (plate.length < 6) { 
         alert("⚠️ Patente inválida. Debe contener al menos 6 caracteres alfanuméricos."); 
         return; 
       }
-      const newTripId = `TRIP-${vehicle_plate}-${Date.now()}`;
+      const newTripId = `TRIP-${plate}-${Date.now()}`;
       
       const { error } = await supabase.from('trips').insert({
         id: newTripId,
-        vehicle_plate: vehicle_plate,
+        plate: plate,
         driver_id: user.id,
         driver_name: user.full_name,
         company_id: user.company_id,
@@ -90,7 +90,7 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
       setIsTracking(true);
       if (speedIntervalRef.current) clearInterval(speedIntervalRef.current);
       speedIntervalRef.current = setInterval(accelerate, 100);
-      setLogs(p => [`🚀 Iniciando viaje para ${vehicle_plate}`, "🛰️ Buscando Satélites...", ...p]);
+      setLogs(p => [`🚀 Iniciando viaje para ${plate}`, "🛰️ Buscando Satélites...", ...p]);
     }
   };
 
@@ -99,7 +99,7 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
       intervalRef.current = setInterval(() => {
         const lat = -34.6037 + (Math.random() - 0.5) * 0.02;
         const lng = -58.3816 + (Math.random() - 0.5) * 0.02;
-        saveLocationUpdate(currentTripId, lat, lng, speed, vehicle_plate, user.company_id || undefined);
+        saveLocationUpdate(currentTripId, lat, lng, speed, plate, user.company_id || undefined);
         setSpeedHistory(prev => [...prev, speed]);
         setLogs(p => [`📍 ${new Date().toLocaleTimeString()} | ${speed} km/h`, ...p.slice(0, 10)]);
       }, 5000);
@@ -108,11 +108,11 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (speedIntervalRef.current) clearInterval(speedIntervalRef.current);
     };
-  }, [isTracking, currentTripId, vehicle_plate, user.company_id, speed]);
+  }, [isTracking, currentTripId, plate, user.company_id, speed]);
 
   return (
-    <div className="fixed inset-0 bg-surface-primary z-[100] flex items-center justify-center p-4">
-      <div className="bg-surface-primary border border-border-primary w-full max-w-md rounded-xl shadow-2xl shadow-primary/20 flex flex-col max-h-[90vh] relative overflow-hidden">
+    <div className="fixed inset-0 bg-slate-950 z-[100] flex items-center justify-center p-4">
+      <div className="bg-surface-primary border-2 border-slate-700 w-full max-w-md rounded-[2.5rem] flex flex-col max-h-[90vh] relative overflow-hidden">
         <button onClick={onClose} className="absolute top-4 right-4 text-on-surface-secondary hover:text-on-surface-primary transition-colors z-10">
           <X size={24} />
         </button>
@@ -123,7 +123,7 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
 
         <div className="flex-grow p-6 flex flex-col items-center overflow-y-auto custom-scrollbar">
           <input 
-            type="text" value={vehicle_plate} onChange={handlePlateChange} disabled={isTracking} placeholder="PATENTE"
+            type="text" value={plate} onChange={handlePlateChange} disabled={isTracking} placeholder="PATENTE"
             className="w-full bg-surface-secondary/50 border-2 border-border-primary rounded-lg py-3 text-center text-xl font-mono font-bold text-on-surface-primary mb-6 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
           />
           <button onClick={toggleTracking} className={`w-48 h-48 rounded-full border-4 flex flex-col items-center justify-center text-2xl font-black transition-all transform hover:scale-105 active:scale-95 ${isTracking ? 'border-red-600 bg-red-800/30 text-red-400 shadow-lg shadow-red-500/20' : 'border-green-600 bg-green-800/30 text-green-400 shadow-lg shadow-green-500/20'}`}>

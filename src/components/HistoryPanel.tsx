@@ -203,7 +203,7 @@ const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) =
     return `${minutes}m ${seconds}s`;
   };
 
-  const filteredTrips = trips.filter((trip: any) => (trip.vehicle_plate || '').toUpperCase().includes(search.toUpperCase()));
+  const filteredTrips = trips.filter((trip: any) => (trip.plate || '').toUpperCase().includes(search.toUpperCase()));
 
   return (
     <div className="flex h-full gap-6 p-6 overflow-hidden">
@@ -238,7 +238,7 @@ const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) =
             >
               <div className="flex justify-between items-center mb-3">
                 <span className={`text-xs font-black px-3 py-1 rounded-lg uppercase ${selectedTrip?.id === trip.id ? 'bg-surface-primary text-primary' : 'bg-primary text-on-surface-primary'}`}>
-                  {trip.vehicle_plate || 'MÓVIL'}
+                  {trip.plate || 'MÓVIL'}
                 </span>
                 <span className={`text-[10px] font-bold ${selectedTrip?.id === trip.id ? 'text-on-surface-primary' : 'text-on-surface-secondary'}`}>
                   {new Date(trip.last_update).toLocaleDateString()}
@@ -249,6 +249,9 @@ const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) =
                   <Truck size={20} className={selectedTrip?.id === trip.id ? 'text-on-surface-primary' : 'text-primary'} />
                 </div>
                 <div>
+                   <p className={`text-sm font-bold ${selectedTrip?.id === trip.id ? 'text-on-surface-primary' : 'text-on-surface-primary'}`}>
+                      {trip.driver_name}
+                    </p>
                    <p className={`text-xs font-black uppercase ${selectedTrip?.id === trip.id ? 'text-on-surface-primary' : 'text-on-surface-secondary'}`}>
                       Duración: {formatDuration(trip.start_time, trip.end_time)}
                    </p>
