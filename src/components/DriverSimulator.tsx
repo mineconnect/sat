@@ -111,8 +111,8 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
   }, [isTracking, currentTripId, plate, user.company_id, speed]);
 
   return (
-    <div className="fixed inset-0 bg-slate-950 z-[100] flex items-center justify-center p-4">
-      <div className="bg-surface-primary border-2 border-slate-700 w-full max-w-md rounded-[2.5rem] flex flex-col max-h-[90vh] relative overflow-hidden">
+    <div className="fixed inset-0 bg-[#020617] z-[100] flex items-center justify-center p-4">
+      <div className="bg-slate-950 border-2 border-slate-800 w-full max-w-md rounded-xl flex flex-col max-h-[90vh] relative overflow-hidden">
         <button onClick={onClose} className="absolute top-4 right-4 text-on-surface-secondary hover:text-on-surface-primary transition-colors z-10">
           <X size={24} />
         </button>
