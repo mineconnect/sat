@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Smartphone, X } from 'lucide-react';
 import type { UserProfile } from '../types';
-import { saveLocationUpdate } from '../services/supabaseClient';
+import { saveLocationUpdate, supabase } from '../services/supabaseClient';
 
 // Simulador de Conductor Refactorizado
 const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserProfile }) => {
@@ -40,7 +40,7 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
     });
   };
 
-  const toggleTracking = () => {
+  const toggleTracking = async () => {
     if (isTracking) {
       setIsTracking(false);
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -54,6 +54,22 @@ const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserPro
         return; 
       }
       const newTripId = `TRIP-${plate}-${Date.now()}`;
+      
+      const { error } = await supabase.from('trips').insert({
+        id: newTripId,
+        plate: plate,
+        driver_id: user.id,
+        company_id: user.company_id,
+        status: 'en_curso',
+        start_time: new Date().toISOString()
+      });
+
+      if (error) {
+        console.error("Error creating trip:", error);
+        alert("🚨 No se pudo iniciar el viaje. " + error.message);
+        return;
+      }
+
       setCurrentTripId(newTripId);
       setIsTracking(true);
       if (speedIntervalRef.current) clearInterval(speedIntervalRef.current);

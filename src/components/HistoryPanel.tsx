@@ -43,6 +43,7 @@ const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) =
     }
     const { data, error } = await query;
     if (error) console.error("Error fetching trips:", error);
+    console.log("Viajes recuperados:", data);
     setTrips(data || []);
     setLoading(false);
   };
