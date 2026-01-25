@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { Users, Building2, ShieldCheck, Activity, Loader2, Plus, Zap, BarChart3 } from 'lucide-react';
 import { supabase } from '../services/supabaseClient';
 
@@ -117,21 +117,36 @@ const AdminPanel = ({ currentUser, theme }: { currentUser: any, theme: 'dark' | 
   );
 };
 
-const TabBtn = ({ theme, active, onClick, icon, label }: any) => (
+interface TabBtnProps {
+  theme: 'dark' | 'light';
+  active: boolean;
+  onClick: () => void;
+  icon: ReactNode;
+  label: string;
+}
+
+const TabBtn = ({ theme, active, onClick, icon, label }: TabBtnProps) => (
   <button 
     onClick={onClick}
     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${
       active 
         ? 'bg-primary text-on-surface-primary shadow-lg shadow-primary/30' 
-        : `text-on-surface-secondary hover:text-on-surface-primary`
+        : `text-on-surface-secondary hover:text-on-surface-primary ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'}`
     }`}
   >
     {icon} {label}
   </button>
 );
 
-const StatCard = ({ theme, label, value, icon }: any) => (
-  <div className={`bg-surface-secondary/50 border border-border-primary p-8 rounded-[2.5rem] relative overflow-hidden group transition-all hover:border-primary/50`}>
+interface StatCardProps {
+  theme: 'dark' | 'light';
+  label: string;
+  value: string | number;
+  icon: ReactNode;
+}
+
+const StatCard = ({ theme, label, value, icon }: StatCardProps) => (
+  <div className={`bg-surface-secondary/50 border p-8 rounded-[2.5rem] relative overflow-hidden group transition-all hover:border-primary/50 ${theme === 'dark' ? 'border-white/10' : 'shadow-sm'}`}>
     <div className="flex items-center gap-4 mb-4">
       <div className={`p-3 bg-surface-secondary/20 rounded-2xl text-blue-500`}>{icon}</div>
       <p className={`text-[10px] font-black text-on-surface-secondary uppercase tracking-widest`}>{label}</p>
