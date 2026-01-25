@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../services/supabaseClient';
 import { MapContainer, TileLayer, Polyline, CircleMarker, Tooltip, useMap } from 'react-leaflet';
-import { Search, Truck, Clock, Gauge, Award, Download, ChevronRight, ShieldCheck, Activity, History as HistoryIcon } from 'lucide-react';
+import { Search, Truck, Gauge, Award, Download, ChevronRight, ShieldCheck, Activity, History as HistoryIcon } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import 'leaflet/dist/leaflet.css';
