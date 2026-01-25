@@ -1,138 +1,156 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Smartphone, X } from 'lucide-react';
-import type { UserProfile } from '../types';
-import { saveLocationUpdate, supabase } from '../services/supabaseClient';
+import { useState, useEffect } from 'react';
+import { Smartphone, X, Activity, Navigation } from 'lucide-react';
+import { supabase, saveLocationUpdate } from '../services/supabaseClient';
 
-// Simulador de Conductor Refactorizado
-const DriverSimulator = ({ onClose, user }: { onClose: () => void, user: UserProfile }) => {
+const WORLD_MAP_BG = "https://i.imgur.com/8yX90qM.png";
+
+const DriverSimulator = ({ onClose, user }: any) => {
   const [isTracking, setIsTracking] = useState(false);
-  const [plate, setPlate] = useState('');
-  const [logs, setLogs] = useState<string[]>([]);
-  const [currentTripId, setCurrentTripId] = useState<string | null>(null);
+  const [vehiclePlate, setVehiclePlate] = useState('');
   const [speed, setSpeed] = useState(0);
   const [speedHistory, setSpeedHistory] = useState<number[]>([]);
-  const intervalRef = useRef<any>(null);
-  const speedIntervalRef = useRef<any>(null);
+  const [currentTripId, setCurrentTripId] = useState<string | null>(null);
+  const [logs, setLogs] = useState<string[]>([]);
 
-  const handlePlateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-    setPlate(value);
-  };
-
-  const accelerate = () => {
-    setSpeed(s => {
-      const newSpeed = s + 2;
-      if (newSpeed >= 75) {
-        clearInterval(speedIntervalRef.current);
-        return 75;
-      }
-      return newSpeed;
-    });
-  };
-
-  const decelerate = () => {
-    setSpeed(s => {
-        const newSpeed = s - 5;
-        if (newSpeed <= 0) {
-            clearInterval(speedIntervalRef.current);
-            return 0;
-        }
-        return newSpeed;
-    });
-  };
-
+  // Función para iniciar o detener el viaje
   const toggleTracking = async () => {
     if (isTracking) {
       setIsTracking(false);
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      if (speedIntervalRef.current) clearInterval(speedIntervalRef.current);
-      speedIntervalRef.current = setInterval(decelerate, 100);
-      setLogs(p => ["🛑 Viaje finalizado.", "📡 GPS Desconectado.", ...p]);
       
-      const max_speed = Math.max(...speedHistory);
-      const avg_speed = speedHistory.length > 0 ? speedHistory.reduce((a, b) => a + b, 0) / speedHistory.length : 0;
+      // Cálculo de métricas finales
+      const maxSpeed = speedHistory.length > 0 ? Math.max(...speedHistory) : 0;
+      const avgSpeed = speedHistory.length > 0 ? speedHistory.reduce((a, b) => a + b, 0) / speedHistory.length : 0;
 
       if (currentTripId) {
-        await supabase.from('trips').update({
-          end_time: new Date().toISOString(),
-          status: 'finalizado',
-          max_speed: max_speed,
-          avg_speed: avg_speed
-        }).eq('id', currentTripId);
+          await supabase.from('trips').update({
+            status: 'finalizado',
+            end_time: new Date().toISOString(),
+            max_speed: maxSpeed,
+            avg_speed: avgSpeed
+          }).eq('id', currentTripId);
       }
-
-      setCurrentTripId(null);
-      setSpeedHistory([]);
+      setSpeed(0);
+      setLogs(prev => [`🛑 Viaje finalizado.`, ...prev]);
     } else {
-      if (plate.length < 6) { 
-        alert("⚠️ Patente inválida. Debe contener al menos 6 caracteres alfanuméricos."); 
-        return; 
-      }
-      const newTripId = `TRIP-${plate}-${Date.now()}`;
+      if (!vehiclePlate) return alert("Ingresá la patente del vehículo");
       
-      const { error } = await supabase.from('trips').insert({
+      const newTripId = crypto.randomUUID();
+      setCurrentTripId(newTripId);
+      setSpeedHistory([]);
+      setLogs([]);
+
+      // Registro inicial en la base de datos
+      const { error } = await supabase.from('trips').insert([{
         id: newTripId,
-        plate: plate,
+        plate: vehiclePlate,
         driver_id: user.id,
-        driver_name: user.full_name,
-        company_id: user.company_id,
+        driver_name: user.full_name, // Captura automática del nombre
         status: 'en_curso',
         start_time: new Date().toISOString()
-      });
+      }]);
 
       if (error) {
-        console.error("Error creating trip:", error);
-        alert("🚨 No se pudo iniciar el viaje. " + error.message);
+        console.error("Error Supabase:", error);
         return;
       }
 
-      setCurrentTripId(newTripId);
       setIsTracking(true);
-      if (speedIntervalRef.current) clearInterval(speedIntervalRef.current);
-      speedIntervalRef.current = setInterval(accelerate, 100);
-      setLogs(p => [`🚀 Iniciando viaje para ${plate}`, "🛰️ Buscando Satélites...", ...p]);
+      setLogs(prev => [`🚀 Iniciando viaje: ${vehiclePlate}`, ...prev]);
     }
   };
 
+  // Efecto de simulación de movimiento y GPS
   useEffect(() => {
+    let interval: any;
     if (isTracking && currentTripId) {
-      intervalRef.current = setInterval(() => {
-        const lat = -34.6037 + (Math.random() - 0.5) * 0.02;
-        const lng = -58.3816 + (Math.random() - 0.5) * 0.02;
-        saveLocationUpdate(currentTripId, lat, lng, speed, plate, user.company_id || undefined);
-        setSpeedHistory(prev => [...prev, speed]);
-        setLogs(p => [`📍 ${new Date().toLocaleTimeString()} | ${speed} km/h`, ...p.slice(0, 10)]);
-      }, 5000);
+      interval = setInterval(() => {
+        setSpeed(prev => {
+            // Simulación de velocidad variable
+            const newSpeed = Math.round(Math.max(0, Math.min(120, prev + (Math.random() * 12 - 5))));
+            setSpeedHistory(s => [...s, newSpeed]);
+            
+            // Envío de coordenadas a la tabla de logs
+            saveLocationUpdate(currentTripId, -34.6037 + (Math.random() * 0.01), -58.3816 + (Math.random() * 0.01), newSpeed, vehiclePlate, user.company_id);
+            
+            setLogs(l => [`📍 GPS: ${newSpeed} km/h`, ...l.slice(0, 5)]);
+            return newSpeed;
+        });
+      }, 3000);
     }
-    return () => { 
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      if (speedIntervalRef.current) clearInterval(speedIntervalRef.current);
-    };
-  }, [isTracking, currentTripId, plate, user.company_id, speed]);
+    return () => clearInterval(interval);
+  }, [isTracking, currentTripId, vehiclePlate, user.company_id]);
 
   return (
-    <div className="fixed inset-0 bg-[#020617] z-[100] flex items-center justify-center p-4">
-      <div className="bg-slate-950 border-2 border-slate-800 w-full max-w-md rounded-xl flex flex-col max-h-[90vh] relative overflow-hidden">
-        <button onClick={onClose} className="absolute top-4 right-4 text-on-surface-secondary hover:text-on-surface-primary transition-colors z-10">
-          <X size={24} />
-        </button>
-        <div className="flex-shrink-0 p-6 pt-8 text-center">
-            <Smartphone className="w-10 h-10 text-primary mb-2 mx-auto" />
-            <h2 className="text-lg font-bold text-on-surface-primary uppercase">Terminal de Conductor</h2>
-        </div>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+      {/* Contenedor Principal con fondo de Mapa */}
+      <div className="relative w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10"
+           style={{ backgroundImage: `url(${WORLD_MAP_BG})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        
+        {/* Overlay oscuro para legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-black"></div>
 
-        <div className="flex-grow p-6 flex flex-col items-center overflow-y-auto custom-scrollbar">
-          <input 
-            type="text" value={plate} onChange={handlePlateChange} disabled={isTracking} placeholder="PATENTE"
-            className="w-full bg-surface-secondary/50 border-2 border-border-primary rounded-lg py-3 text-center text-xl font-mono font-bold text-on-surface-primary mb-6 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-          />
-          <button onClick={toggleTracking} className={`w-48 h-48 rounded-full border-4 flex flex-col items-center justify-center text-2xl font-black transition-all transform hover:scale-105 active:scale-95 ${isTracking ? 'border-red-600 bg-red-800/30 text-red-400 shadow-lg shadow-red-500/20' : 'border-green-600 bg-green-800/30 text-green-400 shadow-lg shadow-green-500/20'}`}>
-            <span>{isTracking ? 'DETENER' : 'INICIAR'}</span>
-            <span className="text-lg font-bold">VIAJE</span>
-          </button>
-          <div className="w-full mt-6 bg-surface-secondary/40 rounded-xl p-3 text-xs font-mono text-on-surface-secondary border border-border-primary h-40 overflow-y-auto">
-            {logs.map((l, i) => <div key={i} className="border-b border-border-primary py-1 animate-in fade-in">{l}</div>)}
-          </div>
+        <div className="relative p-8">
+            {/* Header del Simulador */}
+            <div className="flex justify-between items-center mb-8">
+                <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-500/20 rounded-xl border border-blue-500/30 animate-pulse">
+                        <Activity className="text-blue-400" size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-white font-black tracking-tighter text-xl">TERMINAL M4</h2>
+                        <p className="text-blue-400/60 text-[10px] uppercase font-bold tracking-widest">Telemetría Satelital</p>
+                    </div>
+                </div>
+                <button onClick={onClose} className="text-white/20 hover:text-white transition-colors bg-white/5 p-2 rounded-full"><X size={20}/></button>
+            </div>
+
+            <div className="space-y-6">
+                {/* Input de Patente (Solo visible si no está trackeando) */}
+                {!isTracking && (
+                    <div className="relative group">
+                        <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-blue-500 transition-colors" size={18} />
+                        <input
+                            value={vehiclePlate}
+                            onChange={(e) => setVehiclePlate(e.target.value.toUpperCase())}
+                            placeholder="PATENTE DEL VEHÍCULO"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white font-mono text-center tracking-[0.3em] focus:border-blue-500/50 outline-none transition-all placeholder:text-white/10"
+                        />
+                    </div>
+                )}
+
+                {/* Display de Velocidad con Icono Navigation */}
+                <div className="bg-black/40 rounded-[2rem] p-8 border border-white/5 text-center group">
+                    <Navigation className="mx-auto mb-4 text-blue-500/30 group-hover:text-blue-500 group-hover:scale-110 transition-all duration-500" size={32} />
+                    <div className="text-7xl font-black text-white tracking-tighter mb-1">
+                        {speed}<span className="text-xl text-blue-500 ml-2">km/h</span>
+                    </div>
+                    <div className="text-[10px] text-white/20 font-bold uppercase tracking-widest">Velocidad en Tiempo Real</div>
+                </div>
+
+                {/* Botón de Acción */}
+                <button
+                    onClick={toggleTracking}
+                    disabled={!vehiclePlate && !isTracking}
+                    className={`w-full py-5 rounded-2xl font-black uppercase tracking-[0.2em] transition-all shadow-2xl ${
+                        isTracking 
+                        ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/20' 
+                        : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/40 disabled:opacity-20 disabled:cursor-not-allowed'
+                    }`}
+                >
+                    {isTracking ? 'Finalizar Viaje' : 'Iniciar Simulación'}
+                </button>
+
+                {/* Consola de Logs */}
+                {logs.length > 0 && (
+                    <div className="bg-black/60 rounded-2xl p-4 h-32 overflow-y-auto font-mono text-[10px] text-blue-300/40 space-y-1 border border-white/5 custom-scrollbar">
+                        {logs.map((log, i) => (
+                          <div key={i} className={i === 0 ? "text-blue-400 border-b border-blue-500/10 pb-1 mb-1" : ""}>
+                            {log}
+                          </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
       </div>
     </div>
