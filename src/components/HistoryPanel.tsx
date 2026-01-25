@@ -24,16 +24,93 @@ const RecenterMap = ({ points }: { points: [number, number][] }) => {
   return null;
 };
 
+const StopMarker = ({ position, time }: { position: [number, number], time: number }) => {
+  return (
+    <CircleMarker center={position} radius={8} pathOptions={{ fillColor: '#f97316', color: 'white', weight: 3, fillOpacity: 1 }}>
+      <Tooltip>Parada: {Math.round(time / 60000)} min</Tooltip>
+    </CircleMarker>
+  );
+};
+
+const SpeedPolyline = ({ routeLogs }: { routeLogs: any[] }) => {
+  return (
+    <>
+      {routeLogs.map((log, i) => {
+        if (i === 0) return null;
+        const prevLog = routeLogs[i - 1];
+        return (
+          <Polyline
+            key={i}
+            positions={[[prevLog.lat, prevLog.lng], [log.lat, log.lng]]}
+            pathOptions={{ color: '#2563eb', weight: 6, lineCap: 'round', opacity: 0.8 }}
+          >
+            <Tooltip>Velocidad: {log.speed} km/h</Tooltip>
+          </Polyline>
+        );
+      })}
+    </>
+  );
+};
+
 const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) => {
   const [trips, setTrips] = useState<any[]>([]);
   const [selectedTrip, setSelectedTrip] = useState<any>(null);
   const [routeLogs, setRouteLogs] = useState<any[]>([]);
+  const [stops, setStops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
     fetchTrips();
   }, [user]);
+
+  useEffect(() => {
+    if (routeLogs.length === 0) {
+      setStops([]);
+      return;
+    }
+
+    const detectedStops = [];
+    let currentStop: any = null;
+
+    for (const log of routeLogs) {
+      if (log.speed === 0) {
+        if (!currentStop) {
+          currentStop = {
+            lat: log.lat,
+            lng: log.lng,
+            startTime: new Date(log.created_at).getTime(),
+            endTime: new Date(log.created_at).getTime(),
+          };
+        } else {
+          currentStop.endTime = new Date(log.created_at).getTime();
+        }
+      } else {
+        if (currentStop) {
+          const duration = currentStop.endTime - currentStop.startTime;
+          if (duration > 120000) {
+            detectedStops.push({
+              position: [currentStop.lat, currentStop.lng],
+              time: duration,
+            });
+          }
+          currentStop = null;
+        }
+      }
+    }
+
+    if (currentStop) {
+      const duration = currentStop.endTime - currentStop.startTime;
+      if (duration > 120000) {
+        detectedStops.push({
+          position: [currentStop.lat, currentStop.lng],
+          time: duration,
+        });
+      }
+    }
+
+    setStops(detectedStops);
+  }, [routeLogs]);
 
   const fetchTrips = async () => {
     setLoading(true);
@@ -118,7 +195,15 @@ const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) =
     doc.save(`Viaje_${selectedTrip.plate}_${new Date().toLocaleDateString()}.pdf`);
   };
 
-  const filteredTrips = trips.filter((trip: any) => (trip.plate || '').toUpperCase().includes(search.toUpperCase()));
+  const formatDuration = (start: string, end: string) => {
+    if (!start || !end) return 'N/A';
+    const duration = new Date(end).getTime() - new Date(start).getTime();
+    const minutes = Math.floor(duration / 60000);
+    const seconds = ((duration % 60000) / 1000).toFixed(0);
+    return `${minutes}m ${seconds}s`;
+  };
+
+  const filteredTrips = trips.filter((trip: any) => (trip.vehicle_plate || '').toUpperCase().includes(search.toUpperCase()));
 
   return (
     <div className="flex h-full gap-6 p-6 overflow-hidden">
@@ -153,7 +238,7 @@ const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) =
             >
               <div className="flex justify-between items-center mb-3">
                 <span className={`text-xs font-black px-3 py-1 rounded-lg uppercase ${selectedTrip?.id === trip.id ? 'bg-surface-primary text-primary' : 'bg-primary text-on-surface-primary'}`}>
-                  {trip.plate || 'MÓVIL'}
+                  {trip.vehicle_plate || 'MÓVIL'}
                 </span>
                 <span className={`text-[10px] font-bold ${selectedTrip?.id === trip.id ? 'text-on-surface-primary' : 'text-on-surface-secondary'}`}>
                   {new Date(trip.last_update).toLocaleDateString()}
@@ -164,9 +249,11 @@ const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) =
                   <Truck size={20} className={selectedTrip?.id === trip.id ? 'text-on-surface-primary' : 'text-primary'} />
                 </div>
                 <div>
-                   <p className={`text-xs font-black uppercase ${selectedTrip?.id === trip.id ? 'text-on-surface-primary' : 'text-on-surface-secondary'}`}>Viaje Finalizado</p>
+                   <p className={`text-xs font-black uppercase ${selectedTrip?.id === trip.id ? 'text-on-surface-primary' : 'text-on-surface-secondary'}`}>
+                      Duración: {formatDuration(trip.start_time, trip.end_time)}
+                   </p>
                    <p className={`text-[10px] flex items-center gap-1 ${selectedTrip?.id === trip.id ? 'text-on-surface-primary' : 'text-on-surface-secondary'}`}>
-                      <Clock size={10} /> {new Date(trip.last_update).toLocaleTimeString()}
+                      <Gauge size={10} /> V. Máx: {trip.max_speed?.toFixed(1) ?? 0} km/h - V. Prom: {trip.avg_speed?.toFixed(1) ?? 0} km/h
                    </p>
                 </div>
                 <ChevronRight className={`ml-auto transition-colors ${selectedTrip?.id === trip.id ? 'text-on-surface-primary' : 'text-on-surface-secondary group-hover:text-primary'}`} />
@@ -190,10 +277,13 @@ const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) =
               <ThemedMapLayer theme={theme} />
               {routeLogs.length > 1 && (
                 <>
-                  <Polyline positions={routeLogs.map(l => [l.lat, l.lng])} pathOptions={{ color: '#2563eb', weight: 6, lineCap: 'round', opacity: 0.8 }} />
+                  <SpeedPolyline routeLogs={routeLogs} />
                   <RecenterMap points={routeLogs.map(l => [l.lat, l.lng])} />
                   <CircleMarker center={routeLogs[0]} radius={8} pathOptions={{ fillColor: '#10b981', color: 'white', weight: 3, fillOpacity: 1 }}><Tooltip>Inicio</Tooltip></CircleMarker>
                   <CircleMarker center={routeLogs[routeLogs.length - 1]} radius={8} pathOptions={{ fillColor: '#ef4444', color: 'white', weight: 3, fillOpacity: 1 }}><Tooltip>Fin</Tooltip></CircleMarker>
+                  {stops.map((stop, i) => (
+                    <StopMarker key={i} position={stop.position} time={stop.time} />
+                  ))}
                 </>
               )}
             </MapContainer>
@@ -204,8 +294,8 @@ const HistoryPanel = ({ user, theme }: { user: any, theme: 'dark' | 'light' }) =
           <div className={`bg-surface-primary border border-border-primary rounded-[1.75rem] p-6 flex items-center justify-between animate-in slide-in-from-bottom-6`}>
             <div className="flex gap-8">
               <InfoCard theme={theme} icon={<Award className="text-yellow-500" />} label="Puntaje" value="98/100" />
-              <InfoCard theme={theme} icon={<Gauge className="text-cyan-500" />} label="Vel. Máx" value={`${selectedTrip.last_speed || 0} km/h`} />
-              <InfoCard theme={theme} icon={<ShieldCheck className="text-amber-500" />} label="Estado" value="SEGURO" />
+              <InfoCard theme={theme} icon={<Gauge className="text-cyan-500" />} label="Vel. Máx" value={`${selectedTrip.max_speed?.toFixed(1) ?? 0} km/h`} />
+              <InfoCard theme={theme} icon={<ShieldCheck className="text-amber-500" />} label="Vel. Prom" value={`${selectedTrip.avg_speed?.toFixed(1) ?? 0} km/h`} />
             </div>
             <button onClick={exportPDF} disabled={routeLogs.length === 0} className="bg-primary text-white px-8 py-4 rounded-2xl font-black text-xs hover:bg-primary-hover transition-all flex items-center gap-3 disabled:bg-surface-secondary disabled:text-on-surface-secondary disabled:cursor-not-allowed">
               <Download size={18} /> EXPORTAR PDF
