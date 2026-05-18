@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mineconnect.com.ar/sitemap.xml
