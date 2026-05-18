@@ -6,12 +6,10 @@
     <title>MineConnect | Tecnología, Radiocomunicaciones e IA en Catamarca</title>
     <meta name="description" content="Partner oficial Motorola y Hytera. Equipamiento, automatizaciones con IA, desarrollo a medida y cursos. Soluciones tecnológicas para empresas del NOA y Argentina.">
     <meta name="keywords" content="radios Motorola Catamarca, Partner Hytera, automatización IA Argentina, cursos IA español, desarrollo software NOA">
-    <meta property="og:title" content="MineConnect — Tu aliado tecnológico en el NOA">
-    <meta property="og:description" content="Radiocomunicaciones, IA, software y capacitaciones para PyMEs e industria.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="apple-touch-icon" href="favicon.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..700&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap">
+    <link rel="apple-touch-icon" href="favicon.svg">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="canonical" href="https://mineconnect.com.ar/">
     <meta property="og:title" content="MineConnect | Tecnología, Radiocomunicaciones e IA en Catamarca">
@@ -27,20 +25,8 @@
       "url": "https://mineconnect.com.ar",
       "logo": "https://mineconnect.com.ar/logo.png",
       "description": "Tecnología, radiocomunicaciones, automatizaciones con IA, desarrollo a medida y cursos. Partner Oficial Motorola y Hytera.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Catamarca",
-        "addressRegion": "Catamarca",
-        "addressCountry": "AR"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+54-9-383-432-7244",
-        "contactType": "sales",
-        "email": "contacto@mineconnect.com.ar",
-        "areaServed": "AR",
-        "availableLanguage": "Spanish"
-      },
+      "address": {"@type": "PostalAddress", "addressLocality": "Catamarca", "addressRegion": "Catamarca", "addressCountry": "AR"},
+      "contactPoint": {"@type": "ContactPoint", "telephone": "+54-9-383-432-7244", "contactType": "sales", "email": "contacto@mineconnect.com.ar", "areaServed": "AR", "availableLanguage": "Spanish"},
       "sameAs": []
     }
     </script>
@@ -52,11 +38,7 @@
       "image": "https://mineconnect.com.ar/og.png",
       "telephone": "+54-9-383-432-7244",
       "email": "contacto@mineconnect.com.ar",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Catamarca",
-        "addressCountry": "AR"
-      },
+      "address": {"@type": "PostalAddress", "addressLocality": "Catamarca", "addressCountry": "AR"},
       "priceRange": "$$",
       "url": "https://mineconnect.com.ar"
     }
@@ -64,284 +46,330 @@
 </head>
 <body>
     <div class="scroll-progress"></div>
-    <canvas id="bg-canvas"></canvas>
-    <div class="bg-fx">
-        <div class="aurora a1"></div>
-        <div class="aurora a2"></div>
-        <div class="aurora a3"></div>
-        <div class="noise"></div>
-    </div>
 
-    <header class="site-header">
-        <div class="container">
-            <a href="index.html" class="logo">
-                <span class="logo-mark"></span>
-                Mine<span>Connect</span>
+    <nav class="nav">
+        <div class="shell nav-inner">
+            <a href="index.html" class="brand">
+                <span class="brand-mark">M</span>
+                MineConnect
             </a>
             <button class="menu-toggle" aria-label="Menú">☰</button>
-            <ul class="nav-links">
-                <li><a href="index.html#servicios">Servicios</a></li>
-                <li><a href="cursos.html">Cursos</a></li>
-                <li><a href="nosotros.html">Nosotros</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="contacto.html" class="nav-cta">Cotizar</a></li>
-            </ul>
+            <div class="nav-links">
+                <a href="#servicios">Servicios</a>
+                <a href="#casos">Casos</a>
+                <a href="cursos.html">Cursos</a>
+                <a href="nosotros.html">Nosotros</a>
+                <a href="contacto.html" class="nav-cta">Cotizar</a>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <main>
-        <section class="hero">
-            <div class="container">
-                <div class="pill"><span class="dot"></span> Partner Oficial Motorola · Hytera · Catamarca</div>
-                <h1>Tecnología que conecta tu <span class="gradient-text">operación</span>, donde sea que estés.</h1>
-                <p class="subtitle">Computación, radiocomunicaciones e inteligencia artificial para empresas que no pueden permitirse estar desconectadas.</p>
-                <div class="hero-actions">
-                    <a href="contacto.html" class="btn btn-primary">Cotizá tu proyecto →</a>
-                    <a href="https://wa.me/5493834327244" class="btn btn-secondary" target="_blank">WhatsApp directo</a>
+        <header class="hero hero-solo">
+            <div class="topo" data-topo="11" data-hot="5" aria-hidden="true"></div>
+            <div class="shell hero-stack">
+                <div class="hero-meta">
+                    <span class="pill"><span class="dot"></span> Partner Oficial Motorola · Hytera · Catamarca</span>
+                    <span class="hero-tag">MC · NOA / AR</span>
                 </div>
 
-                <div class="hero-visual">
-                    <svg viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <radialGradient id="hubGrad" cx="50%" cy="50%">
-                                <stop offset="0%" stop-color="#00ffaa" stop-opacity="1"/>
-                                <stop offset="100%" stop-color="#00e599" stop-opacity="0"/>
-                            </radialGradient>
-                            <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stop-color="#00e599"/>
-                                <stop offset="50%" stop-color="#6aa3ff"/>
-                                <stop offset="100%" stop-color="#b66aff"/>
-                            </linearGradient>
-                            <linearGradient id="towerGrad" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#f0f4ff"/>
-                                <stop offset="100%" stop-color="#6aa3ff"/>
-                            </linearGradient>
-                        </defs>
+                <h1 class="h-title h-title-xl">
+                    Tecnología que <span class="it">conecta</span><br>
+                    tu operación, donde<br>
+                    sea que <span class="it">estés</span>.
+                </h1>
 
-                        <!-- Mountain silhouette -->
-                        <path d="M 0,300 L 80,240 L 160,280 L 240,200 L 320,250 L 400,180 L 480,240 L 560,210 L 600,260 L 600,360 L 0,360 Z" fill="rgba(106, 163, 255, 0.08)" stroke="rgba(106, 163, 255, 0.2)" stroke-width="1"/>
+                <div class="hero-bottom">
+                    <p class="h-sub">
+                        Desarrollo de aplicaciones, automatización de procesos repetitivos con IA, diseño web y montaje técnico.
+                        <br><br>
+                        Resolvemos lo que tu empresa necesita para operar con menos fricción — sin tercerizar.
+                    </p>
+                    <div class="h-ctas">
+                        <a href="contacto.html" class="btn btn-primary">Cotizá tu proyecto <span class="arrow">→</span></a>
+                        <a href="https://wa.me/5493834327244" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp directo</a>
+                    </div>
+                </div>
 
-                        <!-- Wave rings -->
-                        <circle class="wave-ring" cx="300" cy="200" r="40" fill="none" stroke="url(#ringGrad)" stroke-width="2"/>
-                        <circle class="wave-ring r2" cx="300" cy="200" r="40" fill="none" stroke="url(#ringGrad)" stroke-width="2"/>
-                        <circle class="wave-ring r3" cx="300" cy="200" r="40" fill="none" stroke="url(#ringGrad)" stroke-width="2"/>
-
-                        <!-- Tower -->
-                        <line x1="300" y1="200" x2="290" y2="300" stroke="url(#towerGrad)" stroke-width="2"/>
-                        <line x1="300" y1="200" x2="310" y2="300" stroke="url(#towerGrad)" stroke-width="2"/>
-                        <line x1="295" y1="240" x2="305" y2="240" stroke="url(#towerGrad)" stroke-width="1.5"/>
-                        <line x1="293" y1="270" x2="307" y2="270" stroke="url(#towerGrad)" stroke-width="1.5"/>
-
-                        <!-- Central hub glow -->
-                        <circle class="hub-glow" cx="300" cy="200" r="60" fill="url(#hubGrad)"/>
-                        <circle cx="300" cy="200" r="12" fill="#00ffaa"/>
-                        <circle cx="300" cy="200" r="6" fill="#ffffff"/>
-
-                        <!-- Connection nodes -->
-                        <circle cx="120" cy="150" r="4" fill="#6aa3ff"/>
-                        <circle cx="480" cy="160" r="4" fill="#6aa3ff"/>
-                        <circle cx="160" cy="80" r="3" fill="#b66aff"/>
-                        <circle cx="440" cy="90" r="3" fill="#b66aff"/>
-
-                        <line x1="300" y1="200" x2="120" y2="150" stroke="rgba(106,163,255,0.3)" stroke-width="1" stroke-dasharray="2,4"/>
-                        <line x1="300" y1="200" x2="480" y2="160" stroke="rgba(106,163,255,0.3)" stroke-width="1" stroke-dasharray="2,4"/>
-                        <line x1="300" y1="200" x2="160" y2="80" stroke="rgba(182,106,255,0.3)" stroke-width="1" stroke-dasharray="2,4"/>
-                        <line x1="300" y1="200" x2="440" y2="90" stroke="rgba(182,106,255,0.3)" stroke-width="1" stroke-dasharray="2,4"/>
-                    </svg>
+                <div class="hero-foot">
+                    <span>↓ Scroll para conocer</span>
+                    <span>Catamarca · Argentina</span>
                 </div>
             </div>
-        </section>
+        </header>
 
-        <!-- Marquee of brands -->
         <div class="marquee" aria-hidden="true">
             <div class="marquee-track">
-                <span class="marquee-item">MOTOROLA SOLUTIONS</span>
-                <span class="marquee-item">HYTERA</span>
-                <span class="marquee-item">HP ENTERPRISE</span>
-                <span class="marquee-item">LENOVO</span>
-                <span class="marquee-item">EPSON</span>
-                <span class="marquee-item">OPENAI</span>
-                <span class="marquee-item">ANTHROPIC</span>
-                <span class="marquee-item">N8N</span>
-                <span class="marquee-item">MOTOROLA SOLUTIONS</span>
-                <span class="marquee-item">HYTERA</span>
-                <span class="marquee-item">HP ENTERPRISE</span>
-                <span class="marquee-item">LENOVO</span>
-                <span class="marquee-item">EPSON</span>
-                <span class="marquee-item">OPENAI</span>
-                <span class="marquee-item">ANTHROPIC</span>
-                <span class="marquee-item">N8N</span>
+                <span>MOTOROLA SOLUTIONS <span class="sep">◆</span> HYTERA <span class="sep">◆</span> HP ENTERPRISE <span class="sep">◆</span> LENOVO <span class="sep">◆</span> EPSON <span class="sep">◆</span> OPENAI <span class="sep">◆</span> ANTHROPIC <span class="sep">◆</span> N8N <span class="sep">◆</span></span>
+                <span>MOTOROLA SOLUTIONS <span class="sep">◆</span> HYTERA <span class="sep">◆</span> HP ENTERPRISE <span class="sep">◆</span> LENOVO <span class="sep">◆</span> EPSON <span class="sep">◆</span> OPENAI <span class="sep">◆</span> ANTHROPIC <span class="sep">◆</span> N8N <span class="sep">◆</span></span>
+                <span>MOTOROLA SOLUTIONS <span class="sep">◆</span> HYTERA <span class="sep">◆</span> HP ENTERPRISE <span class="sep">◆</span> LENOVO <span class="sep">◆</span> EPSON <span class="sep">◆</span> OPENAI <span class="sep">◆</span> ANTHROPIC <span class="sep">◆</span> N8N <span class="sep">◆</span></span>
+                <span>MOTOROLA SOLUTIONS <span class="sep">◆</span> HYTERA <span class="sep">◆</span> HP ENTERPRISE <span class="sep">◆</span> LENOVO <span class="sep">◆</span> EPSON <span class="sep">◆</span> OPENAI <span class="sep">◆</span> ANTHROPIC <span class="sep">◆</span> N8N <span class="sep">◆</span></span>
             </div>
         </div>
 
-        <section>
-            <div class="container">
-                <div class="stats-row reveal">
-                    <div class="stat">
-                        <div class="stat-num"><span data-count="50" data-suffix="km">0</span></div>
-                        <div class="stat-label">de cobertura UHF en sierra</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-num"><span data-count="30" data-suffix="+">0</span></div>
-                        <div class="stat-label">radios desplegadas por proyecto</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-num"><span data-count="12" data-suffix="h">0</span></div>
-                        <div class="stat-label">semanales ahorradas con IA</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-num"><span data-count="100" data-suffix="%">0</span></div>
-                        <div class="stat-label">argentino, en todo el país</div>
-                    </div>
-                </div>
+        <section class="shell stats reveal">
+            <div class="stat">
+                <span class="stat-num"><span data-count="40" data-suffix="+">0</span></span>
+                <span class="stat-lbl">Proyectos entregados</span>
+                <span class="stat-desc">Apps, integraciones, sitios y automatizaciones IA.</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num"><span data-count="12" data-suffix=" hs">0</span></span>
+                <span class="stat-lbl">Ahorradas por semana</span>
+                <span class="stat-desc">Por cliente promedio, con automatizaciones IA.</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num"><span data-count="24" data-suffix=" h">0</span></span>
+                <span class="stat-lbl">Respuesta a cotización</span>
+                <span class="stat-desc">Te leemos hoy, te respondemos hoy.</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num"><span data-count="100" data-suffix=" %">0</span></span>
+                <span class="stat-lbl">Argentino</span>
+                <span class="stat-desc">Catamarca · trabajamos en todo el país.</span>
             </div>
         </section>
 
-        <section id="servicios">
-            <div class="container">
-                <div class="section-heading center reveal">
-                    <span class="eyebrow">Servicios</span>
-                    <h2>Un solo proveedor para todo lo que tu operación necesita</h2>
-                    <p>Resolvemos infraestructura, comunicación, software e IA. Sin tercerizar lo que prometemos.</p>
+        <section id="servicios" class="section">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Servicios · 06</span>
+                        <h2 class="section-h">Un solo proveedor para todo lo que tu operación <span class="it">necesita</span>.</h2>
+                    </div>
+                    <p class="section-sub">Desarrollamos software, diseñamos webs, automatizamos procesos con IA y montamos la infraestructura técnica. Un solo equipo, sin tercerizar.</p>
                 </div>
 
-                <div class="bento">
-                    <div class="card b-lg reveal reveal-delay-1">
-                        <div class="card-icon">RC</div>
-                        <h3>Radiocomunicaciones profesionales</h3>
-                        <p>Partner Oficial Motorola y Hytera. Radios portátiles, móviles, repetidoras y enlaces UHF/VHF diseñados, instalados y mantenidos por nuestro equipo técnico para minería, seguridad e industria.</p>
-                        <div class="bento-visual"></div>
-                        <a href="servicios/radiocomunicaciones.html" class="card-link" style="margin-top: 20px;">Ver detalle →</a>
-                    </div>
-                    <div class="card b-sm reveal reveal-delay-2">
-                        <div class="card-icon">IA</div>
-                        <h3>Automatizaciones con IA</h3>
-                        <p>Agentes y flujos en n8n.</p>
-                        <a href="servicios/automatizaciones-ia.html" class="card-link">Ver detalle →</a>
-                    </div>
-                    <div class="card b-sm reveal reveal-delay-3">
-                        <div class="card-icon">CR</div>
-                        <h3>Cursos de IA</h3>
-                        <p>En vivo, grupos reducidos.</p>
-                        <a href="cursos.html" class="card-link">Ver cursos →</a>
-                    </div>
-                    <div class="card b-md reveal reveal-delay-4">
-                        <div class="card-icon">TI</div>
-                        <h3>Tecnología y equipamiento</h3>
-                        <p>Notebooks, estaciones de trabajo, impresoras e insumos para empresas. Cotización rápida.</p>
-                        <a href="servicios/tecnologia.html" class="card-link">Ver detalle →</a>
-                    </div>
-                    <div class="card b-md reveal reveal-delay-5">
-                        <div class="card-icon">DV</div>
-                        <h3>Desarrollo a medida</h3>
-                        <p>Aplicaciones, integraciones y software pensado para resolver tu problema específico.</p>
-                        <a href="servicios/desarrollo.html" class="card-link">Ver detalle →</a>
-                    </div>
-                    <div class="card b-md reveal reveal-delay-6">
-                        <div class="card-icon">SAT</div>
+                <div class="svc-grid reveal">
+                    <article class="svc svc-feat">
+                        <div class="svc-text">
+                            <div class="svc-tag"><span>DEV · Servicio insignia</span><span class="num">/ 01</span></div>
+                            <h3>Desarrollo de aplicaciones a medida</h3>
+                            <p>Apps web, móviles, integraciones y software hecho para resolver tu problema específico. Stack moderno, código propio, mantenimiento incluido.</p>
+                            <div class="svc-foot"><span>Web · Mobile · Integraciones · APIs</span><span class="arrow">→</span></div>
+                        </div>
+                        <div class="svc-art" aria-hidden="true">
+                            <svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice">
+                                <defs>
+                                    <linearGradient id="codefade" x1="0" x2="0" y1="0" y2="1">
+                                        <stop offset="0%" stop-color="#1a1714"/>
+                                        <stop offset="100%" stop-color="#14110f"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="600" height="400" fill="url(#codefade)"/>
+                                <g stroke="#2a2520" stroke-opacity=".4">
+                                    <line x1="0" y1="50" x2="600" y2="50"/><line x1="0" y1="100" x2="600" y2="100"/>
+                                    <line x1="0" y1="150" x2="600" y2="150"/><line x1="0" y1="200" x2="600" y2="200"/>
+                                    <line x1="0" y1="250" x2="600" y2="250"/><line x1="0" y1="300" x2="600" y2="300"/>
+                                    <line x1="0" y1="350" x2="600" y2="350"/>
+                                    <line x1="50" y1="0" x2="50" y2="400"/><line x1="100" y1="0" x2="100" y2="400"/>
+                                    <line x1="150" y1="0" x2="150" y2="400"/><line x1="200" y1="0" x2="200" y2="400"/>
+                                    <line x1="250" y1="0" x2="250" y2="400"/><line x1="300" y1="0" x2="300" y2="400"/>
+                                    <line x1="350" y1="0" x2="350" y2="400"/><line x1="400" y1="0" x2="400" y2="400"/>
+                                    <line x1="450" y1="0" x2="450" y2="400"/><line x1="500" y1="0" x2="500" y2="400"/>
+                                    <line x1="550" y1="0" x2="550" y2="400"/>
+                                </g>
+                                <g transform="translate(60,70)">
+                                    <rect width="480" height="260" rx="8" fill="#0c0a09" stroke="#3a342e"/>
+                                    <circle cx="20" cy="20" r="4.5" fill="#ff5a1f" opacity=".7"/>
+                                    <circle cx="36" cy="20" r="4.5" fill="#6b645d" opacity=".5"/>
+                                    <circle cx="52" cy="20" r="4.5" fill="#c6ff5a" opacity=".7"/>
+                                    <text x="240" y="24" text-anchor="middle" fill="#6b645d" font-family="Geist Mono, monospace" font-size="11" letter-spacing="2">mineconnect / build</text>
+                                    <g font-family="Geist Mono, monospace" font-size="13">
+                                        <text x="20" y="65" fill="#6b645d">01</text>
+                                        <text x="50" y="65" fill="#ff5a1f">async function</text>
+                                        <text x="170" y="65" fill="#f4ede0">deploy</text>
+                                        <text x="220" y="65" fill="#a8a098">() {</text>
+                                        <text x="20" y="90" fill="#6b645d">02</text>
+                                        <text x="60" y="90" fill="#a8a098">const</text>
+                                        <text x="105" y="90" fill="#f4ede0">app</text>
+                                        <text x="140" y="90" fill="#a8a098">=</text>
+                                        <text x="160" y="90" fill="#ff5a1f">await</text>
+                                        <text x="205" y="90" fill="#f4ede0">build</text>
+                                        <text x="245" y="90" fill="#a8a098">(spec)</text>
+                                        <text x="20" y="115" fill="#6b645d">03</text>
+                                        <text x="60" y="115" fill="#a8a098">await</text>
+                                        <text x="105" y="115" fill="#f4ede0">test</text>
+                                        <text x="135" y="115" fill="#a8a098">(app)</text>
+                                        <text x="20" y="140" fill="#6b645d">04</text>
+                                        <text x="60" y="140" fill="#a8a098">await</text>
+                                        <text x="105" y="140" fill="#f4ede0">ship</text>
+                                        <text x="135" y="140" fill="#a8a098">(app,</text>
+                                        <text x="190" y="140" fill="#c6ff5a">"prod"</text>
+                                        <text x="232" y="140" fill="#a8a098">)</text>
+                                        <text x="20" y="165" fill="#6b645d">05</text>
+                                        <text x="50" y="165" fill="#a8a098">}</text>
+                                        <text x="20" y="200" fill="#6b645d">$</text>
+                                        <text x="40" y="200" fill="#f4ede0">npm run deploy</text>
+                                    </g>
+                                    <rect x="20" y="218" width="440" height="22" rx="3" fill="#1a1714"/>
+                                    <rect x="20" y="218" height="22" rx="3" fill="#c6ff5a" opacity=".25">
+                                        <animate attributeName="width" from="0" to="440" dur="2.4s" repeatCount="indefinite"/>
+                                    </rect>
+                                    <text x="30" y="234" fill="#c6ff5a" font-family="Geist Mono, monospace" font-size="11">✓ build · ✓ test · ✓ deploy</text>
+                                </g>
+                                <text x="20" y="384" fill="#6b645d" font-family="Geist Mono, monospace" font-size="10" letter-spacing="2">APP · WEB · MOBILE · API · INTEGRACIONES</text>
+                            </svg>
+                        </div>
+                    </article>
+
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>IA</span><span class="num">/ 02</span></div>
+                        <h3>Automatización de procesos con IA</h3>
+                        <p>Agentes y flujos en n8n que automatizan tareas repetitivas: lectura de emails, clasificación de documentos, carga al ERP, reportes. Recuperá horas todas las semanas.</p>
+                        <div class="svc-foot"><a href="servicios/automatizaciones-ia.html">Ver detalle</a><span class="arrow">→</span></div>
+                    </article>
+
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>WEB</span><span class="num">/ 03</span></div>
+                        <h3>Diseño y desarrollo web</h3>
+                        <p>Sitios institucionales, landings, tiendas y dashboards. Diseño propio, performance medida, listo para indexar y vender.</p>
+                        <div class="svc-foot"><a href="contacto.html">Ver detalle</a><span class="arrow">→</span></div>
+                    </article>
+
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>SET</span><span class="num">/ 04</span></div>
+                        <h3>Montaje técnico y equipamiento</h3>
+                        <p>Notebooks, workstations, impresoras, redes y setup de oficinas. Cotización rápida, entrega coordinada, todo configurado.</p>
+                        <div class="svc-foot"><a href="servicios/tecnologia.html">Ver detalle</a><span class="arrow">→</span></div>
+                    </article>
+
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>RC</span><span class="num">/ 05</span></div>
+                        <h3>Radiocomunicaciones</h3>
+                        <p>Partner oficial Motorola y Hytera. Portátiles, repetidoras y enlaces UHF/VHF cuando hace falta cubrir terreno.</p>
+                        <div class="svc-foot"><a href="servicios/radiocomunicaciones.html">Ver detalle</a><span class="arrow">→</span></div>
+                    </article>
+
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>SAT</span><span class="num">/ 06</span></div>
                         <h3>MineConnect SAT</h3>
-                        <p>Sistema propio de control de flotas con GPS, reportes de alta precisión y RBAC.</p>
-                        <a href="sat.html" class="card-link">Conocer SAT →</a>
-                    </div>
-                    <div class="card b-md reveal reveal-delay-6">
-                        <div class="card-icon">AU</div>
-                        <h3>Auditorías con IA</h3>
-                        <p>Análisis automatizado de procesos, documentos y operación con foco en hallazgos accionables.</p>
-                        <a href="contacto.html" class="card-link">Hablemos →</a>
-                    </div>
+                        <p>Sistema propio de control de flotas: GPS, reportes de alta precisión y permisos por rol.</p>
+                        <div class="svc-foot"><a href="sat.html">Conocer SAT</a><span class="arrow">→</span></div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="section-heading reveal">
-                    <span class="eyebrow">Casos</span>
-                    <h2>Problemas reales, soluciones que funcionan</h2>
+        <section id="casos" class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Casos · 03</span>
+                        <h2 class="section-h">Problemas reales,<br><span class="it">soluciones</span> que funcionan.</h2>
+                    </div>
+                    <p class="section-sub">Tres ejemplos de proyectos terminados — con tiempos, alcances y resultados verificables.</p>
                 </div>
-                <div class="grid-cards">
-                    <div class="case-card reveal reveal-delay-1">
-                        <h4>Enlace UHF para minera en sierra catamarqueña</h4>
-                        <p>Sistema con repetidora en altura que cubre 50 km en terreno irregular. Instalación en cinco días, más de un año operando sin caídas.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-2">
-                        <h4>Automatización de facturación para constructora</h4>
-                        <p>Flujo en n8n que lee comprobantes por email, los clasifica con IA y los carga al sistema contable. 12 horas semanales recuperadas.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-3">
-                        <h4>Red de 30 radios Motorola para empresa de seguridad</h4>
-                        <p>Equipamiento, programación por cliente y capacitación al personal. Entrega en dos etapas para no frenar operaciones.</p>
-                    </div>
+                <div class="cases">
+                    <a class="case reveal" href="#">
+                        <span class="case-idx">01 /</span>
+                        <div>
+                            <h3 class="case-title">Enlace VHF para minera en sierra catamarqueña</h3>
+                            <div class="case-meta">Minería · 5 días · 50 km cobertura</div>
+                        </div>
+                        <p class="case-result">Repetidora en altura cubriendo terreno irregular. <strong>+12 meses</strong> operando sin caídas.</p>
+                        <span class="case-link">Caso completo →</span>
+                    </a>
+                    <a class="case reveal" href="#">
+                        <span class="case-idx">02 /</span>
+                        <div>
+                            <h3 class="case-title">Automatización de facturación para constructora</h3>
+                            <div class="case-meta">Construcción · n8n + IA · 2 semanas</div>
+                        </div>
+                        <p class="case-result">Lectura, clasificación y carga al sistema contable. <strong>12 hs semanales</strong> recuperadas.</p>
+                        <span class="case-link">Caso completo →</span>
+                    </a>
+                    <a class="case reveal" href="#">
+                        <span class="case-idx">03 /</span>
+                        <div>
+                            <h3 class="case-title">Red de 30 portátiles Hytera para empresa de seguridad</h3>
+                            <div class="case-meta">Seguridad · Hytera · Entrega en 2 etapas</div>
+                        </div>
+                        <p class="case-result">Equipamiento, programación por cliente y capacitación al personal. <strong>0 fricción</strong> operativa.</p>
+                        <span class="case-link">Caso completo →</span>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="section-heading center reveal">
-                    <span class="eyebrow">Testimonios</span>
-                    <h2>Lo que dicen nuestros clientes</h2>
+        <section class="section" style="padding-top:60px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Voces · Clientes</span>
+                        <h2 class="section-h">Lo que dicen <span class="it">quienes ya</span> trabajan con nosotros.</h2>
+                    </div>
                 </div>
-                <div class="testimonial-grid">
-                    <div class="testimonial reveal reveal-delay-1">
-                        <blockquote>"Necesitábamos comunicar tres frentes de cantera separados por cerros. MineConnect nos hizo el relevamiento y la instalación en tiempo. Sin vueltas comerciales."</blockquote>
-                        <cite>
+                <div class="testi-grid">
+                    <article class="testi reveal">
+                        <span class="quote-mark">“</span>
+                        <q>Me lo recomendó un colega y me sorprendió. Lo llamé un viernes a la tarde y el lunes ya tenía el presupuesto y todo explicado en criollo, sin chamuyo técnico. Me sacó varios dolores de cabeza de encima.</q>
+                        <div class="testi-by">
                             <span class="avatar">CM</span>
-                            <span><strong>Carlos Méndez</strong>Jefe de Operaciones · Áridos del Bolsón S.R.L.</span>
-                        </cite>
-                    </div>
-                    <div class="testimonial reveal reveal-delay-2">
-                        <blockquote>"Queríamos meter IA en el estudio pero no sabíamos por dónde empezar. Hicimos el curso y después contratamos una automatización. Recuperamos diez horas por semana."</blockquote>
-                        <cite>
+                            <div>
+                                <div class="testi-name">Carlos Méndez</div>
+                                <div class="testi-role">Jefe de Operaciones · Áridos del Bolsón S.R.L.</div>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="testi reveal">
+                        <span class="quote-mark">“</span>
+                        <q>Muy buena atención la de Facu. Siempre confié en él y sé cómo trabaja. Arrancamos con el curso de IA, después le pedí una automatización para el estudio y nos sacó como diez horas de encima por semana. Saludos.</q>
+                        <div class="testi-by">
                             <span class="avatar">LF</span>
-                            <span><strong>Lucía Fernández</strong>Administradora · Estudio Fernández & Asociados</span>
-                        </cite>
-                    </div>
-                    <div class="testimonial reveal reveal-delay-3">
-                        <blockquote>"Compramos seis notebooks y dos impresoras para abrir una nueva oficina. Cotizaron rápido, entregaron en plazo y configuraron todo. Proveedor de cabecera."</blockquote>
-                        <cite>
+                            <div>
+                                <div class="testi-name">Lucía Fernández</div>
+                                <div class="testi-role">Administradora · Estudio Fernández & Asociados</div>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="testi reveal">
+                        <span class="quote-mark">“</span>
+                        <q>Un crack Facu. Le pedimos seis notebooks y dos impresoras para abrir oficina nueva, cotizó al toque y nos dejó todo andando. Saludos hermano.</q>
+                        <div class="testi-by">
                             <span class="avatar">DQ</span>
-                            <span><strong>Diego Quiroga</strong>Socio gerente · Constructora QuiCo</span>
-                        </cite>
-                    </div>
+                            <div>
+                                <div class="testi-name">Diego Quiroga</div>
+                                <div class="testi-role">Encargado · Empresa constructora</div>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="cta-band reveal">
-                    <div class="beam"></div>
-                    <h2>¿Tenés un problema técnico? <span class="gradient-text">Lo resolvemos.</span></h2>
-                    <p>Equipamiento, redes, radios, software o IA. Un solo equipo, sin tercerizar.</p>
-                    <div class="hero-actions" style="justify-content: center;">
-                        <a href="contacto.html" class="btn btn-primary">Hablemos de tu proyecto →</a>
-                        <a href="https://wa.me/5493834327244" class="btn btn-secondary" target="_blank">WhatsApp</a>
-                    </div>
+        <section id="contacto" class="cta">
+            <div class="topo" data-topo="42" data-hot="3" aria-hidden="true"></div>
+            <div class="shell" style="position:relative;z-index:2">
+                <h2>¿Tenés un problema técnico?<br><span class="it">Lo resolvemos.</span></h2>
+                <p>Equipamiento, redes, radios, software o IA. Un solo equipo, sin tercerizar. Te respondemos en menos de 24 hs.</p>
+                <div class="h-ctas" style="justify-content:center">
+                    <a href="contacto.html" class="btn btn-primary">Hablemos de tu proyecto <span class="arrow">→</span></a>
+                    <a href="https://wa.me/5493834327244" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp <span class="arrow">→</span></a>
                 </div>
             </div>
         </section>
     </main>
-    <a href="https://wa.me/5493834327244" class="fab-wa" target="_blank" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.711.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
 
+    <a class="wa" href="https://wa.me/5493834327244" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.6 11.6 0 0 0 12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5zM12 22a10 10 0 0 1-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A10 10 0 1 1 22 12a10 10 0 0 1-10 10zm5.5-7.5c-.3-.2-1.8-.9-2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.3-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6.4-.6c.1-.2 0-.4 0-.5l-1-2.3c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5 4.5l1.7.7c.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.5.2-.7.2-1.4.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
+    </a>
 
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <a href="index.html" class="logo">
-                        <span class="logo-mark"></span>
-                        Mine<span>Connect</span>
-                    </a>
-                    <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.92rem; max-width: 320px;">Tecnología que entiende el terreno. Catamarca, Argentina. Trabajamos en todo el país.</p>
+    <footer class="foot">
+        <div class="shell">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <a href="index.html" class="brand"><span class="brand-mark">M</span> MineConnect</a>
+                    <p>Tecnología que entiende el terreno. Catamarca, Argentina — trabajamos en todo el país.</p>
                 </div>
                 <div>
                     <h4>Servicios</h4>
                     <ul>
-                        <li><a href="index.html#servicios">Radiocomunicaciones</a></li>
-                        <li><a href="index.html#servicios">Tecnología</a></li>
-                        <li><a href="index.html#servicios">Automatizaciones IA</a></li>
-                        <li><a href="index.html#servicios">Desarrollo</a></li>
+                        <li><a href="servicios/radiocomunicaciones.html">Radiocomunicaciones</a></li>
+                        <li><a href="servicios/tecnologia.html">Tecnología</a></li>
+                        <li><a href="servicios/automatizaciones-ia.html">Automatizaciones IA</a></li>
+                        <li><a href="#servicios">Desarrollo</a></li>
+                        <li><a href="sat.html">MineConnect SAT</a></li>
                     </ul>
                 </div>
                 <div>
@@ -349,21 +377,27 @@
                     <ul>
                         <li><a href="nosotros.html">Nosotros</a></li>
                         <li><a href="cursos.html">Cursos</a></li>
+                        <li><a href="#casos">Casos</a></li>
                         <li><a href="contacto.html">Contacto</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4>Contacto</h4>
-                    <p><a href="https://wa.me/5493834327244">+54 9 383 432-7244</a></p>
-                    <p><a href="mailto:contacto@mineconnect.com.ar">contacto@mineconnect.com.ar</a></p>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">Catamarca, Argentina</p>
+                    <ul>
+                        <li><a href="https://wa.me/5493834327244">+54 9 383 432-7244</a></li>
+                        <li><a href="mailto:contacto@mineconnect.com.ar">contacto@mineconnect.com.ar</a></li>
+                        <li>Catamarca · Argentina</li>
+                    </ul>
                 </div>
             </div>
-            <div class="footer-bottom">© 2026 MineConnect · <a href="privacidad.html" style="color: var(--text-muted);">Privacidad</a> · <a href="terminos.html" style="color: var(--text-muted);">Términos</a></div>
+            <div class="foot-bottom">
+                <span>© 2026 MINECONNECT · TECNOLOGÍA QUE CONECTA</span>
+                <span><a href="privacidad.html">Privacidad</a> · <a href="terminos.html">Términos</a></span>
+            </div>
         </div>
     </footer>
 
-    <script src="js/particles.js"></script>
+    <script src="js/topo.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

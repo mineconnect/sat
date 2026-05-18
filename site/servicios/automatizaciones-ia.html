@@ -8,8 +8,8 @@
     <meta name="keywords" content="automatización con IA Argentina, agentes IA, n8n empresas, ChatGPT empresas, auditoría IA">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="apple-touch-icon" href="../favicon.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..700&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap">
+    <link rel="apple-touch-icon" href="../favicon.svg">
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
     <link rel="canonical" href="https://mineconnect.com.ar/servicios/automatizaciones-ia.html">
     <meta property="og:title" content="Automatizaciones con IA para empresas | MineConnect">
@@ -28,163 +28,234 @@
       "description": "Implementación de agentes, flujos en n8n y auditorías con IA para PyMEs. Diagnóstico gratuito y resultados desde la primera semana."
     }
     </script>
+    <style>
+      .faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+      .faq-item { border-bottom: 1px solid var(--line); padding: 22px 0; }
+      .faq-item summary { list-style: none; cursor: pointer; font-family: var(--f-display); font-weight: 500; font-size: clamp(18px,2vw,22px); letter-spacing: -0.012em; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+      .faq-item summary::-webkit-details-marker { display: none; }
+      .faq-item summary::after { content: "+"; color: var(--hi); font-family: var(--f-mono); font-size: 22px; }
+      .faq-item[open] summary::after { content: "−"; }
+      .faq-item p { margin: 14px 0 0; color: var(--fg-muted); font-size: 15.5px; line-height: 1.55; max-width: 70ch; }
+      .crumb { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-faint); }
+      .crumb a { color: var(--fg-faint); } .crumb a:hover { color: var(--hi); }
+    </style>
 </head>
 <body>
     <div class="scroll-progress"></div>
-    <canvas id="bg-canvas"></canvas>
-    <div class="bg-fx">
-        <div class="aurora a1"></div>
-        <div class="aurora a2"></div>
-    </div>
 
-    <header class="site-header">
-        <div class="container">
-            <a href="../index.html" class="logo"><span class="logo-mark"></span>Mine<span>Connect</span></a>
+    <nav class="nav">
+        <div class="shell nav-inner">
+            <a href="../index.html" class="brand">
+                <span class="brand-mark">M</span>
+                MineConnect
+            </a>
             <button class="menu-toggle" aria-label="Menú">☰</button>
-            <ul class="nav-links">
-                <li><a class="active" href="../index.html#servicios">Servicios</a></li>
-                <li><a href="../cursos.html">Cursos</a></li>
-                <li><a href="../nosotros.html">Nosotros</a></li>
-                <li><a href="../contacto.html">Contacto</a></li>
-                <li><a href="../contacto.html" class="nav-cta">Cotizar</a></li>
-            </ul>
+            <div class="nav-links">
+                <a href="../index.html#servicios">Servicios</a>
+                <a href="../cursos.html">Cursos</a>
+                <a href="../nosotros.html">Nosotros</a>
+                <a href="../contacto.html">Contacto</a>
+                <a href="../contacto.html" class="nav-cta">Cotizar</a>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <main>
-        <section class="hero" style="padding: 80px 0 40px; text-align: left;">
-            <div class="container">
-                <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">
-                    <a href="../index.html" style="color: var(--text-muted);">Inicio</a> / Servicios / Automatizaciones con IA
+        <header class="hero hero-solo">
+            <div class="topo" data-topo="88" data-hot="3" aria-hidden="true"></div>
+            <div class="shell hero-stack">
+                <div class="hero-meta">
+                    <span class="pill"><span class="dot"></span> Diagnóstico inicial sin cargo</span>
+                    <span class="hero-tag">MC · SERVICIOS / IA</span>
                 </div>
-                <div class="pill"><span class="dot"></span> Diagnóstico inicial sin cargo</div>
-                <h1 style="text-align: left; margin: 0 0 20px;">Tu empresa, <span class="gradient-text">automatizada con IA</span>.</h1>
-                <p class="subtitle" style="margin: 0 0 32px; text-align: left;">Implementamos agentes, flujos y auditorías inteligentes que liberan horas reales de tu equipo desde la primera semana. Sin promesas vacías, con resultados medibles.</p>
-                <div class="hero-actions" style="justify-content: flex-start;">
-                    <a href="../contacto.html" class="btn btn-primary">Agendar diagnóstico →</a>
-                    <a href="https://wa.me/5493834327244?text=Hola,%20quiero%20automatizar%20procesos%20con%20IA" class="btn btn-wa" target="_blank">WhatsApp directo</a>
+                <span class="crumb"><a href="../index.html">Inicio</a> / Servicios / <span style="color:var(--hi)">Automatizaciones con IA</span></span>
+
+                <h1 class="h-title h-title-xl">
+                    Tu empresa,<br>
+                    <span class="it">automatizada</span><br>
+                    con IA.
+                </h1>
+
+                <div class="hero-bottom">
+                    <p class="h-sub">
+                        Implementamos agentes, flujos y auditorías inteligentes que liberan horas reales de tu equipo desde la primera semana. Sin promesas vacías, con resultados medibles.
+                    </p>
+                    <div class="h-ctas">
+                        <a href="../contacto.html" class="btn btn-primary">Agendar diagnóstico <span class="arrow">→</span></a>
+                        <a href="https://wa.me/5493834327244?text=Hola,%20quiero%20automatizar%20procesos%20con%20IA" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp directo</a>
+                    </div>
+                </div>
+
+                <div class="hero-foot">
+                    <span>↓ Scroll para casos de uso</span>
+                    <span>n8n · OpenAI · Claude · Gemini</span>
                 </div>
             </div>
-        </section>
+        </header>
 
-        <section>
-            <div class="container">
-                <div class="section-heading">
-                    <span class="eyebrow">Casos de uso</span>
-                    <h2>Procesos que automatizamos</h2>
+        <section class="section">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Casos de uso · 06</span>
+                        <h2 class="section-h">Procesos que <span class="it">automatizamos</span>.</h2>
+                    </div>
+                    <p class="section-sub">Comercial, administración, atención, RH, operaciones y conocimiento. Si es repetitivo y consume horas, es candidato.</p>
                 </div>
-                <div class="grid-cards">
-                    <div class="card reveal reveal-delay-1">
-                        <div class="card-icon">CO</div>
+
+                <div class="svc-grid reveal">
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>COMERCIAL</span><span class="num">/ 01</span></div>
                         <h3>Comercial y ventas</h3>
                         <p>Calificación automática de leads, seguimientos personalizados por WhatsApp y propuestas comerciales generadas en minutos.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-2">
-                        <div class="card-icon">AD</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>ADMIN</span><span class="num">/ 02</span></div>
                         <h3>Administración</h3>
                         <p>Carga automática de comprobantes, conciliación de pagos, generación de reportes y resúmenes para contabilidad.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-3">
-                        <div class="card-icon">AT</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>ATENCIÓN</span><span class="num">/ 03</span></div>
                         <h3>Atención al cliente</h3>
                         <p>Chatbots en WhatsApp con IA que califican, responden FAQ y derivan al humano correcto cuando hace falta.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-4">
-                        <div class="card-icon">RH</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>RRHH</span><span class="num">/ 04</span></div>
                         <h3>Recursos humanos</h3>
                         <p>Filtrado de CVs, generación de descripciones de puesto, onboarding documentado y consultas internas con asistente.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-5">
-                        <div class="card-icon">OP</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>OPS</span><span class="num">/ 05</span></div>
                         <h3>Operaciones</h3>
                         <p>Reportes operativos diarios, alertas inteligentes basadas en datos y monitoreo de KPIs con resúmenes automáticos.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-6">
-                        <div class="card-icon">DC</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>DOCS</span><span class="num">/ 06</span></div>
                         <h3>Documentación y conocimiento</h3>
                         <p>Indexación de manuales, contratos y procedimientos para consultar en lenguaje natural desde cualquier lado.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Proceso · 03</span>
+                        <h2 class="section-h">De diagnóstico a producción<br>en <span class="it">semanas</span>.</h2>
+                    </div>
+                    <p class="section-sub">Trabajamos en ciclos cortos. Cada hito te muestra valor real antes de avanzar al siguiente.</p>
+                </div>
+                <div class="cases reveal">
+                    <div class="case">
+                        <span class="case-idx">01 /</span>
+                        <div>
+                            <h3 class="case-title">Diagnóstico</h3>
+                            <div class="case-meta">1 semana · Sin cargo</div>
+                        </div>
+                        <p class="case-result">Mapeamos tus procesos, identificamos los 3 con mejor <strong>ROI</strong> y priorizamos. Te dejamos un informe aunque no contrates.</p>
+                        <span class="case-link">Detalle →</span>
+                    </div>
+                    <div class="case">
+                        <span class="case-idx">02 /</span>
+                        <div>
+                            <h3 class="case-title">MVP</h3>
+                            <div class="case-meta">2-3 semanas · En producción</div>
+                        </div>
+                        <p class="case-result">Construimos el primer flujo o agente <strong>en producción</strong>. Lo usás vos y tu equipo. Ajustamos con el uso real.</p>
+                        <span class="case-link">Detalle →</span>
+                    </div>
+                    <div class="case">
+                        <span class="case-idx">03 /</span>
+                        <div>
+                            <h3 class="case-title">Escala</h3>
+                            <div class="case-meta">Continuo · Soporte mensual</div>
+                        </div>
+                        <p class="case-result">Sumamos nuevos procesos, monitoreamos métricas y <strong>capacitamos</strong> a tu gente para que el sistema crezca.</p>
+                        <span class="case-link">Detalle →</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="section-heading center reveal">
-                    <span class="eyebrow">Proceso</span>
-                    <h2>De diagnóstico a producción en semanas</h2>
-                    <p>Trabajamos en ciclos cortos. Cada hito te muestra valor real antes de avanzar al siguiente.</p>
-                </div>
-                <div class="grid-cards">
-                    <div class="case-card reveal reveal-delay-1">
-                        <h4>1. Diagnóstico (1 semana)</h4>
-                        <p>Mapeamos tus procesos, identificamos los 3 con mejor ROI de automatización y priorizamos. Te dejamos un informe aunque no contrates.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-2">
-                        <h4>2. MVP (2-3 semanas)</h4>
-                        <p>Construimos el primer flujo o agente en producción. Lo usás vos y tu equipo. Ajustamos según lo que aparece en el uso real.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-3">
-                        <h4>3. Escala (continuo)</h4>
-                        <p>Sumamos nuevos procesos, monitoreamos métricas, ajustamos costos de IA y capacitamos a tu gente para que el sistema crezca.</p>
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Stack · 03</span>
+                        <h2 class="section-h">Con qué <span class="it">construimos</span>.</h2>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <div class="section-heading">
-                    <span class="eyebrow">Stack</span>
-                    <h2>Con qué construimos</h2>
-                </div>
-                <div class="grid-cards">
-                    <div class="card reveal reveal-delay-1">
+                <div class="svc-grid reveal">
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>MODELOS</span><span class="num">/ 01</span></div>
                         <h3>Modelos de IA</h3>
                         <p>OpenAI (GPT-4o, GPT-5), Anthropic (Claude Sonnet/Opus), Gemini. Elegimos el modelo según costo, calidad y latencia del caso.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-2">
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>ORQUESTACIÓN</span><span class="num">/ 02</span></div>
                         <h3>Orquestación</h3>
                         <p>n8n para flujos visuales auto-hosteados o en la nube. Make/Zapier cuando aplica. Código a medida para casos complejos.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-3">
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>INTEGRACIONES</span><span class="num">/ 03</span></div>
                         <h3>Integraciones</h3>
                         <p>WhatsApp Business API, Gmail, Google Sheets, Notion, HubSpot, Pipedrive, sistemas ERP/contables vía API o webhook.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Casos reales · 03</span>
+                        <h2 class="section-h">Automatizaciones que ya están <span class="it">corriendo</span>.</h2>
+                    </div>
+                </div>
+                <div class="cases reveal">
+                    <div class="case">
+                        <span class="case-idx">01 /</span>
+                        <div>
+                            <h3 class="case-title">Facturación automatizada para constructora</h3>
+                            <div class="case-meta">Construcción · n8n + IA</div>
+                        </div>
+                        <p class="case-result">Lee comprobantes por email, los clasifica y los carga al sistema contable. <strong>12 hs semanales</strong> recuperadas.</p>
+                        <span class="case-link">Caso →</span>
+                    </div>
+                    <div class="case">
+                        <span class="case-idx">02 /</span>
+                        <div>
+                            <h3 class="case-title">Chatbot de WhatsApp para clínica</h3>
+                            <div class="case-meta">Salud · WhatsApp · IA</div>
+                        </div>
+                        <p class="case-result">Agenda turnos, responde FAQ y deriva consultas médicas. Atiende el <strong>70%</strong> sin intervención humana.</p>
+                        <span class="case-link">Caso →</span>
+                    </div>
+                    <div class="case">
+                        <span class="case-idx">03 /</span>
+                        <div>
+                            <h3 class="case-title">Reportes diarios para empresa logística</h3>
+                            <div class="case-meta">Logística · Agente IA</div>
+                        </div>
+                        <p class="case-result">Arma cada mañana un <strong>resumen con KPIs</strong>, anomalías y recomendaciones, y lo envía al grupo de gerencia.</p>
+                        <span class="case-link">Caso →</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="section-heading reveal">
-                    <span class="eyebrow">Casos reales</span>
-                    <h2>Automatizaciones que ya están corriendo</h2>
-                </div>
-                <div class="grid-cards">
-                    <div class="case-card reveal reveal-delay-1">
-                        <h4>Facturación automatizada para constructora</h4>
-                        <p>Flujo en n8n + IA que lee comprobantes por email, los clasifica y los carga al sistema contable. 12 horas semanales recuperadas.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-2">
-                        <h4>Chatbot de WhatsApp para clínica</h4>
-                        <p>Asistente que agenda turnos, responde FAQ y deriva consultas médicas. Atiende el 70% de los mensajes sin intervención humana.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-3">
-                        <h4>Reportes diarios para empresa logística</h4>
-                        <p>Agente que arma cada mañana un resumen con KPIs, anomalías y recomendaciones, y lo envía al grupo de gerencia.</p>
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Preguntas frecuentes</span>
+                        <h2 class="section-h">Sobre <span class="it">automatización</span> con IA.</h2>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <div class="section-heading center reveal">
-                    <span class="eyebrow">Preguntas frecuentes</span>
-                    <h2>Sobre automatización con IA</h2>
-                </div>
-                <div class="faq-list">
+                <div class="faq-list reveal">
                     <details class="faq-item">
                         <summary>¿Cuánto cuesta automatizar un proceso?</summary>
                         <p>Depende de la complejidad. Un flujo simple (clasificación de emails, alta de leads, reportes) arranca en USD 600–1200 implementación + un costo mensual chico de hosting e IA. Proyectos más complejos (agentes, integraciones múltiples) los cotizamos según alcance tras el diagnóstico.</p>
@@ -209,29 +280,66 @@
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="cta-band reveal">
-                    <h2>Empezá con un <span class="gradient-text">diagnóstico gratuito</span></h2>
-                    <p>30 minutos en los que identificamos qué procesos tuyos rinden más automatizados y cuánto te puede ahorrar.</p>
-                    <div class="hero-actions" style="justify-content: center;">
-                        <a href="../contacto.html" class="btn btn-primary">Agendar diagnóstico →</a>
-                        <a href="https://wa.me/5493834327244" class="btn btn-secondary" target="_blank">WhatsApp</a>
-                    </div>
+        <section class="cta">
+            <div class="topo" data-topo="112" data-hot="4" aria-hidden="true"></div>
+            <div class="shell" style="position:relative;z-index:2">
+                <h2>Empezá con un<br><span class="it">diagnóstico gratuito</span>.</h2>
+                <p>30 minutos en los que identificamos qué procesos tuyos rinden más automatizados y cuánto te puede ahorrar.</p>
+                <div class="h-ctas" style="justify-content:center">
+                    <a href="../contacto.html" class="btn btn-primary">Agendar diagnóstico <span class="arrow">→</span></a>
+                    <a href="https://wa.me/5493834327244" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp</a>
                 </div>
             </div>
         </section>
     </main>
-    <a href="https://wa.me/5493834327244" class="fab-wa" target="_blank" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.711.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
 
+    <a class="wa" href="https://wa.me/5493834327244" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.6 11.6 0 0 0 12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5zM12 22a10 10 0 0 1-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A10 10 0 1 1 22 12a10 10 0 0 1-10 10zm5.5-7.5c-.3-.2-1.8-.9-2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.3-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6.4-.6c.1-.2 0-.4 0-.5l-1-2.3c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5 4.5l1.7.7c.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.5.2-.7.2-1.4.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
+    </a>
 
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-bottom">© 2026 MineConnect. <a href="../contacto.html" style="color: var(--text-muted);">Contacto</a> · <a href="../index.html" style="color: var(--text-muted);">Inicio</a></div>
+    <footer class="foot">
+        <div class="shell">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <a href="../index.html" class="brand"><span class="brand-mark">M</span> MineConnect</a>
+                    <p>Tecnología que entiende el terreno. Catamarca, Argentina — trabajamos en todo el país.</p>
+                </div>
+                <div>
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="radiocomunicaciones.html">Radiocomunicaciones</a></li>
+                        <li><a href="tecnologia.html">Tecnología</a></li>
+                        <li><a href="automatizaciones-ia.html">Automatizaciones IA</a></li>
+                        <li><a href="desarrollo.html">Desarrollo</a></li>
+                        <li><a href="../sat.html">MineConnect SAT</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="../nosotros.html">Nosotros</a></li>
+                        <li><a href="../cursos.html">Cursos</a></li>
+                        <li><a href="../index.html#casos">Casos</a></li>
+                        <li><a href="../contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><a href="https://wa.me/5493834327244">+54 9 383 432-7244</a></li>
+                        <li><a href="mailto:contacto@mineconnect.com.ar">contacto@mineconnect.com.ar</a></li>
+                        <li>Catamarca · Argentina</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <span>© 2026 MINECONNECT · TECNOLOGÍA QUE CONECTA</span>
+                <span><a href="../privacidad.html">Privacidad</a> · <a href="../terminos.html">Términos</a></span>
+            </div>
         </div>
     </footer>
 
-    <script src="../js/particles.js"></script>
+    <script src="../js/topo.js"></script>
     <script src="../js/main.js"></script>
 </body>
 </html>

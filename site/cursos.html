@@ -7,8 +7,8 @@
     <meta name="description" content="Cursos prácticos en vivo de ChatGPT, n8n, agentes de IA, chatbots de WhatsApp, Python e IA para ventas. Para profesionales y PyMEs en Argentina.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-        <link rel="apple-touch-icon" href="favicon.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..700&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap">
+    <link rel="apple-touch-icon" href="favicon.svg">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="canonical" href="https://mineconnect.com.ar/cursos.html">
     <meta property="og:title" content="Cursos de IA y Automatización | MineConnect">
@@ -28,120 +28,142 @@
       ]
     }
     </script>
+    <style>
+      .faq-list { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+      .faq-item { border-bottom: 1px solid var(--line); padding: 22px 0; }
+      .faq-item summary {
+        list-style: none; cursor: pointer;
+        font-family: var(--f-display); font-weight: 500;
+        font-size: clamp(18px, 2vw, 22px); letter-spacing: -0.012em;
+        display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      }
+      .faq-item summary::-webkit-details-marker { display: none; }
+      .faq-item summary::after {
+        content: "+"; color: var(--hi); font-family: var(--f-mono);
+        font-size: 22px; transition: transform .2s;
+      }
+      .faq-item[open] summary::after { content: "−"; }
+      .faq-item p { margin: 14px 0 0; color: var(--fg-muted); font-size: 15.5px; line-height: 1.55; max-width: 70ch; }
+      .price { color: var(--hi); font-family: var(--f-mono); font-size: 13px; letter-spacing: .04em; }
+    </style>
 </head>
 <body>
     <div class="scroll-progress"></div>
-    <canvas id="bg-canvas"></canvas>
-    <div class="bg-fx"><div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div><div class="noise"></div></div>
-    <header class="site-header">
-        <div class="container">
-            <a href="index.html" class="logo"><span class="logo-mark"></span>Mine<span>Connect</span></a>
+
+    <nav class="nav">
+        <div class="shell nav-inner">
+            <a href="index.html" class="brand">
+                <span class="brand-mark">M</span>
+                MineConnect
+            </a>
             <button class="menu-toggle" aria-label="Menú">☰</button>
-            <ul class="nav-links">
-                <li><a href="index.html#servicios">Servicios</a></li>
-                <li><a class="active" href="cursos.html">Cursos</a></li>
-                <li><a href="nosotros.html">Nosotros</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="contacto.html" class="nav-cta">Cotizar</a></li>
-            </ul>
+            <div class="nav-links">
+                <a href="index.html#servicios">Servicios</a>
+                <a href="index.html#casos">Casos</a>
+                <a href="cursos.html">Cursos</a>
+                <a href="nosotros.html">Nosotros</a>
+                <a href="contacto.html" class="nav-cta">Cotizar</a>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <main>
-        <section class="hero" style="padding: 72px 0 40px;">
-            <div class="container">
-                <h1>Aprendé IA aplicada al trabajo real</h1>
-                <p class="subtitle">Cursos prácticos en vivo para profesionales y PyMEs que quieren producir más con menos. Grupos reducidos, plantillas reutilizables y grupo de WhatsApp con el instructor.</p>
+        <header class="hero hero-solo">
+            <div class="topo" data-topo="23" data-hot="7" aria-hidden="true"></div>
+            <div class="shell hero-stack">
+                <div class="hero-meta">
+                    <span class="pill"><span class="dot"></span> Cursos en vivo · Grupos reducidos · Catamarca / Online</span>
+                    <span class="hero-tag">MC · CURSOS / 06</span>
+                </div>
+
+                <h1 class="h-title h-title-xl">
+                    Aprendé IA<br>
+                    aplicada al<br>
+                    <span class="it">trabajo real</span>.
+                </h1>
+
+                <div class="hero-bottom">
+                    <p class="h-sub">
+                        Cursos prácticos en vivo para profesionales y PyMEs que quieren producir más con menos. Grupos reducidos, plantillas reutilizables y grupo de WhatsApp con el instructor.
+                    </p>
+                    <div class="h-ctas">
+                        <a href="#programa" class="btn btn-primary">Ver el catálogo <span class="arrow">→</span></a>
+                        <a href="https://wa.me/5493834327244" class="btn btn-ghost" target="_blank" rel="noopener">Consultar fechas</a>
+                    </div>
+                </div>
+
+                <div class="hero-foot">
+                    <span>↓ Scroll para ver cursos</span>
+                    <span>Próxima cohorte · Inscripción abierta</span>
+                </div>
             </div>
-        </section>
+        </header>
 
-        <section style="padding-top: 40px;">
-            <div class="container">
-                <div class="grid-cards">
+        <section id="programa" class="section">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Catálogo · 06</span>
+                        <h2 class="section-h">Seis cursos para llevar IA al <span class="it">trabajo</span> de tu equipo.</h2>
+                    </div>
+                    <p class="section-sub">Desde el primer prompt hasta agentes que ejecutan tareas por vos. Elegí el que mejor encaja con tu nivel y objetivo.</p>
+                </div>
 
-                    <div class="course-card">
-                        <span class="level">Inicial-Intermedio</span>
+                <div class="svc-grid reveal">
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>INICIAL · INTERMEDIO</span><span class="num">/ 01</span></div>
                         <h3>ChatGPT y Claude para profesionales</h3>
-                        <p class="course-sub">Dejá de improvisar prompts. Aprendé a usar IA como un experto.</p>
-                        <div class="course-meta">
-                            <span><strong>12h</strong> · 4 clases</span>
-                            <span>Online en vivo</span>
-                        </div>
-                        <div class="course-price">USD 120</div>
-                        <a href="cursos/chatgpt-claude.html" class="btn btn-primary">Ver detalle</a>
-                    </div>
+                        <p>Dejá de improvisar prompts. Aprendé a usar IA como un experto. 12 hs · 4 clases.</p>
+                        <div class="svc-foot"><a href="cursos/chatgpt-claude.html"><span class="price">USD 120</span> · Ver detalle</a><span class="arrow">→</span></div>
+                    </article>
 
-                    <div class="course-card">
-                        <span class="level">Intermedio</span>
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>INTERMEDIO</span><span class="num">/ 02</span></div>
                         <h3>Automatización con n8n</h3>
-                        <p class="course-sub">Conectá tus herramientas y eliminá el trabajo manual.</p>
-                        <div class="course-meta">
-                            <span><strong>16h</strong></span>
-                            <span>Online en vivo</span>
-                        </div>
-                        <div class="course-price">USD 180</div>
-                        <a href="cursos/n8n.html" class="btn btn-primary">Ver detalle</a>
-                    </div>
+                        <p>Conectá tus herramientas y eliminá el trabajo manual. 16 hs.</p>
+                        <div class="svc-foot"><a href="cursos/n8n.html"><span class="price">USD 180</span> · Ver detalle</a><span class="arrow">→</span></div>
+                    </article>
 
-                    <div class="course-card">
-                        <span class="level">Intermedio-Avanzado</span>
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>INTERMEDIO · AVANZADO</span><span class="num">/ 03</span></div>
                         <h3>Agentes de IA aplicados</h3>
-                        <p class="course-sub">Construí tu primer agente que trabaja por vos.</p>
-                        <div class="course-meta">
-                            <span><strong>20h</strong></span>
-                            <span>Online en vivo</span>
-                        </div>
-                        <div class="course-price">USD 250</div>
-                        <a href="cursos/agentes-ia.html" class="btn btn-primary">Ver detalle</a>
-                    </div>
+                        <p>Construí tu primer agente que trabaja por vos. 20 hs.</p>
+                        <div class="svc-foot"><a href="cursos/agentes-ia.html"><span class="price">USD 250</span> · Ver detalle</a><span class="arrow">→</span></div>
+                    </article>
 
-                    <div class="course-card">
-                        <span class="level">Inicial</span>
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>INICIAL</span><span class="num">/ 04</span></div>
                         <h3>IA para ventas y marketing</h3>
-                        <p class="course-sub">Vendé más sin sumar headcount.</p>
-                        <div class="course-meta">
-                            <span><strong>10h</strong> · 3 clases</span>
-                            <span>Online en vivo</span>
-                        </div>
-                        <div class="course-price">USD 110</div>
-                        <a href="cursos/ia-ventas-marketing.html" class="btn btn-primary">Ver detalle</a>
-                    </div>
+                        <p>Vendé más sin sumar headcount. 10 hs · 3 clases.</p>
+                        <div class="svc-foot"><a href="cursos/ia-ventas-marketing.html"><span class="price">USD 110</span> · Ver detalle</a><span class="arrow">→</span></div>
+                    </article>
 
-                    <div class="course-card">
-                        <span class="level">Inicial</span>
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>INICIAL</span><span class="num">/ 05</span></div>
                         <h3>Python para no programadores</h3>
-                        <p class="course-sub">Aprendé a programar apoyándote en IA. Sin miedo, sin teoría innecesaria.</p>
-                        <div class="course-meta">
-                            <span><strong>24h</strong></span>
-                            <span>Online + tutorías</span>
-                        </div>
-                        <div class="course-price">USD 220</div>
-                        <a href="cursos/python-no-programadores.html" class="btn btn-primary">Ver detalle</a>
-                    </div>
+                        <p>Aprendé a programar apoyándote en IA. Sin miedo, sin teoría innecesaria. 24 hs + tutorías.</p>
+                        <div class="svc-foot"><a href="cursos/python-no-programadores.html"><span class="price">USD 220</span> · Ver detalle</a><span class="arrow">→</span></div>
+                    </article>
 
-                    <div class="course-card">
-                        <span class="level">Intermedio</span>
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>INTERMEDIO</span><span class="num">/ 06</span></div>
                         <h3>Chatbots con WhatsApp Business e IA</h3>
-                        <p class="course-sub">Atendé 24/7 sin perder el toque humano.</p>
-                        <div class="course-meta">
-                            <span><strong>14h</strong></span>
-                            <span>Online en vivo</span>
-                        </div>
-                        <div class="course-price">USD 170</div>
-                        <a href="cursos/chatbots-whatsapp.html" class="btn btn-primary">Ver detalle</a>
-                    </div>
-
+                        <p>Atendé 24/7 sin perder el toque humano. 14 hs.</p>
+                        <div class="svc-foot"><a href="cursos/chatbots-whatsapp.html"><span class="price">USD 170</span> · Ver detalle</a><span class="arrow">→</span></div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="section-heading">
-                    <span class="eyebrow">Preguntas frecuentes</span>
-                    <h2>Sobre los cursos</h2>
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Preguntas frecuentes</span>
+                        <h2 class="section-h">Lo que <span class="it">siempre</span> nos preguntan.</h2>
+                    </div>
                 </div>
-                <div class="faq-list">
+                <div class="faq-list reveal">
                     <details class="faq-item">
                         <summary>¿Son grabados o en vivo?</summary>
                         <p>Todos nuestros cursos son en vivo por videollamada, con grupos reducidos para que puedas preguntar. Quedan grabados para que los repases cuando quieras. Incluyen material descargable, plantillas reutilizables y un grupo de WhatsApp con tus compañeros y el instructor.</p>
@@ -162,40 +184,46 @@
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="cta-band reveal" style="max-width: 720px; margin-left: auto; margin-right: auto;">
-                    <span class="eyebrow" style="display: inline-block; margin-bottom: 14px;">Guía gratuita</span>
-                    <h2>10 procesos que tu PyME puede <span class="gradient-text">automatizar con IA</span></h2>
-                    <p>Dejanos tu email y te mandamos la guía + te avisamos cuando abrimos próximas fechas de cursos.</p>
-                    <form data-wa style="display: flex; gap: 10px; max-width: 480px; margin: 28px auto 0; flex-wrap: wrap;">
-                        <input type="text" name="Nombre" placeholder="Tu nombre" required style="flex: 1; min-width: 140px; padding: 13px 16px; background: rgba(5, 8, 16, 0.6); border: 1px solid var(--border-strong); border-radius: 10px; color: var(--text); font-family: inherit; font-size: 0.98rem;">
-                        <input type="email" name="Email" placeholder="tu@email.com" required style="flex: 2; min-width: 180px; padding: 13px 16px; background: rgba(5, 8, 16, 0.6); border: 1px solid var(--border-strong); border-radius: 10px; color: var(--text); font-family: inherit; font-size: 0.98rem;">
-                        <input type="hidden" name="Pedido" value="Guía 10 procesos automatizables + aviso de próximas fechas de cursos">
-                        <button type="submit" class="btn btn-primary" style="flex-shrink: 0;">Quiero la guía</button>
-                    </form>
-                    <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 14px;">Te respondemos por WhatsApp con el material. No te llenamos de mails.</p>
-                </div>
+        <section class="cta">
+            <div class="topo" data-topo="51" data-hot="4" aria-hidden="true"></div>
+            <div class="shell" style="position:relative;z-index:2">
+                <h2>10 procesos que tu PyME<br>puede <span class="it">automatizar con IA</span>.</h2>
+                <p>Dejanos tu email y te mandamos la guía + te avisamos cuando abrimos próximas fechas de cursos.</p>
+                <form data-wa class="form-card" style="max-width:520px;margin:36px auto 0;text-align:left">
+                    <div class="form-group">
+                        <label for="g-nombre">Nombre</label>
+                        <input type="text" id="g-nombre" name="Nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="g-email">Email</label>
+                        <input type="email" id="g-email" name="Email" required>
+                    </div>
+                    <input type="hidden" name="Pedido" value="Guía 10 procesos automatizables + aviso de próximas fechas de cursos">
+                    <button type="submit" class="btn btn-primary">Quiero la guía <span class="arrow">→</span></button>
+                </form>
             </div>
         </section>
     </main>
-    <a href="https://wa.me/5493834327244" class="fab-wa" target="_blank" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.711.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
 
+    <a class="wa" href="https://wa.me/5493834327244" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.6 11.6 0 0 0 12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5zM12 22a10 10 0 0 1-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A10 10 0 1 1 22 12a10 10 0 0 1-10 10zm5.5-7.5c-.3-.2-1.8-.9-2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.3-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6.4-.6c.1-.2 0-.4 0-.5l-1-2.3c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5 4.5l1.7.7c.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.5.2-.7.2-1.4.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
+    </a>
 
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <a href="index.html" class="logo"><span class="logo-mark"></span>Mine<span>Connect</span></a>
-                    <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.92rem;">Tecnología que entiende el terreno. Catamarca, Argentina.</p>
+    <footer class="foot">
+        <div class="shell">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <a href="index.html" class="brand"><span class="brand-mark">M</span> MineConnect</a>
+                    <p>Tecnología que entiende el terreno. Catamarca, Argentina — trabajamos en todo el país.</p>
                 </div>
                 <div>
                     <h4>Servicios</h4>
                     <ul>
-                        <li><a href="index.html#servicios">Radiocomunicaciones</a></li>
-                        <li><a href="index.html#servicios">Tecnología</a></li>
-                        <li><a href="index.html#servicios">Automatizaciones IA</a></li>
-                        <li><a href="index.html#servicios">Desarrollo</a></li>
+                        <li><a href="servicios/radiocomunicaciones.html">Radiocomunicaciones</a></li>
+                        <li><a href="servicios/tecnologia.html">Tecnología</a></li>
+                        <li><a href="servicios/automatizaciones-ia.html">Automatizaciones IA</a></li>
+                        <li><a href="servicios/desarrollo.html">Desarrollo</a></li>
+                        <li><a href="sat.html">MineConnect SAT</a></li>
                     </ul>
                 </div>
                 <div>
@@ -203,20 +231,27 @@
                     <ul>
                         <li><a href="nosotros.html">Nosotros</a></li>
                         <li><a href="cursos.html">Cursos</a></li>
+                        <li><a href="index.html#casos">Casos</a></li>
                         <li><a href="contacto.html">Contacto</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4>Contacto</h4>
-                    <p><a href="https://wa.me/5493834327244">+54 9 383 432-7244</a></p>
-                    <p><a href="mailto:contacto@mineconnect.com.ar">contacto@mineconnect.com.ar</a></p>
+                    <ul>
+                        <li><a href="https://wa.me/5493834327244">+54 9 383 432-7244</a></li>
+                        <li><a href="mailto:contacto@mineconnect.com.ar">contacto@mineconnect.com.ar</a></li>
+                        <li>Catamarca · Argentina</li>
+                    </ul>
                 </div>
             </div>
-            <div class="footer-bottom">© 2026 MineConnect.</div>
+            <div class="foot-bottom">
+                <span>© 2026 MINECONNECT · TECNOLOGÍA QUE CONECTA</span>
+                <span><a href="privacidad.html">Privacidad</a> · <a href="terminos.html">Términos</a></span>
+            </div>
         </div>
     </footer>
 
-    <script src="js/particles.js"></script>
+    <script src="js/topo.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

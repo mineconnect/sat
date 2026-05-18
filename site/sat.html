@@ -8,8 +8,8 @@
     <meta name="keywords" content="control de flotas Argentina, GPS tracking empresas, software flotas, fleet management Catamarca">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="apple-touch-icon" href="favicon.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..700&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap">
+    <link rel="apple-touch-icon" href="favicon.svg">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="canonical" href="https://mineconnect.com.ar/sat.html">
     <meta property="og:title" content="MineConnect SAT | Control de flotas con GPS y reportes de alta precisión">
@@ -17,137 +17,196 @@
     <meta property="og:image" content="https://mineconnect.com.ar/og.svg">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+      .faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+      .faq-item { border-bottom: 1px solid var(--line); padding: 22px 0; }
+      .faq-item summary {
+        list-style: none; cursor: pointer;
+        font-family: var(--f-display); font-weight: 500;
+        font-size: clamp(18px, 2vw, 22px); letter-spacing: -0.012em;
+        display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      }
+      .faq-item summary::-webkit-details-marker { display: none; }
+      .faq-item summary::after { content: "+"; color: var(--hi); font-family: var(--f-mono); font-size: 22px; }
+      .faq-item[open] summary::after { content: "−"; }
+      .faq-item p { margin: 14px 0 0; color: var(--fg-muted); font-size: 15.5px; line-height: 1.55; max-width: 70ch; }
+    </style>
 </head>
 <body>
     <div class="scroll-progress"></div>
-    <canvas id="bg-canvas"></canvas>
-    <div class="bg-fx">
-        <div class="aurora a1"></div>
-        <div class="aurora a2"></div>
-    </div>
 
-    <header class="site-header">
-        <div class="container">
-            <a href="index.html" class="logo"><span class="logo-mark"></span>Mine<span>Connect</span></a>
+    <nav class="nav">
+        <div class="shell nav-inner">
+            <a href="index.html" class="brand">
+                <span class="brand-mark">M</span>
+                MineConnect
+            </a>
             <button class="menu-toggle" aria-label="Menú">☰</button>
-            <ul class="nav-links">
-                <li><a href="index.html#servicios">Servicios</a></li>
-                <li><a href="cursos.html">Cursos</a></li>
-                <li><a href="nosotros.html">Nosotros</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="contacto.html" class="nav-cta">Agendar demo</a></li>
-            </ul>
+            <div class="nav-links">
+                <a href="index.html#servicios">Servicios</a>
+                <a href="cursos.html">Cursos</a>
+                <a href="nosotros.html">Nosotros</a>
+                <a href="contacto.html">Contacto</a>
+                <a href="contacto.html" class="nav-cta">Agendar demo</a>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <main>
-        <section class="hero">
-            <div class="container">
-                <div class="pill"><span class="dot"></span> Producto propio · En producción</div>
-                <h1>MineConnect <span class="gradient-text">SAT</span>.<br>Tu flota, en tiempo real.</h1>
-                <p class="subtitle">Sistema de control de flotas con seguimiento GPS preciso, reportes detallados, control de roles y alertas inteligentes. Diseñado para empresas que necesitan saber dónde está cada vehículo y por qué.</p>
-                <div class="hero-actions">
-                    <a href="contacto.html" class="btn btn-primary">Agendar demo →</a>
-                    <a href="https://wa.me/5493834327244?text=Hola,%20quiero%20conocer%20MineConnect%20SAT" class="btn btn-wa" target="_blank">WhatsApp directo</a>
-                    <a href="/app/" class="btn btn-secondary">Acceder al sistema</a>
+        <header class="hero hero-solo">
+            <div class="topo" data-topo="44" data-hot="9" aria-hidden="true"></div>
+            <div class="shell hero-stack">
+                <div class="hero-meta">
+                    <span class="pill"><span class="dot"></span> Producto propio · En producción</span>
+                    <span class="hero-tag">MC · SAT</span>
+                </div>
+
+                <h1 class="h-title h-title-xl">
+                    MineConnect <span class="it">SAT</span>.<br>
+                    Tu flota, en<br>
+                    tiempo <span class="it">real</span>.
+                </h1>
+
+                <div class="hero-bottom">
+                    <p class="h-sub">
+                        Sistema de control de flotas con seguimiento GPS preciso, reportes detallados, control de roles y alertas inteligentes. Diseñado para empresas que necesitan saber dónde está cada vehículo y por qué.
+                    </p>
+                    <div class="h-ctas">
+                        <a href="contacto.html" class="btn btn-primary">Agendar demo <span class="arrow">→</span></a>
+                        <a href="https://wa.me/5493834327244?text=Hola,%20quiero%20conocer%20MineConnect%20SAT" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp directo</a>
+                        <a href="/app/" class="btn btn-ghost">Acceder al sistema <span class="arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="hero-foot">
+                    <span>↓ Scroll para funcionalidades</span>
+                    <span>GPS · RBAC · Reportes · Alertas</span>
                 </div>
             </div>
-        </section>
+        </header>
 
-        <section>
-            <div class="container">
-                <div class="section-heading">
-                    <span class="eyebrow">Funcionalidades</span>
-                    <h2>Todo lo que tu operación necesita</h2>
+        <section class="section">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Funcionalidades · 06</span>
+                        <h2 class="section-h">Todo lo que tu operación <span class="it">necesita</span>.</h2>
+                    </div>
+                    <p class="section-sub">De GPS en tiempo real a alertas configurables, control de roles y app móvil para choferes. Un solo sistema, sin add-ons.</p>
                 </div>
-                <div class="grid-cards">
-                    <div class="card reveal reveal-delay-1">
-                        <div class="card-icon">GP</div>
+
+                <div class="svc-grid reveal">
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>GPS</span><span class="num">/ 01</span></div>
                         <h3>Tracking GPS en tiempo real</h3>
                         <p>Ubicación de cada vehículo en mapa con actualización constante. Histórico de recorridos consultable por fecha.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-2">
-                        <div class="card-icon">RP</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>REPORTES</span><span class="num">/ 02</span></div>
                         <h3>Reportes de alta precisión</h3>
                         <p>Kilometraje, tiempos de viaje, paradas, velocidad, geocercas. Exportables en PDF o Excel.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-3">
-                        <div class="card-icon">RB</div>
-                        <h3>Control de roles (RBAC)</h3>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>RBAC</span><span class="num">/ 03</span></div>
+                        <h3>Control de roles</h3>
                         <p>Cada usuario ve solo lo que le corresponde: administradores, supervisores, choferes y clientes externos.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-4">
-                        <div class="card-icon">AL</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>ALERTAS</span><span class="num">/ 04</span></div>
                         <h3>Alertas configurables</h3>
                         <p>Exceso de velocidad, salida de zona, encendido fuera de horario, batería baja del dispositivo y más.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-5">
-                        <div class="card-icon">GC</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>GEOCERCAS</span><span class="num">/ 05</span></div>
                         <h3>Geocercas y zonas</h3>
                         <p>Definí áreas operativas, clientes habituales o zonas prohibidas. El sistema notifica cuando se cruzan.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-6">
-                        <div class="card-icon">MO</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>MÓVIL</span><span class="num">/ 06</span></div>
                         <h3>App móvil para choferes</h3>
                         <p>Aplicación para que el chofer reciba viajes, registre eventos y se comunique con la base.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Casos de uso · 03</span>
+                        <h2 class="section-h">Empresas que ya lo <span class="it">usan</span>.</h2>
+                    </div>
+                </div>
+                <div class="cases reveal">
+                    <div class="case">
+                        <span class="case-idx">01 /</span>
+                        <div>
+                            <h3 class="case-title">Empresas mineras y de áridos</h3>
+                            <div class="case-meta">Minería · Áridos · Maquinaria pesada</div>
+                        </div>
+                        <p class="case-result">Control de camiones, palas y maquinaria pesada. <strong>Reportes por turno</strong> y por frente de trabajo.</p>
+                        <span class="case-link">Caso →</span>
+                    </div>
+                    <div class="case">
+                        <span class="case-idx">02 /</span>
+                        <div>
+                            <h3 class="case-title">Logística y transporte</h3>
+                            <div class="case-meta">Cargas · Tiempos · Rutas</div>
+                        </div>
+                        <p class="case-result">Trazabilidad de cargas, tiempos de entrega y eficiencia de rutas con <strong>datos reales</strong>, no estimaciones.</p>
+                        <span class="case-link">Caso →</span>
+                    </div>
+                    <div class="case">
+                        <span class="case-idx">03 /</span>
+                        <div>
+                            <h3 class="case-title">Constructoras y servicios</h3>
+                            <div class="case-meta">Cuadrillas · Obra · Km</div>
+                        </div>
+                        <p class="case-result">Saber dónde está cada cuadrilla, cuánto tiempo estuvieron en obra y <strong>km recorridos</strong> por mes.</p>
+                        <span class="case-link">Caso →</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="section-heading center reveal">
-                    <span class="eyebrow">Para quién es</span>
-                    <h2>Empresas que ya lo usan</h2>
-                </div>
-                <div class="grid-cards">
-                    <div class="case-card reveal reveal-delay-1">
-                        <h4>Empresas mineras y de áridos</h4>
-                        <p>Control de camiones, palas y maquinaria pesada. Reportes por turno y por frente de trabajo.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-2">
-                        <h4>Logística y transporte</h4>
-                        <p>Trazabilidad de cargas, tiempos de entrega y eficiencia de rutas con datos reales, no estimaciones.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-3">
-                        <h4>Constructoras y servicios</h4>
-                        <p>Saber dónde está cada cuadrilla, cuánto tiempo estuvieron en obra y kilómetros recorridos por mes.</p>
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Diferencial · 03</span>
+                        <h2 class="section-h">Por qué <span class="it">SAT</span> y no otro.</h2>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <div class="section-heading center reveal">
-                    <span class="eyebrow">Por qué SAT</span>
-                    <h2>Diferencias contra competencia</h2>
-                </div>
-                <div class="grid-cards">
-                    <div class="card reveal reveal-delay-1">
+                <div class="svc-grid reveal">
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>SOPORTE</span><span class="num">/ 01</span></div>
                         <h3>Soporte argentino</h3>
                         <p>Hablás con quien desarrolla, no con un call center. Lo que pedís, se evalúa y se hace si tiene sentido.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-2">
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>PRECIOS</span><span class="num">/ 02</span></div>
                         <h3>Precios en pesos</h3>
                         <p>Sin sorpresas dolarizadas. Plan mensual claro, ajustable según cantidad de vehículos.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-3">
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>HARDWARE</span><span class="num">/ 03</span></div>
                         <h3>Hardware flexible</h3>
                         <p>Funciona con la mayoría de los dispositivos GPS del mercado. Si ya tenés equipos, los integramos.</p>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="section-heading center reveal">
-                    <span class="eyebrow">Preguntas frecuentes</span>
-                    <h2>Sobre MineConnect SAT</h2>
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Preguntas frecuentes</span>
+                        <h2 class="section-h">Sobre <span class="it">MineConnect SAT</span>.</h2>
+                    </div>
                 </div>
-                <div class="faq-list">
+                <div class="faq-list reveal">
                     <details class="faq-item">
                         <summary>¿Cuánto cuesta el sistema?</summary>
                         <p>Trabajamos con planes mensuales por vehículo según cantidad de unidades, con descuentos por volumen. El hardware (dispositivo GPS) se cotiza aparte y queda de tu propiedad. En la demo te pasamos números concretos según tu flota.</p>
@@ -168,29 +227,67 @@
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="cta-band reveal">
-                    <h2>Pedí una <span class="gradient-text">demo en vivo</span></h2>
-                    <p>20 minutos en los que te mostramos el sistema funcionando con datos reales y respondemos tus dudas.</p>
-                    <div class="hero-actions" style="justify-content: center;">
-                        <a href="contacto.html" class="btn btn-primary">Agendar demo →</a>
-                        <a href="https://wa.me/5493834327244" class="btn btn-secondary" target="_blank">WhatsApp</a>
-                    </div>
+        <section class="cta">
+            <div class="topo" data-topo="77" data-hot="5" aria-hidden="true"></div>
+            <div class="shell" style="position:relative;z-index:2">
+                <h2>Pedí una<br><span class="it">demo en vivo</span>.</h2>
+                <p>20 minutos en los que te mostramos el sistema funcionando con datos reales y respondemos tus dudas.</p>
+                <div class="h-ctas" style="justify-content:center">
+                    <a href="contacto.html" class="btn btn-primary">Agendar demo <span class="arrow">→</span></a>
+                    <a href="https://wa.me/5493834327244" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp</a>
+                    <a href="/app/" class="btn btn-ghost">Acceder al sistema</a>
                 </div>
             </div>
         </section>
     </main>
-    <a href="https://wa.me/5493834327244" class="fab-wa" target="_blank" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.711.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
 
+    <a class="wa" href="https://wa.me/5493834327244" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.6 11.6 0 0 0 12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5zM12 22a10 10 0 0 1-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A10 10 0 1 1 22 12a10 10 0 0 1-10 10zm5.5-7.5c-.3-.2-1.8-.9-2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.3-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6.4-.6c.1-.2 0-.4 0-.5l-1-2.3c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5 4.5l1.7.7c.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.5.2-.7.2-1.4.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
+    </a>
 
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-bottom">© 2026 MineConnect. <a href="contacto.html" style="color: var(--text-muted);">Contacto</a> · <a href="index.html" style="color: var(--text-muted);">Inicio</a></div>
+    <footer class="foot">
+        <div class="shell">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <a href="index.html" class="brand"><span class="brand-mark">M</span> MineConnect</a>
+                    <p>Tecnología que entiende el terreno. Catamarca, Argentina — trabajamos en todo el país.</p>
+                </div>
+                <div>
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="servicios/radiocomunicaciones.html">Radiocomunicaciones</a></li>
+                        <li><a href="servicios/tecnologia.html">Tecnología</a></li>
+                        <li><a href="servicios/automatizaciones-ia.html">Automatizaciones IA</a></li>
+                        <li><a href="servicios/desarrollo.html">Desarrollo</a></li>
+                        <li><a href="sat.html">MineConnect SAT</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="nosotros.html">Nosotros</a></li>
+                        <li><a href="cursos.html">Cursos</a></li>
+                        <li><a href="index.html#casos">Casos</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><a href="https://wa.me/5493834327244">+54 9 383 432-7244</a></li>
+                        <li><a href="mailto:contacto@mineconnect.com.ar">contacto@mineconnect.com.ar</a></li>
+                        <li>Catamarca · Argentina</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <span>© 2026 MINECONNECT · TECNOLOGÍA QUE CONECTA</span>
+                <span><a href="privacidad.html">Privacidad</a> · <a href="terminos.html">Términos</a></span>
+            </div>
         </div>
     </footer>
 
-    <script src="js/particles.js"></script>
+    <script src="js/topo.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
