@@ -63,7 +63,6 @@ const state = {
     // Active Sessions
     currentTrip: null,
     showChecklist: false,
-    showChecklist: false,
     showPlateLogin: false,
     tempPlate: '',
     sosMode: false,
@@ -181,6 +180,31 @@ function showDigitalCertificate(checklistId) {
 
 // Auth constants
 const SUPER_ADMIN = { id: 'sa', email: 'fbarrosmarengo@gmail.com', pass: 'Soporte2022!', role: 'super-admin', company: 'all' };
+
+// RBAC — defensa en profundidad: las vistas filtran por rol, pero TODA accion mutativa
+// pasa por can(). Si retorna false, el caller muestra toast y aborta.
+// Acciones: 'delete-user' | 'edit-user' | 'create-user' | 'create-vehicle' | 'edit-vehicle' | 'create-company'
+// resource: { role?, company? } segun el caso
+function can(action, resource = {}) {
+    const u = state.user;
+    if (!u) return false;
+    if (u.role === 'super-admin') return true;
+    if (u.role === 'Conductor') return false;
+    if (u.role !== 'Coordinador') return false;
+    if (action === 'create-company') return false;
+    if (resource.company && resource.company !== u.company) return false;
+    switch (action) {
+        case 'create-user':
+        case 'edit-user':
+        case 'delete-user':
+            return resource.role === 'Conductor';
+        case 'create-vehicle':
+        case 'edit-vehicle':
+            return true;
+        default:
+            return false;
+    }
+}
 
 const app = document.getElementById('app');
 
@@ -635,8 +659,8 @@ function renderHistoryView() {
                     </thead>
                     <tbody>
                         ${state.history.map(h => {
-        const stops = Math.floor(Math.random() * 4);
-        const avgSpeed = (65 + Math.random() * 15).toFixed(1);
+        const stops = (typeof h.stops === 'number') ? `${h.stops} paradas` : '—';
+        const avgSpeed = (typeof h.avgSpeed === 'number') ? `${h.avgSpeed.toFixed(1)} km/h` : '—';
         return `
                             <tr>
                                 <td>
@@ -648,8 +672,8 @@ function renderHistoryView() {
                                 <td>${h.driver}</td>
                                 <td>${h.kmEnd - h.kmStart} km</td>
                                 <td>${h.duration}</td>
-                                <td>${stops} paradas</td>
-                                <td>${avgSpeed} km/h</td>
+                                <td>${stops}</td>
+                                <td>${avgSpeed}</td>
                                 <td><span class="compliance-status status-valid" style="font-size: 10px;">CERTIFICADO</span></td>
                             </tr>
                         `;
@@ -1736,6 +1760,36 @@ document.addEventListener('click', () => {
         startSensors();
     }
 }, { once: true });
+
+// Funciones Globales de Gestión de Usuarios
+window.deleteUser = (id) => {
+    const target = state.users.find(u => u.id === id);
+    if (!target) return;
+    if (!can('delete-user', { role: target.role, company: target.company })) {
+        showToast('No tenés permiso para eliminar este usuario');
+        return;
+    }
+    if (confirm('¿Está seguro de que desea eliminar este usuario? Esta acción quedará registrada en el log legal.')) {
+        state.users = state.users.filter(u => u.id !== id);
+        showToast('Usuario eliminado del sistema');
+        render();
+    }
+};
+
+window.editUser = (id) => {
+    const user = state.users.find(u => u.id === id);
+    if (!user) return;
+    if (!can('edit-user', { role: user.role, company: user.company })) {
+        showToast('No tenés permiso para editar este usuario');
+        return;
+    }
+    const newEmail = prompt('Nuevo correo electrónico:', user.email);
+    if (newEmail) {
+        user.email = newEmail;
+        showToast('Datos de usuario actualizados');
+        render();
+    }
+};
 
 // Network Listeners
 window.addEventListener('online', () => { state.telemetry.isOnline = true; updateTelemetryUI(); });
