@@ -8,8 +8,8 @@
     <meta name="keywords" content="desarrollo software a medida Argentina, aplicaciones empresas, integración APIs, software para PyMEs">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="apple-touch-icon" href="../favicon.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..700&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap">
+    <link rel="apple-touch-icon" href="../favicon.svg">
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
     <link rel="canonical" href="https://mineconnect.com.ar/servicios/desarrollo.html">
     <meta property="og:title" content="Desarrollo de software a medida | MineConnect">
@@ -17,147 +17,206 @@
     <meta property="og:image" content="https://mineconnect.com.ar/og.svg">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+      .faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+      .faq-item { border-bottom: 1px solid var(--line); padding: 22px 0; }
+      .faq-item summary { list-style: none; cursor: pointer; font-family: var(--f-display); font-weight: 500; font-size: clamp(18px,2vw,22px); letter-spacing: -0.012em; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+      .faq-item summary::-webkit-details-marker { display: none; }
+      .faq-item summary::after { content: "+"; color: var(--hi); font-family: var(--f-mono); font-size: 22px; }
+      .faq-item[open] summary::after { content: "−"; }
+      .faq-item p { margin: 14px 0 0; color: var(--fg-muted); font-size: 15.5px; line-height: 1.55; max-width: 70ch; }
+      .crumb { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-faint); }
+      .crumb a { color: var(--fg-faint); } .crumb a:hover { color: var(--hi); }
+    </style>
 </head>
 <body>
     <div class="scroll-progress"></div>
-    <canvas id="bg-canvas"></canvas>
-    <div class="bg-fx">
-        <div class="aurora a1"></div>
-        <div class="aurora a2"></div>
-    </div>
 
-    <header class="site-header">
-        <div class="container">
-            <a href="../index.html" class="logo"><span class="logo-mark"></span>Mine<span>Connect</span></a>
+    <nav class="nav">
+        <div class="shell nav-inner">
+            <a href="../index.html" class="brand">
+                <span class="brand-mark">M</span>
+                MineConnect
+            </a>
             <button class="menu-toggle" aria-label="Menú">☰</button>
-            <ul class="nav-links">
-                <li><a class="active" href="../index.html#servicios">Servicios</a></li>
-                <li><a href="../cursos.html">Cursos</a></li>
-                <li><a href="../nosotros.html">Nosotros</a></li>
-                <li><a href="../contacto.html">Contacto</a></li>
-                <li><a href="../contacto.html" class="nav-cta">Cotizar</a></li>
-            </ul>
+            <div class="nav-links">
+                <a href="../index.html#servicios">Servicios</a>
+                <a href="../cursos.html">Cursos</a>
+                <a href="../nosotros.html">Nosotros</a>
+                <a href="../contacto.html">Contacto</a>
+                <a href="../contacto.html" class="nav-cta">Cotizar</a>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <main>
-        <section class="hero" style="padding: 80px 0 40px; text-align: left;">
-            <div class="container">
-                <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">
-                    <a href="../index.html" style="color: var(--text-muted);">Inicio</a> / Servicios / Desarrollo
+        <header class="hero hero-solo">
+            <div class="topo" data-topo="131" data-hot="6" aria-hidden="true"></div>
+            <div class="shell hero-stack">
+                <div class="hero-meta">
+                    <span class="pill"><span class="dot"></span> Briefing inicial sin cargo</span>
+                    <span class="hero-tag">MC · SERVICIOS / DEV</span>
                 </div>
-                <div class="pill"><span class="dot"></span> Briefing inicial sin cargo</div>
-                <h1 style="text-align: left; margin: 0 0 20px;">Software hecho para <span class="gradient-text">tu problema</span>.</h1>
-                <p class="subtitle" style="margin: 0 0 32px; text-align: left;">Aplicaciones web, móviles e integraciones a medida. Metodología clara, entregas por hitos y código documentado que te pertenece desde el primer día.</p>
-                <div class="hero-actions" style="justify-content: flex-start;">
-                    <a href="../contacto.html" class="btn btn-primary">Contar tu proyecto →</a>
-                    <a href="https://wa.me/5493834327244?text=Hola,%20quiero%20cotizar%20un%20desarrollo" class="btn btn-wa" target="_blank">WhatsApp directo</a>
+                <span class="crumb"><a href="../index.html">Inicio</a> / Servicios / <span style="color:var(--hi)">Desarrollo</span></span>
+
+                <h1 class="h-title h-title-xl">
+                    Software hecho<br>
+                    para <span class="it">tu problema</span>.
+                </h1>
+
+                <div class="hero-bottom">
+                    <p class="h-sub">
+                        Aplicaciones web, móviles e integraciones a medida. Metodología clara, entregas por hitos y código documentado que te pertenece desde el primer día.
+                    </p>
+                    <div class="h-ctas">
+                        <a href="../contacto.html" class="btn btn-primary">Contar tu proyecto <span class="arrow">→</span></a>
+                        <a href="https://wa.me/5493834327244?text=Hola,%20quiero%20cotizar%20un%20desarrollo" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp directo</a>
+                    </div>
+                </div>
+
+                <div class="hero-foot">
+                    <span>↓ Scroll para conocer el stack</span>
+                    <span>React · Node · Python · Mobile</span>
                 </div>
             </div>
-        </section>
+        </header>
 
-        <section>
-            <div class="container">
-                <div class="section-heading">
-                    <span class="eyebrow">Tipos de proyecto</span>
-                    <h2>Qué construimos</h2>
+        <section class="section">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Qué construimos · 06</span>
+                        <h2 class="section-h">De MVPs a sistemas <span class="it">complejos</span>.</h2>
+                    </div>
+                    <p class="section-sub">Aplicaciones, móviles, integraciones, dashboards, modernización de legacy y prototipos validables en semanas.</p>
                 </div>
-                <div class="grid-cards">
-                    <div class="card reveal reveal-delay-1">
-                        <div class="card-icon">WB</div>
+
+                <div class="svc-grid reveal">
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>WEB</span><span class="num">/ 01</span></div>
                         <h3>Aplicaciones web</h3>
                         <p>SaaS, paneles administrativos, sistemas internos, portales para clientes. Construidos para escalar y mantenerse simples.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-2">
-                        <div class="card-icon">MV</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>MÓVIL</span><span class="num">/ 02</span></div>
                         <h3>Apps móviles</h3>
                         <p>Apps iOS y Android (nativas o cross-platform). Conectadas a tu sistema actual o como producto independiente.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-3">
-                        <div class="card-icon">IN</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>APIs</span><span class="num">/ 03</span></div>
                         <h3>Integraciones y APIs</h3>
                         <p>Conectamos tus herramientas: ERP, CRM, sistema contable, marketplaces, WhatsApp Business, MercadoPago, AFIP.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-4">
-                        <div class="card-icon">BD</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>BI</span><span class="num">/ 04</span></div>
                         <h3>Tableros y dashboards</h3>
                         <p>Visualizamos tus KPIs en tiempo real. Indicadores operativos, comerciales o financieros desde tus propios datos.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-5">
-                        <div class="card-icon">MD</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>LEGACY</span><span class="num">/ 05</span></div>
                         <h3>Modernización de legacy</h3>
                         <p>¿Tu sistema viejo te frena? Migramos por partes a tecnología actual sin parar la operación.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-6">
-                        <div class="card-icon">MV</div>
+                    </article>
+                    <article class="svc span-4">
+                        <div class="svc-tag"><span>MVP</span><span class="num">/ 06</span></div>
                         <h3>MVPs y prototipos</h3>
                         <p>¿Tenés una idea? Construimos el primer producto funcional en 4 a 8 semanas para validar antes de invertir más.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Metodología · 04</span>
+                        <h2 class="section-h">Sin sorpresas<br>en el <span class="it">camino</span>.</h2>
+                    </div>
+                </div>
+                <div class="cases reveal">
+                    <div class="case">
+                        <span class="case-idx">01 /</span>
+                        <div>
+                            <h3 class="case-title">Briefing y propuesta</h3>
+                            <div class="case-meta">1-2 semanas · Precio fijo por hito</div>
+                        </div>
+                        <p class="case-result">Te entrevistamos, mapeamos lo que necesitás y te pasamos una propuesta con <strong>alcance, plazos y precio</strong> fijo por hito.</p>
+                        <span class="case-link">Detalle →</span>
+                    </div>
+                    <div class="case">
+                        <span class="case-idx">02 /</span>
+                        <div>
+                            <h3 class="case-title">Diseño y validación</h3>
+                            <div class="case-meta">UX · Wireframes · Visual</div>
+                        </div>
+                        <p class="case-result">Antes de programar, te mostramos cómo va a verse y funcionar. <strong>Iteramos hasta que estés conforme.</strong></p>
+                        <span class="case-link">Detalle →</span>
+                    </div>
+                    <div class="case">
+                        <span class="case-idx">03 /</span>
+                        <div>
+                            <h3 class="case-title">Desarrollo por sprints</h3>
+                            <div class="case-meta">2 semanas por entrega</div>
+                        </div>
+                        <p class="case-result">Lo probás vos, ajustamos, seguimos. <strong>Vos ves el avance</strong>, no es una caja negra.</p>
+                        <span class="case-link">Detalle →</span>
+                    </div>
+                    <div class="case">
+                        <span class="case-idx">04 /</span>
+                        <div>
+                            <h3 class="case-title">Soporte y evolución</h3>
+                            <div class="case-meta">Post-lanzamiento</div>
+                        </div>
+                        <p class="case-result">Período de soporte y corrección de bugs sin cargo. Después podés contratar <strong>evolución mensual</strong>.</p>
+                        <span class="case-link">Detalle →</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="section-heading center reveal">
-                    <span class="eyebrow">Metodología</span>
-                    <h2>Sin sorpresas en el camino</h2>
-                </div>
-                <div class="grid-cards">
-                    <div class="case-card reveal reveal-delay-1">
-                        <h4>1. Briefing y propuesta</h4>
-                        <p>Te entrevistamos, mapeamos lo que necesitás y te pasamos una propuesta con alcance, plazos y precio fijo por hito.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-2">
-                        <h4>2. Diseño y validación</h4>
-                        <p>Antes de programar, te mostramos cómo va a verse y funcionar. Iteramos hasta que estés conforme.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-3">
-                        <h4>3. Desarrollo por sprints</h4>
-                        <p>Entregas cada 2 semanas. Lo probás vos, ajustamos, seguimos. Vos ves el avance, no es una caja negra.</p>
-                    </div>
-                    <div class="case-card reveal reveal-delay-4">
-                        <h4>4. Soporte y evolución</h4>
-                        <p>Una vez en producción incluimos un período de soporte y corrección de bugs sin cargo. Después podés contratar evolución mensual.</p>
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Stack · 04</span>
+                        <h2 class="section-h">Con qué <span class="it">construimos</span>.</h2>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <div class="section-heading">
-                    <span class="eyebrow">Stack</span>
-                    <h2>Con qué construimos</h2>
-                </div>
-                <div class="grid-cards">
-                    <div class="card reveal reveal-delay-1">
+                <div class="svc-grid reveal">
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>FRONT</span><span class="num">/ 01</span></div>
                         <h3>Frontend</h3>
                         <p>React, Next.js, Vue, Tailwind CSS. Diseños responsive, accesibles y rápidos.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-2">
+                    </article>
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>BACK</span><span class="num">/ 02</span></div>
                         <h3>Backend</h3>
                         <p>Node.js, Python, FastAPI. APIs REST y GraphQL. Bases SQL y NoSQL según el caso.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-3">
+                    </article>
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>MOBILE</span><span class="num">/ 03</span></div>
                         <h3>Mobile</h3>
                         <p>React Native, Flutter y nativo cuando hace falta máximo rendimiento.</p>
-                    </div>
-                    <div class="card reveal reveal-delay-4">
+                    </article>
+                    <article class="svc span-6">
+                        <div class="svc-tag"><span>CLOUD</span><span class="num">/ 04</span></div>
                         <h3>Cloud y DevOps</h3>
                         <p>AWS, Vercel, Supabase, Railway. CI/CD, monitoreo y backups automatizados.</p>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="section-heading center reveal">
-                    <span class="eyebrow">Preguntas frecuentes</span>
-                    <h2>Sobre desarrollo a medida</h2>
+        <section class="section" style="padding-top:40px">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">Preguntas frecuentes</span>
+                        <h2 class="section-h">Sobre <span class="it">desarrollo</span> a medida.</h2>
+                    </div>
                 </div>
-                <div class="faq-list">
+                <div class="faq-list reveal">
                     <details class="faq-item">
                         <summary>¿Cuánto cuesta un desarrollo a medida?</summary>
                         <p>Depende mucho del alcance. Un MVP simple puede arrancar en USD 3.000–6.000. Un sistema más complejo con integraciones varias va de USD 10.000 en adelante. Cotizamos por hitos para que veas valor antes de comprometer todo el presupuesto.</p>
@@ -178,29 +237,66 @@
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <div class="cta-band reveal">
-                    <h2>¿Tenés una <span class="gradient-text">idea para construir</span>?</h2>
-                    <p>Contanos qué necesitás. Si encaja, te pasamos una propuesta concreta. Si no, te orientamos hacia algo que sí.</p>
-                    <div class="hero-actions" style="justify-content: center;">
-                        <a href="../contacto.html" class="btn btn-primary">Contar tu proyecto →</a>
-                        <a href="https://wa.me/5493834327244" class="btn btn-secondary" target="_blank">WhatsApp</a>
-                    </div>
+        <section class="cta">
+            <div class="topo" data-topo="155" data-hot="2" aria-hidden="true"></div>
+            <div class="shell" style="position:relative;z-index:2">
+                <h2>¿Tenés una<br><span class="it">idea</span> para construir?</h2>
+                <p>Contanos qué necesitás. Si encaja, te pasamos una propuesta concreta. Si no, te orientamos hacia algo que sí.</p>
+                <div class="h-ctas" style="justify-content:center">
+                    <a href="../contacto.html" class="btn btn-primary">Contar tu proyecto <span class="arrow">→</span></a>
+                    <a href="https://wa.me/5493834327244" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp</a>
                 </div>
             </div>
         </section>
     </main>
-    <a href="https://wa.me/5493834327244" class="fab-wa" target="_blank" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.711.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
 
+    <a class="wa" href="https://wa.me/5493834327244" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.6 11.6 0 0 0 12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5zM12 22a10 10 0 0 1-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A10 10 0 1 1 22 12a10 10 0 0 1-10 10zm5.5-7.5c-.3-.2-1.8-.9-2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.3-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6.4-.6c.1-.2 0-.4 0-.5l-1-2.3c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5 4.5l1.7.7c.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.5.2-.7.2-1.4.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
+    </a>
 
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-bottom">© 2026 MineConnect. <a href="../contacto.html" style="color: var(--text-muted);">Contacto</a> · <a href="../index.html" style="color: var(--text-muted);">Inicio</a></div>
+    <footer class="foot">
+        <div class="shell">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <a href="../index.html" class="brand"><span class="brand-mark">M</span> MineConnect</a>
+                    <p>Tecnología que entiende el terreno. Catamarca, Argentina — trabajamos en todo el país.</p>
+                </div>
+                <div>
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="radiocomunicaciones.html">Radiocomunicaciones</a></li>
+                        <li><a href="tecnologia.html">Tecnología</a></li>
+                        <li><a href="automatizaciones-ia.html">Automatizaciones IA</a></li>
+                        <li><a href="desarrollo.html">Desarrollo</a></li>
+                        <li><a href="../sat.html">MineConnect SAT</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="../nosotros.html">Nosotros</a></li>
+                        <li><a href="../cursos.html">Cursos</a></li>
+                        <li><a href="../index.html#casos">Casos</a></li>
+                        <li><a href="../contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><a href="https://wa.me/5493834327244">+54 9 383 432-7244</a></li>
+                        <li><a href="mailto:contacto@mineconnect.com.ar">contacto@mineconnect.com.ar</a></li>
+                        <li>Catamarca · Argentina</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <span>© 2026 MINECONNECT · TECNOLOGÍA QUE CONECTA</span>
+                <span><a href="../privacidad.html">Privacidad</a> · <a href="../terminos.html">Términos</a></span>
+            </div>
         </div>
     </footer>
 
-    <script src="../js/particles.js"></script>
+    <script src="../js/topo.js"></script>
     <script src="../js/main.js"></script>
 </body>
 </html>
