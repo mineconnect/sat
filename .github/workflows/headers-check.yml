@@ -1,0 +1,66 @@
+name: Headers regression check
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  schedule:
+    - cron: "33 7 * * *"
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "URL a auditar (default: producción)"
+        required: false
+        default: "https://mineconnect.com.ar"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl headers
+        id: hdr
+        run: |
+          URL="${{ github.event.inputs.url || 'https://mineconnect.com.ar' }}"
+          echo "Auditando $URL"
+          HDRS=$(curl -sS -D - -o /dev/null --max-time 20 "$URL" | tr -d '\r' | awk 'tolower($0) ~ /^[a-z-]+: / {print tolower($0)}')
+          echo "$HDRS"
+          echo "$HDRS" > /tmp/headers.txt
+
+      - name: Assert critical headers
+        run: |
+          fail=0
+          required=(
+            "strict-transport-security: max-age="
+            "x-content-type-options: nosniff"
+            "x-frame-options: deny"
+            "referrer-policy:"
+            "content-security-policy:"
+            "permissions-policy:"
+          )
+          for h in "${required[@]}"; do
+            if ! grep -qi "$h" /tmp/headers.txt; then
+              echo "::error::Header faltante o débil: $h"
+              fail=1
+            fi
+          done
+
+          # HSTS debe incluir includeSubDomains
+          if ! grep -i "strict-transport-security:" /tmp/headers.txt | grep -qi "includesubdomains"; then
+            echo "::warning::HSTS sin includeSubDomains"
+          fi
+
+          # CSP no debe tener wildcard *
+          if grep -i "content-security-policy:" /tmp/headers.txt | grep -qE "(^|[^a-z])\*[^.a-z]"; then
+            echo "::error::CSP contiene wildcard * sin restricción"
+            fail=1
+          fi
+
+          # frame-ancestors none
+          if ! grep -i "content-security-policy:" /tmp/headers.txt | grep -qi "frame-ancestors 'none'"; then
+            echo "::warning::CSP sin frame-ancestors 'none'"
+          fi
+
+          exit $fail

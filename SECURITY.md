@@ -177,6 +177,31 @@ SELECT jobname, schedule, active FROM cron.job ORDER BY jobname;
 -- mineconnect_keepalive      | 17 */6 * * *
 ```
 
+### CSP violation reporting
+
+- Edge function: `csp-report` v1 ACTIVE (`/functions/v1/csp-report`).
+- Tabla: `public._csp_reports` (RLS forzada, service_role only).
+- Acepta legacy `application/csp-report` y Reporting API (`application/reports+json`).
+- Inserta hasta 20 reports por request; body cap 64 KB.
+- Cron `mineconnect_csp_reports_purge` borra reports > 30 días a las 04:37.
+- Configurado en CSP de los 4 backends: `report-uri https://...supabase.co/functions/v1/csp-report`.
+
+Consultar violaciones recientes:
+```sql
+SELECT violated, blocked_uri, count(*)
+  FROM public._csp_reports
+ WHERE occurred_at > now() - interval '7 days'
+ GROUP BY 1,2 ORDER BY count(*) DESC LIMIT 20;
+```
+
+### Alerter para eventos críticos (manual setup pendiente)
+
+`_security_events` ya captura alertas. Para notificación push:
+1. Crear Incoming Webhook en Slack/Discord/Teams.
+2. Setear como secret en Supabase Dashboard: `Project Settings → Edge Functions → ALERTER_WEBHOOK_URL`.
+3. Deployar edge function `alerter` (template en `supabase/functions/alerter/README.md` cuando se configure).
+4. Schedule via `pg_cron`: `*/5 * * * *` que invoque la function vía `pg_net`.
+
 ### Logs de Supabase (Dashboard)
 
 - `Logs → Edge Functions → leads-submit`: ver invocaciones, errores 4xx/5xx.
