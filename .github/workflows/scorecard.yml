@@ -1,0 +1,46 @@
+name: OpenSSF Scorecard
+
+# Mide el security health del repo según los 18+ checks de OpenSSF:
+# Branch-Protection, Code-Review, CII-Best-Practices, Contributors, CI-Tests,
+# Dangerous-Workflow, Dependency-Update-Tool, Fuzzing, License, Maintained,
+# Packaging, Pinned-Dependencies, SAST, SBOM, Security-Policy, Signed-Releases,
+# Token-Permissions, Vulnerabilities, Webhooks.
+
+on:
+  branch_protection_rule:
+  schedule:
+    - cron: "17 5 * * 3"
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: ossf/scorecard-action@v2.4.0
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SARIF
+          path: results.sarif
+          retention-days: 30
+
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
