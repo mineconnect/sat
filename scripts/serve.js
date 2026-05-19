@@ -109,9 +109,17 @@ const server = http.createServer((req, res) => {
     const parsed = url.parse(req.url);
     let pathname = parsed.pathname || '/';
 
+    // Bloquear paths que podrían interpretarse como redirects externos
+    // (e.g. `//evil.com/` o `/\evil.com/` → Location: //evil.com → open redirect).
+    if (!pathname.startsWith('/') || /^\/[/\\]/.test(pathname)) {
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        return res.end('Bad Request');
+    }
+
     // trailing slash redirect (vercel: trailingSlash=false)
     if (pathname.length > 1 && pathname.endsWith('/')) {
-        res.writeHead(308, { Location: pathname.replace(/\/+$/, '') + (parsed.search || '') });
+        const target = pathname.replace(/\/+$/, '') + (parsed.search || '');
+        res.writeHead(308, { Location: target });
         return res.end();
     }
 
