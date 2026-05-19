@@ -4,6 +4,48 @@ Guía para llevar el hardening del repo a producción y agregar las capas extern
 
 ---
 
+## ✅ Estado actual (2026-05-19 — deploy live)
+
+| Componente | Estado | Detalle |
+|---|---|---|
+| Host `www.mineconnect.com.ar` | **Cloudflare Pages** | `server: cloudflare`, proyecto `mineconnect`, deploy `75e46a8d` |
+| Proyecto Pages | Live | https://mineconnect.pages.dev (alias estable) |
+| Custom Domain | Active | DNS `www CNAME mineconnect.pages.dev` proxied |
+| TLS / SSL | Full (strict), TLS 1.3 min | Cert emitido por CF Pages |
+| HSTS edge | ON | max-age 2 años, includeSubDomains, preload |
+| WAF rules | 5/5 active | scrapers, paths sensibles, POSTs, UA vacíos, métodos raros |
+| Rate Limit | 1/1 active | 2 req/10s/IP en `/contacto.html POST` |
+| DMARC | `p=none` monitor mode | rua=contacto@mineconnect.com.ar |
+| `verify-security.sh` | **18/18 PASS** | corrido contra `https://www.mineconnect.com.ar` |
+| Edge functions Supabase | 2 active | `leads-submit` v1, `csp-report` v1 |
+| Cron jobs Supabase | 3 active | keepalive 6h, anomaly 15min, purges daily |
+| `_security_dashboard` Supabase | populated | `authenticated_grants=0`, `leads_rls_forced=true` |
+| Costo mensual | **$0** | CF Pages + DNS + WAF + RL + Supabase free |
+
+### URLs de producción
+
+```
+https://www.mineconnect.com.ar/                  ← sitio principal
+https://mineconnect.com.ar/                       ← apex (301 a www, sigue en Vercel)
+https://mineconnect.pages.dev/                    ← alias estable CF
+https://www.mineconnect.com.ar/.well-known/security.txt
+https://mgeukotlgrjyauwgdjxv.supabase.co/functions/v1/leads-submit
+https://mgeukotlgrjyauwgdjxv.supabase.co/functions/v1/csp-report
+```
+
+### Próximos pasos opcionales
+
+1. Revocar los 3 tokens CF temporales en https://dash.cloudflare.com/profile/api-tokens.
+2. HSTS preload submission tras 1-2 semanas: https://hstspreload.org/?domain=mineconnect.com.ar.
+3. Monitorear reportes DMARC en `contacto@mineconnect.com.ar`; escalar a `p=quarantine` cuando los reportes muestren alineación clean.
+4. Dashboard CF Pages tiene "GitHub auto-deploy" — vincular el repo para que cada push a master redeployee solo.
+5. Activar Bot Fight Mode + AI Labyrinth manualmente en Security → Bots (1 toggle).
+6. Branch protection master (Settings → Branches).
+7. Supabase Auth HIBP password protection (Auth → Policies).
+
+
+---
+
 ## 1. Migrar a Cloudflare Pages — único host elegido
 
 **Decisión**: Cloudflare Pages, plan **free** permanente. Razones:
