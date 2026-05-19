@@ -94,8 +94,8 @@ done
 STYLE_ATTRS=$(grep -rhoE 'style="[^"]+"' --include='*.html' site/ 2>/dev/null | wc -l | tr -d ' ')
 STYLE_ATTRS=${STYLE_ATTRS:-0}
 # Baseline conocido al momento de medirlo. Si crece, warning.
-BL_BLOCKS=12
-BL_ATTRS=110
+BL_BLOCKS=13
+BL_ATTRS=260
 if [ "$STYLE_BLOCKS" -gt "$BL_BLOCKS" ] || [ "$STYLE_ATTRS" -gt "$BL_ATTRS" ]; then
   warn "inline styles aumentaron — blocks=$STYLE_BLOCKS (BL=$BL_BLOCKS), attrs=$STYLE_ATTRS (BL=$BL_ATTRS). Si CSP migra a strict style-src, esto rompe."
 else

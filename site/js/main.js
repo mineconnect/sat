@@ -127,4 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+
+    // Delegación de click para botones [data-print] (CSP-friendly)
+    document.addEventListener('click', e => {
+        if (e.target.closest('[data-print]')) window.print();
+    });
+
 });
