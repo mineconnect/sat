@@ -61,7 +61,18 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(step);
     }
 
-    // Form → WhatsApp (con anti-bot: honeypot + min-time)
+    // Form → leads-submit (DB) + WhatsApp, con anti-bot honeypot + min-time
+    const LEADS_ENDPOINT = 'https://mgeukotlgrjyauwgdjxv.supabase.co/functions/v1/leads-submit';
+
+    const utmFromUrl = () => {
+        const p = new URLSearchParams(location.search);
+        return {
+            utm_source:   p.get('utm_source')   || null,
+            utm_medium:   p.get('utm_medium')   || null,
+            utm_campaign: p.get('utm_campaign') || null,
+        };
+    };
+
     document.querySelectorAll('form[data-wa]').forEach(form => {
         const tsField = form.querySelector('input[name="_ts"]');
         if (tsField) tsField.value = String(Date.now());
@@ -69,15 +80,41 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', e => {
             e.preventDefault();
 
-            // Honeypot: si un bot llena el campo oculto "website", abortar en silencio
             const hp = form.querySelector('input[name="website"]');
             if (hp && hp.value.trim() !== '') return;
 
-            // Min-time: rechazar envíos en menos de 2s (formularios humanos toman más)
             const ts = Number(form.querySelector('input[name="_ts"]')?.value || 0);
             if (ts && Date.now() - ts < 2000) return;
 
             const data = new FormData(form);
+            const get = (k) => (data.get(k) || '').toString().trim();
+
+            const payload = {
+                nombre:   get('Nombre'),
+                empresa:  get('Empresa'),
+                email:    get('Email'),
+                telefono: get('Telefono'),
+                servicio: get('Servicio'),
+                mensaje:  get('Mensaje'),
+                website:  hp ? hp.value : '',
+                _ts:      ts,
+                ...utmFromUrl(),
+            };
+
+            // Fire-and-forget al edge function (no bloquea la apertura de WhatsApp).
+            // keepalive=true permite que el POST sobreviva la navegación a wa.me.
+            try {
+                fetch(LEADS_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    keepalive: true,
+                    mode: 'cors',
+                    credentials: 'omit',
+                    referrerPolicy: 'no-referrer',
+                }).catch(() => { /* silencio: WhatsApp sigue siendo el canal primario */ });
+            } catch (_) { /* idem */ }
+
             const lines = [];
             for (const [key, value] of data.entries()) {
                 if (key === 'website' || key === '_ts') continue;
