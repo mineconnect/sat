@@ -4,6 +4,8 @@
   const STORAGE_KEY = 'mc-chat-history';
   const WA_NUMBER   = '5493834327244';
   const WA_BASE     = `https://wa.me/${WA_NUMBER}?text=`;
+  const API_URL     = 'https://mineconnect-chat-api.vercel.app/api/chat';
+  const API_TIMEOUT = 15000;
 
   const GREETINGS = [
     '¡Hola! Soy MC 🤖 — ¿en qué puedo ayudarte?',
@@ -102,11 +104,60 @@
     return GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
   }
 
-  function answer(text) {
+  function answerLocal(text) {
     for (const intent of INTENTS) {
       if (intent.match.test(text)) return { reply: intent.reply, actions: intent.actions };
     }
     return FALLBACK;
+  }
+
+  // Map our internal history into Anthropic-style messages
+  function toAnthropic(history) {
+    return history
+      .filter(m => m.role === 'user' || m.role === 'bot')
+      .map(m => ({ role: m.role === 'bot' ? 'assistant' : 'user', content: m.text }));
+  }
+
+  // Heuristic: pick actions for an LLM reply based on its content
+  function actionsFor(text, userText) {
+    const lower = (text + ' ' + userText).toLowerCase();
+    const acts = [];
+    if (/(whatsapp|hablar|contact|coordin|coordinar|asesor|humano|persona|t[eé]cnico)/i.test(lower)) {
+      acts.push({ label: 'Abrir WhatsApp', wa: 'Hola, vengo del chat de la web: ' });
+    }
+    if (/(curso|formaci|capacit)/i.test(lower)) acts.push({ label: 'Ver cursos', href: 'cursos.html' });
+    if (/(radio|motorola|hytera)/i.test(lower)) acts.push({ label: 'Radiocomunicaciones', href: 'servicios/radiocomunicaciones.html' });
+    if (/(automat|n8n|agente|ia\b)/i.test(lower)) acts.push({ label: 'Automatizaciones', href: 'servicios/automatizaciones-ia.html' });
+    if (/(desarroll|software|app|sistema)/i.test(lower)) acts.push({ label: 'Desarrollo', href: 'servicios/desarrollo.html' });
+    if (/(cotiz|presupuesto|precio|costo)/i.test(lower)) acts.push({ label: 'Cotizar', wa: 'Hola, quiero cotizar un proyecto: ' });
+    return acts.slice(0, 3);
+  }
+
+  async function answerRemote(history, userText) {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), API_TIMEOUT);
+    try {
+      const messages = toAnthropic(history);
+      const r = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages }),
+        signal: ctl.signal,
+      });
+      clearTimeout(timer);
+      if (!r.ok) return null;
+      const data = await r.json();
+      if (!data || !data.reply) return null;
+      return { reply: data.reply, actions: actionsFor(data.reply, userText) };
+    } catch {
+      clearTimeout(timer);
+      return null;
+    }
+  }
+
+  async function answer(text, history) {
+    const remote = await answerRemote(history, text);
+    return remote || answerLocal(text);
   }
 
   function pathPrefix() {
@@ -190,21 +241,26 @@
       return wrap;
     }
 
-    function send(text) {
+    async function send(text) {
       text = (text || '').trim();
       if (!text) return;
       bubble('user', text);
       input.value = '';
-      const history = loadHistory(); history.push({ role: 'user', text }); saveHistory(history);
-      // typing indicator
+      input.disabled = true;
+      const history = loadHistory();
+      history.push({ role: 'user', text });
+      saveHistory(history);
       const typing = bubble('bot', '…');
       typing.querySelector('p').classList.add('mc-typing');
-      setTimeout(() => {
-        const { reply, actions } = answer(text);
+      try {
+        const { reply, actions } = await answer(text, history);
         typing.remove();
         bubble('bot', reply, actions);
         const h2 = loadHistory(); h2.push({ role: 'bot', text: reply }); saveHistory(h2);
-      }, 550 + Math.random() * 400);
+      } finally {
+        input.disabled = false;
+        input.focus();
+      }
     }
 
     // render history or greeting
