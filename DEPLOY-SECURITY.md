@@ -1,57 +1,215 @@
 # Deploy & External Security Layers
 
-Guía para llevar el hardening del repo a producción y agregar las capas externas que el repo no puede controlar por sí solo.
+Guía para llevar el hardening del repo a producción y agregar las capas externas que el repo no puede controlar por sí solo. **Costo total: $0** — 100% en planes gratuitos.
 
 ---
 
-## 1. Migrar de GitHub Pages a un host con headers
+## 1. Migrar a Cloudflare Pages — único host elegido
 
-**Diagnóstico actual**: `www.mineconnect.com.ar` responde con `server: GitHub.com` + `x-github-request-id`. GitHub Pages **NO soporta custom headers**, lo que vuelve inertes `_headers`, `netlify.toml`, `vercel.json` y `.htaccess`.
+**Decisión**: Cloudflare Pages, plan **free** permanente. Razones:
 
-El apex `mineconnect.com.ar` (vía Vercel) redirige 301 a `www.` (GitHub Pages). Hay que mover `www.` a un host con soporte para headers.
+| Criterio | Cloudflare Pages | Vercel Hobby | Netlify Free | GitHub Pages |
+|---|---|---|---|---|
+| Ancho de banda | **Ilimitado** | 100 GB/mes | 100 GB/mes | 100 GB/mes |
+| Requests | **Ilimitados** | 100K/día | 300/min | Soft cap |
+| Custom headers | ✅ `_headers` nativo | ✅ `vercel.json` | ✅ `_headers` | ❌ |
+| Custom domain | ✅ gratis | ✅ gratis | ✅ gratis | ✅ gratis |
+| Uso comercial | ✅ permitido | ❌ TOS prohíbe | ✅ permitido | ✅ permitido |
+| SSL | ✅ auto | ✅ auto | ✅ auto | ✅ auto |
+| Build minutes | 500/mes | 100 hr/mes | 300/mes | — |
+| DNS ya en este proveedor | ✅ **sí** | ❌ | ❌ | ❌ |
+| Lee `_headers` | ✅ | ❌ | ✅ | ❌ |
 
-### Opción A — Cloudflare Pages (recomendada)
+Vercel Hobby queda descartado porque su TOS prohíbe uso comercial. Netlify free tiene cap de 100 GB que puede agotarse en una campaña. CF Pages no tiene caps de transferencia/requests y el DNS ya vive en Cloudflare.
 
-**Por qué**: el DNS ya está en Cloudflare; Pages se integra sin cambios de nameservers; lee `_headers` automáticamente; ancho de banda ilimitado en plan free.
+**Diagnóstico del estado actual**: `www.mineconnect.com.ar` responde con `server: GitHub.com` + `x-github-request-id`. GitHub Pages **NO soporta custom headers**, lo que vuelve inertes `_headers`, `netlify.toml`, `vercel.json` y `.htaccess`. El apex (`mineconnect.com.ar`) redirige 301 a `www.` desde Vercel.
 
-Pasos:
+### Pasos exactos para deployar en Cloudflare Pages
 
-1. Dashboard Cloudflare → **Workers & Pages → Create application → Pages → Connect to Git**.
-2. Seleccionar el repo `mineconnect/sat`, branch `master`.
-3. Build settings:
-   - **Framework preset**: None
-   - **Build command**: `bash scripts/build-dist.sh`
-   - **Build output directory**: `dist`
-4. Deploy. Una vez OK, Cloudflare entrega un dominio `*.pages.dev`.
-5. Custom domains → agregar `www.mineconnect.com.ar` → Cloudflare apunta DNS automáticamente.
-6. Subir TTL temporalmente y verificar con `curl -I https://www.mineconnect.com.ar`.
+#### 1.1 — Crear el proyecto
 
-### Opción B — Vercel (apex ya en Vercel)
+1. Abrir https://dash.cloudflare.com → **Workers & Pages** (sidebar izquierdo).
+2. Click **Create application** → tab **Pages** → **Connect to Git**.
+3. Si es la primera vez: **Connect GitHub** → autorizar el org `mineconnect`.
+4. Seleccionar repo `mineconnect/sat` → **Begin setup**.
 
-El apex ya redirige a www; mover www al mismo proyecto Vercel evita la doble dependencia.
+#### 1.2 — Build settings (copiá tal cual)
 
-Pasos:
-1. `https://vercel.com/dashboard` → proyecto del apex → **Settings → Domains** → agregar `www.mineconnect.com.ar`.
-2. Sustituir el DNS de `www` en Cloudflare por el CNAME que Vercel pida.
-3. Subir `vercel.json` (ya está en este repo) y `dist/`.
-4. Vercel respeta `vercel.json` (ya con todos los headers).
+| Campo | Valor |
+|---|---|
+| **Project name** | `mineconnect` (genera dominio `mineconnect.pages.dev`) |
+| **Production branch** | `master` |
+| **Framework preset** | None |
+| **Build command** | `bash scripts/build-dist.sh` |
+| **Build output directory** | `dist` |
+| **Root directory (advanced)** | `/` (default) |
+| **Environment variables (Production)** | ninguna requerida |
 
-### Opción C — Netlify
+Click **Save and Deploy**. CF clona el repo, corre `build-dist.sh`, genera `dist/`, y publica.
 
-Mismo flujo que Cloudflare Pages, build command idéntico. Lee `_headers` y `netlify.toml`.
+#### 1.3 — Verificar primer deploy en el dominio temporal
 
-### Opción D — Quedarse en GitHub Pages
+Pasados 1–2 min, abrir `https://mineconnect.pages.dev` → debe cargar el sitio.
 
-GitHub Pages no permite headers custom. Únicas defensas posibles:
-- `<meta>` tags (ya aplicados en 18 páginas).
-- HSTS preload submission (depende de un primer set por algún host).
-- Subir el sitio a Cloudflare en modo proxy (orange cloud) → ver sección 2.
+```bash
+curl -sI https://mineconnect.pages.dev/ | head -20
+```
 
-**No recomendado para producción seria.**
+Esperás ver:
+```
+HTTP/2 200
+strict-transport-security: max-age=63072000; ...
+content-security-policy: default-src 'self'; ... 'sha256-...' ...
+x-content-type-options: nosniff
+x-frame-options: DENY
+referrer-policy: strict-origin-when-cross-origin
+permissions-policy: ...
+reporting-endpoints: ...
+```
+
+Si todo OK, seguí. Si algún header falta: revisar **Logs** del deploy en CF dashboard.
+
+#### 1.4 — Conectar el dominio custom `www.mineconnect.com.ar`
+
+1. En el proyecto CF Pages → tab **Custom domains** → **Set up a custom domain**.
+2. Ingresá `www.mineconnect.com.ar` → **Continue** → **Activate domain**.
+3. Cloudflare crea automáticamente un CNAME `www → mineconnect.pages.dev` en la zona DNS. **No tenés que tocar nada manualmente** porque el DNS ya vive en la misma cuenta CF.
+4. ⚠️ Si existe un registro DNS previo para `www` (que apuntaba a GitHub Pages: `185.199.108.153` etc.), **bórralo**. CF te avisa si lo detecta.
+5. Esperar 2–5 minutos para propagación y SSL.
+6. Verificar:
+   ```bash
+   ./scripts/verify-security.sh
+   # o bien:
+   URL=https://www.mineconnect.com.ar ./scripts/verify-security.sh
+   ```
+   Esperás `9/9 PASS`.
+
+#### 1.5 — Decidir qué hacer con el apex `mineconnect.com.ar`
+
+Hoy el apex está en Vercel y redirige 301 a `www`. Dos rutas:
+
+**A) Mover apex también a CF Pages** (recomendado — un solo host):
+- En CF Pages → **Custom domains** → agregar `mineconnect.com.ar`.
+- Crear page rule (Rules → Redirect Rules): `mineconnect.com.ar/*` → `https://www.mineconnect.com.ar/$1` (301).
+- Eliminar el proyecto Vercel del apex (opcional, evita doble facturación implícita).
+
+**B) Dejar el apex en Vercel**:
+- `vercel.json` ya tiene los headers correctos; el redirect 301 ya funciona.
+- Vercel free no factura mientras no superes 100GB.
+
+#### 1.6 — Activar features de Cloudflare incluidas en free
+
+Una vez el sitio sirve desde CF Pages, en el dashboard de la zona `mineconnect.com.ar`:
+
+**Speed → Optimization**:
+- ☑ Auto Minify: HTML / CSS / JavaScript
+- ☑ Brotli compression
+- ☑ Early Hints
+- ☑ Rocket Loader: OFF (rompe CSP estricta; dejarlo en OFF)
+
+**Caching → Configuration**:
+- Browser Cache TTL: Respect Existing Headers (los `_headers` ya tienen TTL óptimo)
+- Crawler Hints: ON
+
+**Security → Settings**:
+- Security Level: **Medium**
+- Browser Integrity Check: ON
+- Challenge Passage: 30 minutes
+- Privacy Pass Support: ON
+- Replace insecure JavaScript libraries: ON
+
+**Security → Bots → Configure Super Bot Fight Mode**:
+- Bot Fight Mode: **ON** (free tier)
+- Static Resource Protection: OFF (rompería cache; usar default)
+- Block AI scrapers: **ON** (cubre GPTBot, ClaudeBot, PerplexityBot, etc. — además del robots.txt)
+
+**Security → DDoS**:
+- HTTP DDoS Attack Protection: **Sensitivity = High**
+- Action: Managed Challenge
+
+**Network**:
+- HTTP/3 (with QUIC): ON
+- 0-RTT Connection Resumption: ON
+- WebSockets: ON (necesario para Supabase Realtime futuro)
+- Onion Routing: ON (opcional, no daña)
+
+**SSL/TLS → Edge Certificates**:
+- Always Use HTTPS: ON
+- Minimum TLS Version: **TLS 1.3**
+- Opportunistic Encryption: ON
+- TLS 1.3: ON
+- Automatic HTTPS Rewrites: ON
+- Certificate Transparency Monitoring: ON
+
+#### 1.7 — Cloudflare WAF Custom Rules (free permite 5)
+
+**Security → WAF → Custom rules → Create rule**:
+
+**Rule 1** — Bloquear scrapers SEO/IA (refuerza robots.txt):
+```
+Name: Block known scrapers
+Match: (http.user_agent contains "AhrefsBot")
+    or (http.user_agent contains "SemrushBot")
+    or (http.user_agent contains "MJ12bot")
+    or (http.user_agent contains "DotBot")
+    or (http.user_agent contains "PetalBot")
+    or (http.user_agent contains "Bytespider")
+    or (http.user_agent contains "GPTBot")
+    or (http.user_agent contains "ClaudeBot")
+    or (http.user_agent contains "anthropic-ai")
+    or (http.user_agent contains "CCBot")
+Action: Block
+```
+
+**Rule 2** — Bloquear paths sensibles:
+```
+Name: Block sensitive paths
+Match: (http.request.uri.path contains "/.git")
+    or (http.request.uri.path contains "/.env")
+    or (http.request.uri.path contains "/wp-admin")
+    or (http.request.uri.path contains "/wp-login")
+    or (http.request.uri.path contains "/phpmyadmin")
+    or (http.request.uri.path contains "/.htaccess")
+    or (http.request.uri.path contains "/node_modules")
+Action: Block
+```
+
+**Rule 3** — Challenge en POSTs sospechosos (refuerzo del form):
+```
+Name: Challenge non-form POSTs
+Match: (http.request.method eq "POST" and not http.request.uri.path matches "^/contacto" and not http.request.uri.path matches "^/functions/v1/")
+Action: Managed Challenge
+```
+
+**Rule 4** — Block requests sin User-Agent (bots crudos):
+```
+Name: Block empty user agents
+Match: (http.user_agent eq "")
+Action: Block
+```
+
+**Rule 5** — Block métodos HTTP raros:
+```
+Name: Block weird HTTP methods
+Match: not http.request.method in {"GET" "POST" "HEAD" "OPTIONS"}
+Action: Block
+```
+
+#### 1.8 — Cloudflare Rate Limiting (free permite 1 regla, 10k requests/mes)
+
+**Security → Rate Limit Rules → Create**:
+```
+Name: Form abuse protection
+Match: http.request.uri.path eq "/contacto.html" and http.request.method eq "POST"
+Rate: 10 requests per 1 minute per IP
+Action: Block (1 hour)
+```
+
+Esto **complementa** el rate-limit del trigger DB (5/h IP). Acá filtramos antes de que llegue a la base, ahorrando egress.
 
 ---
 
-## 2. Cloudflare como WAF/proxy (si no migrás de host)
+## 2. Cloudflare como WAF/proxy adicional (sección legacy — ya no necesaria)
 
 Si por algún motivo conservás GitHub Pages, activar Cloudflare proxy (orange cloud) y agregar Transform Rules permite inyectar headers de seguridad sin tocar el origen.
 
