@@ -1,0 +1,50 @@
+name: Mozilla Observatory
+
+on:
+  push:
+    branches: [master, main]
+  schedule:
+    - cron: "11 8 * * 1"
+  workflow_dispatch:
+    inputs:
+      host:
+        description: "Host a auditar (sin protocolo)"
+        required: false
+        default: "mineconnect.com.ar"
+
+permissions:
+  contents: read
+
+jobs:
+  observatory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan
+        run: |
+          HOST="${{ github.event.inputs.host || 'mineconnect.com.ar' }}"
+          echo "Auditando $HOST en Mozilla Observatory…"
+
+          # Trigger scan (rescan force=true) y poll hasta FINISHED
+          curl -fsS -X POST "https://observatory-api.mdn.mozilla.net/api/v2/analyze?host=$HOST" \
+            -H 'Content-Type: application/x-www-form-urlencoded' > /tmp/obs.json
+          cat /tmp/obs.json | head -200
+
+          # Reintentar lectura para asegurar grade final
+          for i in 1 2 3 4 5; do
+            sleep 10
+            curl -fsS "https://observatory-api.mdn.mozilla.net/api/v2/analyze?host=$HOST" > /tmp/obs.json || true
+            STATE=$(jq -r '.state // empty' /tmp/obs.json)
+            echo "intento $i: state=$STATE"
+            [ "$STATE" = "FINISHED" ] && break
+          done
+
+          GRADE=$(jq -r '.grade // empty' /tmp/obs.json)
+          SCORE=$(jq -r '.score // empty' /tmp/obs.json)
+          echo "Grade: $GRADE  Score: $SCORE"
+          echo "::notice::Mozilla Observatory grade=$GRADE score=$SCORE"
+
+          # Política: aceptar A+ y A. Cualquier otra cosa falla.
+          case "$GRADE" in
+            A+|A) echo "OK" ;;
+            *) echo "::error::Grade $GRADE bajo el mínimo A"; exit 1 ;;
+          esac

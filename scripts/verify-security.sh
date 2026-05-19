@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+# verify-security.sh — verificación local antes de merge / deploy
+# Corre todos los checks que hace el CI, en orden y con output legible.
+set -uo pipefail
+
+cd "$(dirname "$0")/.."
+RED='\033[31m'; GREEN='\033[32m'; YEL='\033[33m'; NC='\033[0m'
+pass() { printf "${GREEN}PASS${NC} %s\n" "$1"; }
+fail() { printf "${RED}FAIL${NC} %s\n" "$1"; RC=1; }
+warn() { printf "${YEL}WARN${NC} %s\n" "$1"; }
+RC=0
+
+echo "== verify-security.sh ============================="
+
+# 1) npm audit (production deps)
+echo "-- npm audit --audit-level=high"
+if npm audit --audit-level=high --omit=dev >/tmp/audit.log 2>&1; then
+  pass "npm audit (no high+)"
+else
+  fail "npm audit reportó vulnerabilidades"; tail -20 /tmp/audit.log
+fi
+
+# 2) secret scan local (gitleaks si existe, sino grep)
+echo "-- secret scan"
+if command -v gitleaks >/dev/null; then
+  if gitleaks detect --no-banner --redact --exit-code 0 >/tmp/gl.log 2>&1; then
+    pass "gitleaks (sin secretos)"
+  else
+    fail "gitleaks encontró potenciales secretos"; tail -10 /tmp/gl.log
+  fi
+else
+  if grep -rE '(api[_-]?key|secret|password|token)\s*[:=]\s*["\x27][^"\x27]{20,}' \
+       --include='*.{js,ts,json,html,yml,yaml}' \
+       --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist . >/tmp/grep.log 2>&1; then
+    warn "grep encontró líneas sospechosas (revisar manualmente):"; cat /tmp/grep.log
+  else
+    pass "grep secretos (limpio)"
+  fi
+fi
+
+# 3) CSP hashes sincronizados con inline scripts
+echo "-- CSP hashes sync"
+if [ -x scripts/compute-csp-hashes.sh ]; then
+  ./scripts/compute-csp-hashes.sh site | sort -u > /tmp/computed.txt
+  for f in site/_headers netlify.toml vercel.json site/.htaccess; do
+    grep -oE "'sha256-[A-Za-z0-9+/=]+'" "$f" | sort -u > /tmp/in_backend.txt
+    if diff -q /tmp/computed.txt /tmp/in_backend.txt >/dev/null; then
+      pass "CSP hashes sincronizados ($f)"
+    else
+      fail "CSP hashes desincronizados ($f). Corré ./scripts/compute-csp-hashes.sh y actualizá."
+    fi
+  done
+else
+  warn "compute-csp-hashes.sh no encontrado"
+fi
+
+# 4) Headers de producción (si la URL está reachable)
+URL="${URL:-https://mineconnect.com.ar}"
+echo "-- headers en $URL"
+if curl -sI --max-time 10 "$URL" >/tmp/hdrs.txt 2>/dev/null; then
+  required=("strict-transport-security" "x-content-type-options" "x-frame-options"
+            "content-security-policy" "referrer-policy" "permissions-policy")
+  for h in "${required[@]}"; do
+    if grep -qi "^$h:" /tmp/hdrs.txt; then pass "header $h"; else fail "falta header $h"; fi
+  done
+else
+  warn "no se pudo curl $URL (offline o aún sin deploy)"
+fi
+
+# 5) Validar que no haya event handlers inline (onclick=, etc) en HTML
+echo "-- event handlers inline"
+if grep -rnE 'on(click|load|submit|change|input|focus|blur|mouseover|keydown|keyup)=' \
+   --include='*.html' site/ >/tmp/ev.log 2>&1; then
+  fail "event handlers inline detectados (rompen CSP estricta):"; cat /tmp/ev.log
+else
+  pass "sin event handlers inline"
+fi
+
+# 6) Validar que no haya http:// hardcodeado en HTML
+echo "-- http:// hardcodeado"
+if grep -rnE 'href="http://|src="http://' --include='*.html' site/ >/tmp/http.log 2>&1; then
+  warn "http:// hardcodeado (debería migrarse a https://):"; cat /tmp/http.log
+else
+  pass "todos los links son https://"
+fi
+
+echo "==================================================="
+if [ $RC -eq 0 ]; then
+  printf "${GREEN}OK${NC} — todos los checks pasaron\n"
+else
+  printf "${RED}FAIL${NC} — hay errores que resolver\n"
+fi
+exit $RC

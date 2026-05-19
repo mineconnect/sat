@@ -1,0 +1,28 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [master, main]
+  schedule:
+    - cron: "55 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lighthouse audit
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://mineconnect.com.ar/
+            https://mineconnect.com.ar/contacto.html
+            https://mineconnect.com.ar/servicios/desarrollo.html
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: ./.github/lighthouse-budget.json
