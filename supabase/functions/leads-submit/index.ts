@@ -1,4 +1,4 @@
-// leads-submit — proxy seguro entre el formulario público y la tabla leads.
+// leads-submit v2 — proxy seguro entre el formulario público y la tabla leads.
 // Validación server-side estricta + CORS allowlist + honeypot + rate limit por IP.
 // verify_jwt=false: endpoint público con autenticación propia (honeypot + validación + RLS).
 
