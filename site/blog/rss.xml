@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+    <title>Blog MineConnect</title>
+    <link>https://mineconnect.com.ar/blog/</link>
+    <atom:link href="https://mineconnect.com.ar/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <description>Artículos prácticos sobre IA aplicada, automatización con n8n, radiocomunicaciones Motorola/Hytera y casos reales de pymes argentinas.</description>
+    <language>es-AR</language>
+    <copyright>© 2026 MineConnect</copyright>
+    <pubDate>Tue, 19 May 2026 09:00:00 -0300</pubDate>
+    <lastBuildDate>Tue, 19 May 2026 09:00:00 -0300</lastBuildDate>
+    <generator>MineConnect blog v1</generator>
+    <image>
+        <url>https://mineconnect.com.ar/assets/logo-robot.png</url>
+        <title>Blog MineConnect</title>
+        <link>https://mineconnect.com.ar/blog/</link>
+    </image>
+
+    <item>
+        <title>n8n vs Zapier vs Make: cuál conviene para una pyme argentina en 2026</title>
+        <link>https://mineconnect.com.ar/blog/n8n-vs-zapier-vs-make-argentina-2026.html</link>
+        <guid isPermaLink="true">https://mineconnect.com.ar/blog/n8n-vs-zapier-vs-make-argentina-2026.html</guid>
+        <pubDate>Tue, 19 May 2026 09:00:00 -0300</pubDate>
+        <description>Comparativa real de n8n, Zapier y Make para pymes argentinas en 2026: precios en pesos, integraciones con AFIP/Mercado Pago/WhatsApp, y cuál ganó en 12 proyectos.</description>
+        <author>contacto@mineconnect.com.ar (Facundo Barros Marengo)</author>
+        <category>Automatización</category>
+        <category>IA</category>
+    </item>
+</channel>
+</rss>
