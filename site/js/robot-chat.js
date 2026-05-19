@@ -598,42 +598,23 @@
     const oldHero = document.querySelector('.hero-logo, .mc-hero-stage');
     if (oldHero) oldHero.style.display = 'none';
 
+    // Imagen real del robot del logo (WebP con fallback PNG)
+    const robotPic = picture(prefix, 'logo-robot-walk', 'MC, asistente de MineConnect');
+    const robotImg = robotPic.querySelector('img');
+    robotImg.classList.add('mc-image');
+    robotImg.setAttribute('draggable', 'false');
+
     const robot = el('div', { id: 'mc-robot', 'aria-label': 'MC, asistente de MineConnect' }, [
       el('div', { class: 'mc-body', role: 'button', tabindex: '0', onclick: () => toggle(true), onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(true); } } }, [
-        // Drones
         el('div', { class: 'mc-dron d1', 'aria-hidden': 'true' }),
         el('div', { class: 'mc-dron d2', 'aria-hidden': 'true' }),
         el('div', { class: 'mc-dron d3', 'aria-hidden': 'true' }),
-        // Chispas
         el('div', { class: 'mc-spark s1', 'aria-hidden': 'true' }),
         el('div', { class: 'mc-spark s2', 'aria-hidden': 'true' }),
         el('div', { class: 'mc-spark s3', 'aria-hidden': 'true' }),
-        // Sombra del piso
         el('div', { class: 'mc-floor-shadow', 'aria-hidden': 'true' }),
-        // Antenas
-        el('div', { class: 'mc-antena izq', 'aria-hidden': 'true' }),
-        el('div', { class: 'mc-antena der', 'aria-hidden': 'true' }),
-        // Casco con linterna
-        el('div', { class: 'mc-casco' }, [
-          el('div', { class: 'mc-linterna', 'aria-hidden': 'true' }),
-        ]),
-        // Visera oscura con ojos cyan
-        el('div', { class: 'mc-visera' }, [
-          el('div', { class: 'mc-ojo' }),
-          el('div', { class: 'mc-ojo' }),
-        ]),
-        // Torso con franjas y logo
-        el('div', { class: 'mc-torso' }, [
-          el('div', { class: 'mc-logo-m' }, ['M']),
-        ]),
-        // Brazos
-        el('div', { class: 'mc-brazo izq', 'aria-hidden': 'true' }),
-        el('div', { class: 'mc-brazo der', 'aria-hidden': 'true' }),
-        // Mano saludando (encima de brazo izquierdo)
+        robotPic,
         el('div', { class: 'mc-mano', 'aria-hidden': 'true' }, ['✋']),
-        // Piernas
-        el('div', { class: 'mc-pierna izq', 'aria-hidden': 'true' }),
-        el('div', { class: 'mc-pierna der', 'aria-hidden': 'true' }),
       ]),
     ]);
 
