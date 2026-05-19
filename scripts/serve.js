@@ -109,17 +109,21 @@ const server = http.createServer((req, res) => {
     const parsed = url.parse(req.url);
     let pathname = parsed.pathname || '/';
 
-    // Bloquear paths que podrían interpretarse como redirects externos
-    // (e.g. `//evil.com/` o `/\evil.com/` → Location: //evil.com → open redirect).
-    if (!pathname.startsWith('/') || /^\/[/\\]/.test(pathname)) {
+    // Allow-list estricto: solo paths con caracteres seguros. Rechaza
+    // `//evil.com`, `/\evil.com`, control chars, percent-encoded, etc.
+    // Suficiente para los assets en site/ (no usan caracteres especiales).
+    if (!/^\/[A-Za-z0-9._\-/]*$/.test(pathname)) {
         res.writeHead(400, { 'Content-Type': 'text/plain' });
         return res.end('Bad Request');
     }
 
-    // trailing slash redirect (vercel: trailingSlash=false)
+    // trailing slash redirect (vercel: trailingSlash=false).
+    // Reconstruimos el path desde componentes ya validados para que el
+    // analizador estático reconozca la sanitización.
     if (pathname.length > 1 && pathname.endsWith('/')) {
-        const target = pathname.replace(/\/+$/, '') + (parsed.search || '');
-        res.writeHead(308, { Location: target });
+        const segments = pathname.split('/').filter(s => s.length > 0);
+        const safeTarget = '/' + segments.join('/');
+        res.writeHead(308, { Location: safeTarget });
         return res.end();
     }
 
