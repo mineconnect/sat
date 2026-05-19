@@ -61,13 +61,26 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(step);
     }
 
-    // Form → WhatsApp
+    // Form → WhatsApp (con anti-bot: honeypot + min-time)
     document.querySelectorAll('form[data-wa]').forEach(form => {
+        const tsField = form.querySelector('input[name="_ts"]');
+        if (tsField) tsField.value = String(Date.now());
+
         form.addEventListener('submit', e => {
             e.preventDefault();
+
+            // Honeypot: si un bot llena el campo oculto "website", abortar en silencio
+            const hp = form.querySelector('input[name="website"]');
+            if (hp && hp.value.trim() !== '') return;
+
+            // Min-time: rechazar envíos en menos de 2s (formularios humanos toman más)
+            const ts = Number(form.querySelector('input[name="_ts"]')?.value || 0);
+            if (ts && Date.now() - ts < 2000) return;
+
             const data = new FormData(form);
             const lines = [];
             for (const [key, value] of data.entries()) {
+                if (key === 'website' || key === '_ts') continue;
                 if (value) lines.push(`${key}: ${value}`);
             }
             const msg = encodeURIComponent(

@@ -1,0 +1,6 @@
+Contact: mailto:seguridad@mineconnect.com.ar
+Contact: https://wa.me/5493834327244
+Expires: 2027-05-19T00:00:00.000Z
+Preferred-Languages: es, en
+Canonical: https://mineconnect.com.ar/.well-known/security.txt
+Policy: https://mineconnect.com.ar/privacidad.html
