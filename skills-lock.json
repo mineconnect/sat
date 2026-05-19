@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "flux-kontext": {
+      "source": "agentspace-so/runcomfy-agent-skills",
+      "sourceType": "github",
+      "skillPath": "flux-kontext/SKILL.md",
+      "computedHash": "f4bafaf65ed5f1da1defe05e40fbff2a244c1a69408e8b1727e54e746281aaea"
+    },
+    "gpt-image-edit": {
+      "source": "agentspace-so/runcomfy-agent-skills",
+      "sourceType": "github",
+      "skillPath": "gpt-image-edit/SKILL.md",
+      "computedHash": "0e584131d3bb37bdc4a94d073df8d797a0720b6b0d0d34c0131c59cfac901c6b"
+    },
+    "image-edit": {
+      "source": "agentspace-so/runcomfy-agent-skills",
+      "sourceType": "github",
+      "skillPath": "image-edit/SKILL.md",
+      "computedHash": "ebc0443ba11e0d414b16e996d018a856dfcdf1b266270c8b5b277ec04443c0a3"
+    },
+    "image-to-video": {
+      "source": "agentspace-so/runcomfy-agent-skills",
+      "sourceType": "github",
+      "skillPath": "image-to-video/SKILL.md",
+      "computedHash": "0b513e14dfeb425a5288a79b551a7cf101a44b25763f7bd6b588d529f40d48c2"
+    },
+    "nano-banana-2": {
+      "source": "agentspace-so/runcomfy-agent-skills",
+      "sourceType": "github",
+      "skillPath": "nano-banana-2/SKILL.md",
+      "computedHash": "1f8e3c29a2ac938e8f8d874a699ebcd4ed49d604cc3b8ea45d2eeadfc84f8382"
+    },
+    "nano-banana-edit": {
+      "source": "agentspace-so/runcomfy-agent-skills",
+      "sourceType": "github",
+      "skillPath": "nano-banana-edit/SKILL.md",
+      "computedHash": "0eb7f34906319e3a17beaed6778f588e32a430c8bce0e64cdd763cc1372956ea"
+    },
+    "video-edit": {
+      "source": "agentspace-so/runcomfy-agent-skills",
+      "sourceType": "github",
+      "skillPath": "video-edit/SKILL.md",
+      "computedHash": "8db3460bb7f1d42e6f6e4ebf90054b9da161ce71de0a27c1020ba53c937c57cc"
+    }
+  }
+}
