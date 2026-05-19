@@ -1,0 +1,35 @@
+/* TEAM */
+Founder: Facundo Barros Marengo
+Contact: facu [at] mineconnect.com.ar
+WhatsApp: +54 9 383 432-7244
+From: San Fernando del Valle de Catamarca, Argentina
+
+/* THANKS */
+Motorola Solutions — Partner Oficial Radiocomunicaciones
+Hytera — Partner Oficial Argentina
+Cloudflare — Hosting + Pages + WAF
+Supabase — Postgres + Edge Functions
+Anthropic — Claude para automatización
+n8n — Self-hosted automation
+
+/* SITE */
+Last update: 2026/05/19
+Standards: HTML5, CSS3, ES2024, JSON-LD
+Components: Vanilla JS, Leaflet maps, Lucide icons
+Software: Built with Claude Code + AI-assisted development
+Hosting: Cloudflare Pages (apex + www), DNS Cloudflare proxied
+Security: HSTS preload, CSP strict, SSL TLS 1.3, WAF 5 rules, DMARC quarantine
+Language: Spanish (es-AR)
+
+      MMMMMMMM     MMMMMMMM
+      M:::::::M   M:::::::M
+      M::::::::M M::::::::M
+      M:::::::::M::::::::M           MineConnect
+      M::::::::::::::::::M           Tecnología que conecta
+      M:::::M:::M:::M:::M
+      M:::::M M:M M M:::M            mineconnect.com.ar
+      M:::::M  M M  M:::M
+      M:::::M  M M  M:::M
+      M:::::M       M:::M
+      M:::::M       M:::M
+      MMMMMMM       MMMMMMM

@@ -1,0 +1,70 @@
+name: IndexNow ping
+
+# Avisa a Bing/Yandex/Naver de las URLs actualizadas en cada push a master.
+# Trigger: push a master que toque sitio (no docs, no .github).
+# Resultado: re-crawl en minutos en vez de días.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "site/**"
+      - "scripts/build-dist.sh"
+  schedule:
+    # Re-ping semanal de todo el sitemap por las dudas
+    - cron: "23 4 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  INDEXNOW_KEY: dabde1492014411ab9cd70e60dd577a0
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build IndexNow payload from sitemap (XML parser)
+        run: |
+          python3 <<'PY'
+          import json, re, xml.etree.ElementTree as ET
+
+          tree = ET.parse('site/sitemap.xml')
+          root = tree.getroot()
+          ns = {'s': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+
+          urls = sorted({loc.text.strip() for loc in root.findall('s:url/s:loc', ns) if loc.text})
+          host = re.match(r'https?://([^/]+)/', urls[0]).group(1) if urls else 'mineconnect.com.ar'
+
+          payload = {
+            "host": host,
+            "key": "dabde1492014411ab9cd70e60dd577a0",
+            "keyLocation": f"https://{host}/dabde1492014411ab9cd70e60dd577a0.txt",
+            "urlList": urls
+          }
+          with open('/tmp/payload.json', 'w') as f:
+            json.dump(payload, f, indent=2)
+          print(f"host={host}  urls={len(urls)}")
+          for u in urls: print(f"  {u}")
+          PY
+
+      - name: Ping IndexNow (Bing endpoint)
+        run: |
+          echo "→ POST https://api.indexnow.org/IndexNow"
+          curl -sS -X POST "https://api.indexnow.org/IndexNow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -H "Host: api.indexnow.org" \
+            --data @/tmp/payload.json \
+            -w "\nHTTP %{http_code}\n"
+
+      - name: Ping IndexNow (Yandex endpoint, opcional)
+        continue-on-error: true
+        run: |
+          echo "→ POST https://yandex.com/indexnow"
+          curl -sS -X POST "https://yandex.com/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data @/tmp/payload.json \
+            -w "\nHTTP %{http_code}\n"
