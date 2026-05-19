@@ -131,6 +131,58 @@ await fetch("https://mgeukotlgrjyauwgdjxv.supabase.co/functions/v1/leads-submit"
   ```
 - Para restaurar desde backup automático: solicitar via Dashboard support en plan free, o vía CLI en Pro+.
 
+## Monitoring + alerting
+
+### Vista `public._security_dashboard` (service_role)
+
+Snapshot consolidado del estado de seguridad. Consultar con:
+
+```sql
+SELECT row_to_json(d) FROM public._security_dashboard d;
+```
+
+Devuelve: cantidad de tablas/funciones públicas, estado de RLS en `leads`, grants a `anon`/`authenticated`, métricas de leads (total, 24h, 1h, spam), heartbeat del keep-alive, eventos críticos/warn en 24h, cron jobs activos.
+
+### Tabla `public._security_events`
+
+Persiste alertas detectadas por el anomaly check. Solo `service_role` lee/escribe.
+
+```sql
+SELECT severity, kind, occurred_at, detail
+  FROM public._security_events
+ WHERE occurred_at > now() - interval '7 days'
+ ORDER BY occurred_at DESC;
+```
+
+### Anomaly detection automático
+
+Cron `mineconnect_anomaly_check` corre cada 15 minutos y registra alertas si:
+
+| Regla | Severity | Threshold |
+|---|---|---|
+| Burst de leads en 1h | `critical` | > 30 inserts/h |
+| Ratio de spam alto en 24h | `warn` | ≥ 50% spam con ≥ 10 leads |
+| Keep-alive estancado | `critical` | > 12h sin beat |
+
+### Retención
+
+Cron `mineconnect_events_purge` borra eventos > 90 días una vez por día a las 03:42.
+
+### Cron jobs activos (verificar)
+
+```sql
+SELECT jobname, schedule, active FROM cron.job ORDER BY jobname;
+-- mineconnect_anomaly_check  | */15 * * * *
+-- mineconnect_events_purge   | 42 3 * * *
+-- mineconnect_keepalive      | 17 */6 * * *
+```
+
+### Logs de Supabase (Dashboard)
+
+- `Logs → Edge Functions → leads-submit`: ver invocaciones, errores 4xx/5xx.
+- `Logs → Postgres`: queries lentas, errores de RLS, intentos de acceso fallidos.
+- `Logs → API Gateway`: tráfico anómalo, rate-limit hits.
+
 ## Pasos manuales que el dashboard exige (no automatizables vía MCP)
 
 1. **Activar Leaked Password Protection**:
