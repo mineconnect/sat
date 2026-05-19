@@ -1,7 +1,8 @@
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'mc-chat-history';
+  // Chat NO persiste entre cargas — historia solo en memoria de esta página.
+  let HISTORY = [];
   const VOICE_KEY   = 'mc-chat-voice';
   const WA_NUMBER   = '5493834327244';
   const WA_BASE     = `https://wa.me/${WA_NUMBER}?text=`;
@@ -388,13 +389,9 @@
     return (/\/(cursos|servicios)\//.test(location.pathname)) ? '../' : '';
   }
 
-  function loadHistory() {
-    try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY)) || []; }
-    catch { return []; }
-  }
-  function saveHistory(h) {
-    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(h.slice(-30))); } catch {}
-  }
+  function loadHistory() { return HISTORY.slice(); }
+  function saveHistory(h) { HISTORY = h.slice(-30); }
+  function clearHistory() { HISTORY = []; }
 
   function voiceEnabled() {
     return localStorage.getItem(VOICE_KEY) === '1';
@@ -460,15 +457,25 @@
       if (!on) try { window.speechSynthesis.cancel(); } catch {}
     });
 
+    const resetBtn = el('button', {
+      class: 'mc-chat-voice', 'aria-label': 'Limpiar chat', title: 'Limpiar',
+    }, ['🗑']);
+    resetBtn.addEventListener('click', () => {
+      clearHistory();
+      body.innerHTML = '';
+      seedGreeting();
+    });
+
     const header = el('div', { class: 'mc-chat-head' }, [
       el('div', { class: 'mc-chat-avatar' }, [
-        el('img', { src: `${prefix}assets/logo-robot-96.png`, alt: 'MC' }),
+        el('img', { src: `${prefix}assets/logo-robot-96.webp`, alt: 'MC', onerror: function(){this.src=`${prefix}assets/logo-robot-96.png`;} }),
       ]),
       el('div', { class: 'mc-chat-id' }, [
         el('strong', {}, ['MC · Asistente']),
         el('span', { class: 'mc-chat-status' }, ['en línea · responde rápido']),
       ]),
       voiceBtn,
+      resetBtn,
       el('button', { class: 'mc-chat-close', 'aria-label': 'Cerrar', onclick: () => toggle(false) }, ['✕']),
     ]);
 
@@ -485,7 +492,7 @@
       const wrap = el('div', { class: `mc-msg mc-msg-${role}` });
       if (role === 'bot') {
         wrap.appendChild(el('div', { class: 'mc-msg-avatar' }, [
-          el('img', { src: `${prefix}assets/logo-robot-96.png`, alt: '' }),
+          el('img', { src: `${prefix}assets/logo-robot-96.webp`, alt: '', onerror: function(){this.src=`${prefix}assets/logo-robot-96.png`;} }),
         ]));
       }
       const p = el('p', {}, [text]);
@@ -531,10 +538,7 @@
       }
     }
 
-    const history = loadHistory();
-    if (history.length) {
-      for (const m of history) bubble(m.role, m.text);
-    } else {
+    function seedGreeting() {
       const greet = pickGreeting();
       bubble('bot', greet, [
         { label: 'Quiero cotizar', wa: 'Hola, quiero cotizar: ' },
@@ -543,10 +547,26 @@
       ]);
       const h = loadHistory(); h.push({ role: 'bot', text: greet }); saveHistory(h);
     }
+    const history = loadHistory();
+    if (history.length) {
+      for (const m of history) bubble(m.role, m.text);
+    } else {
+      seedGreeting();
+    }
 
     root._send = send;
     root._input = input;
     return root;
+  }
+
+  function picture(prefix, baseName, alt, w, h, extra) {
+    const pic = el('picture');
+    pic.appendChild(el('source', { srcset: `${prefix}assets/${baseName}.webp`, type: 'image/webp' }));
+    const img = el('img', Object.assign({ src: `${prefix}assets/${baseName}.png`, alt }, extra || {}));
+    if (w) img.setAttribute('width', String(w));
+    if (h) img.setAttribute('height', String(h));
+    pic.appendChild(img);
+    return pic;
   }
 
   function buildLauncher() {
@@ -555,7 +575,7 @@
       class: 'mc-launcher', 'aria-label': 'Abrir chat con MC',
       onclick: () => toggle(),
     }, [
-      el('img', { src: `${prefix}assets/logo-robot-96.png`, alt: '' }),
+      picture(prefix, 'logo-robot-96', '', 42, 42),
       el('span', { class: 'mc-launcher-dot' }),
     ]);
   }
@@ -573,54 +593,64 @@
   }
 
   function bindHeroRobot() {
-    const hero = document.querySelector('.hero-logo');
-    if (!hero) return;
-    hero.classList.add('mc-hero-robot');
-    // wrap in a stage so we can compose multiple animations
-    const stage = el('div', { class: 'mc-hero-stage' });
-    hero.parentElement.insertBefore(stage, hero);
-    stage.appendChild(hero);
+    const existing = document.querySelector('.hero-logo');
+    if (!existing) return;
+    const prefix = pathPrefix();
+
+    // Reemplazo el <img> grande estático por una pista de animación
+    const stage = el('div', { class: 'mc-hero-stage', 'aria-label': 'MC, asistente de MineConnect' });
+
+    const walker = el('div', { class: 'mc-walker' });
+    const robotPic = picture(prefix, 'logo-robot-walk', 'MC, asistente de MineConnect', 200, 156);
+    const robotImg = robotPic.querySelector('img');
+    robotImg.classList.add('mc-hero-robot');
+    robotImg.setAttribute('role', 'button');
+    robotImg.setAttribute('tabindex', '0');
+    robotImg.addEventListener('click', () => toggle(true));
+    robotImg.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(true); }
+    });
+    walker.appendChild(robotPic);
+
     const shadow = el('div', { class: 'mc-hero-shadow', 'aria-hidden': 'true' });
-    stage.appendChild(shadow);
 
-    hero.setAttribute('role', 'button');
-    hero.setAttribute('tabindex', '0');
-    hero.setAttribute('aria-label', 'Hablar con MC, asistente de MineConnect');
-    hero.style.cursor = 'pointer';
-    hero.addEventListener('click', () => toggle(true));
-    hero.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(true); } });
-
-    // speech bubble
     const bubble = el('div', { class: 'mc-speech', onclick: () => toggle(true) }, [
       el('span', { class: 'mc-speech-text' }, [SPEECH_PHRASES[0]]),
       el('span', { class: 'mc-speech-tail', 'aria-hidden': 'true' }),
     ]);
-    stage.appendChild(bubble);
 
+    stage.appendChild(bubble);
+    stage.appendChild(walker);
+    stage.appendChild(shadow);
+    existing.parentElement.replaceChild(stage, existing);
+
+    // rotación del bocadillo
     let i = 0;
     setInterval(() => {
       i = (i + 1) % SPEECH_PHRASES.length;
       const t = bubble.querySelector('.mc-speech-text');
+      t.style.transition = 'opacity .25s';
       t.style.opacity = 0;
       setTimeout(() => { t.textContent = SPEECH_PHRASES[i]; t.style.opacity = 1; }, 250);
     }, 5500);
 
-    // hide bubble when chat open
+    // oculta bocadillo cuando el chat está abierto
     const obs = new MutationObserver(() => {
       bubble.style.display = document.body.classList.contains('mc-chat-open') ? 'none' : '';
     });
     obs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-    // trigger a one-shot "salute" animation every 9-13 seconds
-    function salute() {
-      hero.classList.remove('mc-salute', 'mc-jump', 'mc-look-r', 'mc-look-l');
-      const pick = ['mc-salute', 'mc-jump', 'mc-look-r', 'mc-look-l'][Math.floor(Math.random() * 4)];
-      // force reflow so animation restarts
-      void hero.offsetWidth;
-      hero.classList.add(pick);
-      setTimeout(() => hero.classList.remove(pick), 1800);
+    // Personalidades aleatorias cada 7-11s
+    const personalities = ['mc-salute', 'mc-jump', 'mc-spin', 'mc-dance'];
+    function personality() {
+      if (document.hidden) return;
+      personalities.forEach(c => robotImg.classList.remove(c));
+      const pick = personalities[Math.floor(Math.random() * personalities.length)];
+      void robotImg.offsetWidth;
+      robotImg.classList.add(pick);
+      setTimeout(() => robotImg.classList.remove(pick), 1900);
     }
-    setInterval(salute, 9000 + Math.random() * 4000);
+    setInterval(personality, 7000 + Math.random() * 4000);
   }
 
   function init() {
