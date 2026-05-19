@@ -5,7 +5,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:dist": "bash scripts/build-dist.sh",
+    "verify": "bash scripts/verify-security.sh",
+    "verify:prod": "URL=https://www.mineconnect.com.ar bash scripts/verify-security.sh",
+    "csp:hashes": "bash scripts/compute-csp-hashes.sh site | sort -u",
+    "csp:check": "bash -c 'diff <(bash scripts/compute-csp-hashes.sh site | sort -u) <(grep -oE \"\\x27sha256-[A-Za-z0-9+/=]+\\x27\" site/_headers | sort -u)'",
+    "cf:setup": "bash scripts/cloudflare-setup.sh",
+    "audit": "npm audit --audit-level=high",
+    "audit:fix": "npm audit fix",
+    "test": "bash scripts/verify-security.sh"
   },
   "keywords": [],
   "author": "",
