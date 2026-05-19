@@ -250,6 +250,27 @@ Verificado con SQL directo sobre DB:
 - `.github/workflows/codeql.yml` — SAST con `security-extended` + `security-and-quality`.
 - `.github/workflows/security-audit.yml` — `npm audit --audit-level=high` + gitleaks en cada push/PR + diario.
 
+## CSP strict (sin `'unsafe-inline'` en script-src)
+
+A partir de esta versión la CSP `script-src` lista 15 hashes SHA256 de los bloques inline JSON-LD (uno por structured data único) en lugar de `'unsafe-inline'`. Esto cierra el vector de XSS por inyección de `<script>` a pelo.
+
+Mantenimiento:
+
+```bash
+# Cuando edites un JSON-LD o agregues uno nuevo, regenerá los hashes:
+./scripts/compute-csp-hashes.sh site | sort -u
+```
+
+El workflow `csp-hashes-sync.yml` falla el CI si el set de hashes en los 4 backends (`_headers`, `netlify.toml`, `vercel.json`, `site/.htaccess`) no coincide con el computado desde el HTML.
+
+## Verificación local
+
+```bash
+./scripts/verify-security.sh
+```
+
+Corre en orden: `npm audit --audit-level=high`, secret scan (gitleaks o grep), CSP hashes sync, headers de producción (si reachable), event handlers inline, `http://` hardcodeado. Devuelve exit 0 si todo pasa.
+
 ## Próximos refuerzos sugeridos
 
 - Migrar JSON-LD a archivos `.json` cargados como `<script type="application/ld+json" src=...>` o usar nonces, eliminando `'unsafe-inline'` de `script-src`.

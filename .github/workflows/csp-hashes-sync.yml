@@ -1,0 +1,34 @@
+name: CSP hashes sync
+
+on:
+  push:
+    branches: [master, main, rollforward]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compute hashes from inline scripts
+        run: ./scripts/compute-csp-hashes.sh site | sort -u > /tmp/current-hashes.txt
+      - name: Extract hashes from CSP
+        run: |
+          for f in site/_headers netlify.toml vercel.json site/.htaccess; do
+            grep -oE "'sha256-[A-Za-z0-9+/=]+'" "$f" | sort -u > "/tmp/$(basename $f).hashes"
+          done
+      - name: Assert each backend matches computed set
+        run: |
+          fail=0
+          for f in _headers netlify.toml vercel.json .htaccess; do
+            if ! diff -q /tmp/current-hashes.txt "/tmp/$f.hashes" > /dev/null; then
+              echo "::error::CSP hashes desincronizados en $f"
+              echo "--- computed (from HTML) ---"; cat /tmp/current-hashes.txt
+              echo "--- in $f ---"; cat "/tmp/$f.hashes"
+              fail=1
+            fi
+          done
+          exit $fail
