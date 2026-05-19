@@ -629,26 +629,120 @@ button { font-family: inherit; }
 
 
 /* ============== Robot animado + Chat MC ============== */
-@keyframes mc-bob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-8px) rotate(2deg); } }
-@keyframes mc-wave { 0%,60%,100% { transform: translateY(0) rotate(-2deg); } 70% { transform: translateY(-4px) rotate(8deg); } 80% { transform: translateY(-4px) rotate(-6deg); } 90% { transform: translateY(-4px) rotate(8deg); } }
-@keyframes mc-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,138,46,.55); } 100% { box-shadow: 0 0 0 18px rgba(255,138,46,0); } }
+
+/* Idle: respira + balanceo lateral + bobbing vertical, ciclo 12s con variaciones */
+@keyframes mc-breathe {
+  0%   { transform: translateY(0)    rotate(-1.5deg) scale(1);    }
+  12%  { transform: translateY(-6px) rotate( 1.2deg) scale(1.012);}
+  25%  { transform: translateY(-3px) rotate( 2deg)   scale(1.005);}
+  38%  { transform: translateY(-9px) rotate(-1deg)   scale(1.015);}
+  50%  { transform: translateY(-2px) rotate(-2.5deg) scale(1);    }
+  62%  { transform: translateY(-7px) rotate( 0.5deg) scale(1.01); }
+  75%  { transform: translateY(-4px) rotate( 1.8deg) scale(1.008);}
+  88%  { transform: translateY(-8px) rotate(-1.2deg) scale(1.013);}
+  100% { transform: translateY(0)    rotate(-1.5deg) scale(1);    }
+}
+
+/* Saludo enérgico (clase one-shot mc-salute) */
+@keyframes mc-salute-anim {
+  0%   { transform: translateY(0)    rotate(-2deg)  scale(1); }
+  15%  { transform: translateY(-12px) rotate(10deg) scale(1.04); }
+  30%  { transform: translateY(-10px) rotate(-8deg) scale(1.03); }
+  45%  { transform: translateY(-12px) rotate(12deg) scale(1.04); }
+  60%  { transform: translateY(-10px) rotate(-6deg) scale(1.02); }
+  80%  { transform: translateY(-4px)  rotate(3deg)  scale(1.01); }
+  100% { transform: translateY(0)     rotate(-2deg) scale(1); }
+}
+
+/* Salto */
+@keyframes mc-jump-anim {
+  0%   { transform: translateY(0)    scale(1, 1); }
+  20%  { transform: translateY(2px)  scale(1.08, .92); }  /* squash */
+  45%  { transform: translateY(-32px) scale(.94, 1.08); } /* stretch */
+  65%  { transform: translateY(-26px) scale(.96, 1.06); }
+  85%  { transform: translateY(3px)  scale(1.1, .9); }    /* land squash */
+  100% { transform: translateY(0)    scale(1, 1); }
+}
+
+/* Mira a la derecha (skewY + translateX para sensación 3D) */
+@keyframes mc-look-r-anim {
+  0%,100% { transform: translateY(0) rotateY(0) translateX(0); }
+  30%,70% { transform: translateY(-4px) rotateY(18deg) translateX(8px); }
+}
+@keyframes mc-look-l-anim {
+  0%,100% { transform: translateY(0) rotateY(0) translateX(0); }
+  30%,70% { transform: translateY(-4px) rotateY(-18deg) translateX(-8px); }
+}
+
+/* Sombra "respira" sincronizada con el bobbing */
+@keyframes mc-shadow {
+  0%,100% { transform: scaleX(1) translateY(0); opacity: .35; filter: blur(8px); }
+  38%     { transform: scaleX(.78) translateY(0); opacity: .22; filter: blur(6px); }
+  88%     { transform: scaleX(.82) translateY(0); opacity: .25; filter: blur(7px); }
+}
+
+@keyframes mc-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,90,31,.55); } 100% { box-shadow: 0 0 0 18px rgba(255,90,31,0); } }
 @keyframes mc-pop { from { transform: scale(.7) translateY(8px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
 @keyframes mc-slide-in { from { transform: translateY(20px) scale(.96); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+@keyframes mc-bubble-float {
+  0%,100% { transform: translateY(0) rotate(-1deg); }
+  50%     { transform: translateY(-5px) rotate(1deg); }
+}
 
-.mc-hero-robot { animation: mc-bob 4.2s ease-in-out infinite; transition: transform .25s; transform-origin: 50% 90%; }
-.mc-hero-robot:hover { animation: mc-wave 1.4s ease-in-out infinite; }
+/* Stage que envuelve al robot del hero */
+.mc-hero-stage {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  perspective: 600px;
+  margin: 0 auto 28px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.mc-hero-robot {
+  margin: 0 !important;
+  transform-origin: 50% 95%;
+  animation: mc-breathe 6.5s cubic-bezier(.45,.05,.55,.95) infinite;
+  transition: filter .3s;
+  filter: drop-shadow(0 12px 30px rgba(255,90,31,.18)) drop-shadow(0 6px 16px rgba(0,0,0,.4));
+  cursor: pointer;
+  will-change: transform;
+}
+.mc-hero-robot:hover {
+  filter: drop-shadow(0 16px 40px rgba(255,90,31,.35)) drop-shadow(0 8px 20px rgba(0,0,0,.5));
+}
+
+/* one-shot personality animations (added/removed by JS) */
+.mc-hero-robot.mc-salute { animation: mc-salute-anim 1.6s cubic-bezier(.34,1.4,.64,1) 1; }
+.mc-hero-robot.mc-jump   { animation: mc-jump-anim   1.4s cubic-bezier(.36,.07,.19,.97) 1; }
+.mc-hero-robot.mc-look-r { animation: mc-look-r-anim 1.6s ease-in-out 1; }
+.mc-hero-robot.mc-look-l { animation: mc-look-l-anim 1.6s ease-in-out 1; }
+
+/* Sombra debajo del robot */
+.mc-hero-shadow {
+  width: 180px; height: 22px; margin-top: -10px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 70%);
+  border-radius: 50%;
+  animation: mc-shadow 6.5s cubic-bezier(.45,.05,.55,.95) infinite;
+  transform-origin: center;
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .mc-hero-robot, .mc-hero-robot:hover { animation: none; }
+  .mc-hero-robot, .mc-hero-robot:hover,
+  .mc-hero-robot.mc-salute, .mc-hero-robot.mc-jump,
+  .mc-hero-robot.mc-look-r, .mc-hero-robot.mc-look-l,
+  .mc-hero-shadow { animation: none !important; }
 }
 
 .mc-speech {
   display: inline-block; position: relative; cursor: pointer;
-  margin: -8px auto 28px; padding: 12px 18px;
+  margin: 18px auto 0; padding: 12px 18px;
   background: var(--hi); color: #1a0a02;
   border-radius: 18px; font-family: var(--f-mono); font-size: 13px; font-weight: 600;
   letter-spacing: .01em; max-width: 320px; text-align: center;
-  animation: mc-pop .5s ease-out .8s both;
-  box-shadow: 0 6px 24px rgba(255,138,46,.35);
+  animation: mc-pop .5s ease-out .8s both, mc-bubble-float 4s ease-in-out 1.4s infinite;
+  box-shadow: 0 8px 28px rgba(255,90,31,.45), 0 2px 6px rgba(0,0,0,.3);
 }
 .mc-speech-text { display: block; transition: opacity .25s; }
 .mc-speech-tail {
@@ -705,12 +799,14 @@ body.mc-chat-open .mc-chat { display: flex; animation: mc-slide-in .28s cubic-be
 .mc-chat-id strong { display: block; font-size: 14px; color: #fff; }
 .mc-chat-status { display: block; font-size: 11px; color: #2ecc71; margin-top: 2px; }
 .mc-chat-status::before { content: "● "; }
-.mc-chat-close {
+.mc-chat-close, .mc-chat-voice {
   background: rgba(255,255,255,.06); border: 0; color: #f4f4f5;
   width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-  font-size: 14px; transition: background .15s;
+  font-size: 14px; transition: background .15s, transform .15s;
+  display: grid; place-items: center;
 }
-.mc-chat-close:hover { background: rgba(255,255,255,.12); }
+.mc-chat-close:hover, .mc-chat-voice:hover { background: rgba(255,255,255,.14); transform: scale(1.08); }
+.mc-chat-voice { font-size: 16px; }
 
 .mc-chat-body {
   flex: 1; overflow-y: auto; padding: 16px;
@@ -750,8 +846,15 @@ body.mc-chat-open .mc-chat { display: flex; animation: mc-slide-in .28s cubic-be
 .mc-act-wa:hover { background: #25d366; color: #0a0a0b; }
 .mc-act-wa::before { content: "💬 "; }
 
-.mc-typing { font-family: monospace; letter-spacing: 4px; }
-.mc-typing::after { content: ""; }
+.mc-typing {
+  font-family: monospace; letter-spacing: 6px;
+  animation: mc-typing-pulse 1.2s ease-in-out infinite;
+  color: var(--hi); font-size: 14px;
+}
+@keyframes mc-typing-pulse {
+  0%,100% { opacity: .4; }
+  50%     { opacity: 1; }
+}
 
 .mc-chat-form {
   display: flex; gap: 8px; padding: 12px;
