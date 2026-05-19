@@ -124,4 +124,28 @@
         <priority>0.85</priority>
         <changefreq>monthly</changefreq>
     </url>
+    <url>
+        <loc>https://mineconnect.com.ar/blog/radios-motorola-mineria-catamarca-noa</loc>
+        <lastmod>2026-05-19</lastmod>
+        <priority>0.8</priority>
+        <changefreq>monthly</changefreq>
+    </url>
+    <url>
+        <loc>https://mineconnect.com.ar/blog/casos-reales-ia-pymes-argentina-2026</loc>
+        <lastmod>2026-05-19</lastmod>
+        <priority>0.8</priority>
+        <changefreq>monthly</changefreq>
+    </url>
+    <url>
+        <loc>https://mineconnect.com.ar/partners</loc>
+        <lastmod>2026-05-19</lastmod>
+        <priority>0.7</priority>
+        <changefreq>monthly</changefreq>
+    </url>
+    <url>
+        <loc>https://mineconnect.com.ar/casos</loc>
+        <lastmod>2026-05-19</lastmod>
+        <priority>0.85</priority>
+        <changefreq>monthly</changefreq>
+    </url>
 </urlset>
