@@ -594,6 +594,7 @@
 
   // Inyecta el robot CSS puro flotante (vive en TODAS las páginas)
   function injectFloatingRobot() {
+    const prefix = pathPrefix();
     // Si había un robot viejo del hero, lo escondemos (sigue existiendo para no romper layout)
     const oldHero = document.querySelector('.hero-logo, .mc-hero-stage');
     if (oldHero) oldHero.style.display = 'none';
