@@ -601,27 +601,39 @@
     const robot = el('div', { id: 'mc-robot', 'aria-label': 'MC, asistente de MineConnect' }, [
       el('div', { class: 'mc-body', role: 'button', tabindex: '0', onclick: () => toggle(true), onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(true); } } }, [
         // Drones
-        el('div', { class: 'mc-dron', style: 'animation-delay:0s; top: 0; left: 30%;' }),
-        el('div', { class: 'mc-dron', style: 'animation-delay:1.7s; top: 20%; left: 10%;' }),
-        el('div', { class: 'mc-dron', style: 'animation-delay:3.4s; top: 10%; right: 10%;' }),
-        // Sombra
+        el('div', { class: 'mc-dron d1', 'aria-hidden': 'true' }),
+        el('div', { class: 'mc-dron d2', 'aria-hidden': 'true' }),
+        el('div', { class: 'mc-dron d3', 'aria-hidden': 'true' }),
+        // Chispas
+        el('div', { class: 'mc-spark s1', 'aria-hidden': 'true' }),
+        el('div', { class: 'mc-spark s2', 'aria-hidden': 'true' }),
+        el('div', { class: 'mc-spark s3', 'aria-hidden': 'true' }),
+        // Sombra del piso
         el('div', { class: 'mc-floor-shadow', 'aria-hidden': 'true' }),
-        // Casco
+        // Antenas
+        el('div', { class: 'mc-antena izq', 'aria-hidden': 'true' }),
+        el('div', { class: 'mc-antena der', 'aria-hidden': 'true' }),
+        // Casco con linterna
         el('div', { class: 'mc-casco' }, [
-          el('div', { class: 'mc-antena izq', 'aria-hidden': 'true' }),
-          el('div', { class: 'mc-antena der', 'aria-hidden': 'true' }),
           el('div', { class: 'mc-linterna', 'aria-hidden': 'true' }),
-          el('div', { class: 'mc-ojos' }, [
-            el('div', { class: 'mc-ojo' }),
-            el('div', { class: 'mc-ojo' }),
-          ]),
         ]),
-        // Chaleco con M
-        el('div', { class: 'mc-chaleco' }, [
+        // Visera oscura con ojos cyan
+        el('div', { class: 'mc-visera' }, [
+          el('div', { class: 'mc-ojo' }),
+          el('div', { class: 'mc-ojo' }),
+        ]),
+        // Torso con franjas y logo
+        el('div', { class: 'mc-torso' }, [
           el('div', { class: 'mc-logo-m' }, ['M']),
         ]),
-        // Mano saludando
+        // Brazos
+        el('div', { class: 'mc-brazo izq', 'aria-hidden': 'true' }),
+        el('div', { class: 'mc-brazo der', 'aria-hidden': 'true' }),
+        // Mano saludando (encima de brazo izquierdo)
         el('div', { class: 'mc-mano', 'aria-hidden': 'true' }, ['✋']),
+        // Piernas
+        el('div', { class: 'mc-pierna izq', 'aria-hidden': 'true' }),
+        el('div', { class: 'mc-pierna der', 'aria-hidden': 'true' }),
       ]),
     ]);
 

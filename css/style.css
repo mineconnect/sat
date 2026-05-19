@@ -629,159 +629,249 @@ button { font-family: inherit; }
 .course-sidebar .btn + .btn { margin-top: 10px; }
 
 
-/* ============== Robot MC flotante (CSS puro, vive en toda la página) ============== */
+/* ============== Robot MC 3D — CSS puro, walk cycle por toda la pantalla ============== */
 
-:root { --mc-robot-size: 140px; --mc-walk-speed: 38s; }
+:root { --mc-robot-size: 170px; --mc-walk-speed: 35s; }
 
 #mc-robot {
   position: fixed; z-index: 50;
-  bottom: 16px; left: 0;
-  width: var(--mc-robot-size); aspect-ratio: 1;
-  pointer-events: none;
+  bottom: 14px; left: 0;
+  width: var(--mc-robot-size); aspect-ratio: 0.7;
+  pointer-events: none; user-select: none;
   animation: mc-walk-screen var(--mc-walk-speed) linear infinite alternate;
+  will-change: transform;
 }
 #mc-robot .mc-body {
   width: 100%; height: 100%; position: relative;
   cursor: pointer; pointer-events: auto;
-  animation: mc-bounce 1.2s ease-in-out infinite alternate;
+  animation: mc-bounce 0.9s ease-in-out infinite alternate;
   -webkit-tap-highlight-color: transparent;
+  transform-origin: 50% 100%;
 }
-#mc-robot .mc-body:hover { transform: scale(1.05); transition: transform .25s; }
+#mc-robot .mc-body:hover { animation-duration: 0.5s; }
 @keyframes mc-walk-screen {
-  0%   { transform: translateX(0) }
-  45%  { transform: translateX(calc(100vw - var(--mc-robot-size))) scaleX(1) }
-  50%  { transform: translateX(calc(100vw - var(--mc-robot-size))) scaleX(-1) }
-  95%  { transform: translateX(0) scaleX(-1) }
-  100% { transform: translateX(0) scaleX(1) }
+  0%   { transform: translateX(0) scaleX(1); }
+  48%  { transform: translateX(calc(100vw - var(--mc-robot-size))) scaleX(1); }
+  52%  { transform: translateX(calc(100vw - var(--mc-robot-size))) scaleX(-1); }
+  98%  { transform: translateX(0) scaleX(-1); }
+  100% { transform: translateX(0) scaleX(1); }
 }
 @keyframes mc-bounce {
-  0%   { transform: translateY(0) rotate(-1deg) }
-  100% { transform: translateY(-7px) rotate(1deg) }
+  0%   { transform: translateY(0) rotate(-1.5deg); }
+  100% { transform: translateY(-9px) rotate(1.5deg); }
 }
 
-/* Casco con linterna y ojos */
-#mc-robot .mc-casco {
-  width: 78%; height: 55%;
-  background: linear-gradient(180deg, #ffffff 0%, #e6e6e6 100%);
-  border-radius: 22% 22% 30% 30%;
-  margin: 0 auto; position: relative;
-  box-shadow: 0 3px 12px rgba(0,0,0,.18), inset 0 2px 4px rgba(255,255,255,.6);
+/* Antenas con LEDs */
+#mc-robot .mc-antena {
+  position: absolute; top: 0%; width: 2px; height: 11%;
+  background: linear-gradient(180deg, #999 0%, #555 100%);
+  animation: mc-sway 2.2s ease-in-out infinite alternate;
 }
-#mc-robot .mc-linterna {
-  position: absolute; top: 10%; left: 50%;
+#mc-robot .mc-antena.izq { left: 28%; transform-origin: bottom; transform: rotate(-12deg); }
+#mc-robot .mc-antena.der { right: 28%; transform-origin: bottom; transform: rotate(12deg); animation-delay: -1.1s; }
+#mc-robot .mc-antena::before {
+  content: ""; position: absolute; top: -5px; left: -3px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ff9a5f, #ff5a1f 60%, #c63d0f);
+  box-shadow: 0 0 10px #ff5a1f, 0 0 20px rgba(255,90,31,.5);
+  animation: mc-flash 1.5s infinite;
+}
+@keyframes mc-sway {
+  0% { transform: rotate(-12deg); }
+  100% { transform: rotate(-6deg); }
+}
+
+/* Casco: 3D con gradientes metálicos */
+#mc-robot .mc-casco {
+  position: absolute; top: 8%; left: 50%;
   transform: translateX(-50%);
-  width: 26%; aspect-ratio: 1; border-radius: 50%;
-  background: #eaffff;
-  box-shadow: 0 0 14px #48bcff, 0 0 24px rgba(72,188,255,.4);
+  width: 62%; height: 28%;
+  background:
+    radial-gradient(ellipse at 40% 30%, #ffffff 0%, #f0f0f0 35%, #c8c8c8 70%, #999 100%);
+  border-radius: 50% 50% 35% 35% / 60% 60% 40% 40%;
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.25),
+    inset -4px -6px 12px rgba(0,0,0,.15),
+    inset 4px 4px 8px rgba(255,255,255,.7);
+}
+/* Linterna del casco */
+#mc-robot .mc-linterna {
+  position: absolute; top: 18%; left: 50%;
+  transform: translateX(-50%);
+  width: 22%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffffff, #cce8ff 50%, #48bcff 100%);
+  box-shadow:
+    0 0 12px #48bcff,
+    0 0 24px rgba(72,188,255,.5),
+    inset 0 0 4px rgba(255,255,255,.9);
   animation: mc-flash 3s infinite;
 }
-#mc-robot .mc-antena {
-  position: absolute; top: -4%; width: 2px; height: 14%;
-  background: #888;
-}
-#mc-robot .mc-antena.izq { left: 18%; transform: rotate(-18deg); }
-#mc-robot .mc-antena.der { right: 18%; transform: rotate(18deg); }
-#mc-robot .mc-antena::before {
-  content: ""; position: absolute; top: -4px; left: -3px;
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #ff5a1f; box-shadow: 0 0 8px #ff5a1f;
-  animation: mc-flash 1.8s infinite;
-}
-#mc-robot .mc-ojos {
-  position: absolute; bottom: 16%; left: 6%;
-  width: 88%; height: 42%;
-  background: #121212; border-radius: 18px;
+/* Visera oscura debajo del casco */
+#mc-robot .mc-visera {
+  position: absolute; top: 30%; left: 50%;
+  transform: translateX(-50%);
+  width: 70%; height: 16%;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+  border-radius: 40% 40% 10% 10% / 80% 80% 30% 30%;
   display: flex; justify-content: space-around; align-items: center;
+  padding: 0 8%;
+  box-shadow: 0 3px 6px rgba(0,0,0,.4), inset 0 -2px 4px rgba(255,255,255,.1);
 }
 #mc-robot .mc-ojo {
-  width: 28%; aspect-ratio: 1; border-radius: 50%;
-  background: #48d0ff;
-  box-shadow: 0 0 12px #1890ff, inset 0 -2px 4px rgba(255,255,255,.4);
+  width: 36%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #cdf6ff, #48d0ff 40%, #1890ff 90%);
+  box-shadow: 0 0 10px #48d0ff, inset 0 -2px 4px rgba(0,0,0,.3);
   animation: mc-blink 4.2s infinite;
 }
 
-/* Chaleco reflectante */
-#mc-robot .mc-chaleco {
-  width: 64%; height: 38%;
-  background: linear-gradient(180deg, #ff7a40 0%, #ff5a1f 100%);
-  margin: 4px auto; border-radius: 6px;
-  position: relative;
-  box-shadow: 0 2px 8px rgba(255,90,31,.4);
+/* Torso / chaleco con franjas reflectivas */
+#mc-robot .mc-torso {
+  position: absolute; top: 44%; left: 50%;
+  transform: translateX(-50%);
+  width: 55%; height: 32%;
+  background:
+    linear-gradient(180deg, #ff8a4a 0%, #ff5a1f 50%, #d44415 100%);
+  border-radius: 12% 12% 8% 8%;
+  box-shadow:
+    0 4px 10px rgba(255,90,31,.4),
+    inset -3px -4px 8px rgba(0,0,0,.18),
+    inset 3px 3px 6px rgba(255,255,255,.3);
 }
-#mc-robot .mc-chaleco::before, #mc-robot .mc-chaleco::after {
+#mc-robot .mc-torso::before, #mc-robot .mc-torso::after {
   content: ""; position: absolute;
-  width: 70%; height: 3px; left: 15%;
-  background: rgba(255,255,255,.75);
+  left: 8%; width: 84%; height: 4px;
+  background: linear-gradient(90deg, rgba(255,255,255,.4), rgba(255,255,255,.95), rgba(255,255,255,.4));
   border-radius: 2px;
+  box-shadow: 0 0 4px rgba(255,255,255,.6);
 }
-#mc-robot .mc-chaleco::before { top: 22%; }
-#mc-robot .mc-chaleco::after  { bottom: 22%; }
+#mc-robot .mc-torso::before { top: 22%; }
+#mc-robot .mc-torso::after  { bottom: 22%; }
 #mc-robot .mc-logo-m {
   position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   color: white; font-weight: 900;
-  font-size: calc(var(--mc-robot-size) * .19);
+  font-size: calc(var(--mc-robot-size) * .14);
   font-family: var(--f-display, system-ui);
-  text-shadow: 0 2px 4px rgba(0,0,0,.3);
+  text-shadow: 0 2px 4px rgba(0,0,0,.4), 0 0 8px rgba(255,255,255,.3);
+  z-index: 2;
 }
 
-/* Mano saludando con emoji rotativo */
+/* Brazos */
+#mc-robot .mc-brazo {
+  position: absolute; top: 46%;
+  width: 11%; height: 22%;
+  background: linear-gradient(180deg, #e8e8e8 0%, #b0b0b0 100%);
+  border-radius: 40% 40% 20% 20% / 25% 25% 75% 75%;
+  box-shadow: inset -2px -2px 4px rgba(0,0,0,.2), 0 2px 4px rgba(0,0,0,.2);
+}
+#mc-robot .mc-brazo.izq { left: 16%; transform-origin: 50% 0%; animation: mc-arm-swing 0.9s ease-in-out infinite alternate; }
+#mc-robot .mc-brazo.der { right: 16%; transform-origin: 50% 0%; animation: mc-arm-swing 0.9s ease-in-out infinite alternate-reverse; }
+@keyframes mc-arm-swing {
+  0%   { transform: rotate(-12deg); }
+  100% { transform: rotate(12deg); }
+}
+
+/* Mano izquierda con emoji que rota (saluda) */
 #mc-robot .mc-mano {
-  position: absolute; left: 4%; top: 48%;
-  font-size: calc(var(--mc-robot-size) * .18);
-  animation: mc-wave 2.8s ease-in-out infinite alternate;
+  position: absolute; top: 50%; left: 8%;
+  font-size: calc(var(--mc-robot-size) * .14);
+  animation: mc-wave 2.7s ease-in-out infinite alternate;
   transform-origin: bottom center;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.4));
+  z-index: 3;
 }
 @keyframes mc-wave {
-  0%   { transform: rotate(-15deg) }
-  100% { transform: rotate(35deg) }
+  0%   { transform: rotate(-10deg); }
+  100% { transform: rotate(35deg); }
 }
 
-/* Drones orbitando */
-#mc-robot .mc-dron {
-  position: absolute; width: 14px; height: 8px;
-  background: #1a1a1a; border-radius: 3px;
-  opacity: .7;
-  box-shadow: 0 0 4px rgba(0,0,0,.5);
-  animation: mc-fly 6s linear infinite;
+/* Piernas — alternan adelante/atrás para simular caminar */
+#mc-robot .mc-pierna {
+  position: absolute; bottom: 0; width: 14%; height: 24%;
+  background: linear-gradient(180deg, #555 0%, #222 100%);
+  border-radius: 18% 18% 40% 40%;
+  box-shadow: inset -2px -2px 4px rgba(0,0,0,.4), 0 3px 6px rgba(0,0,0,.3);
 }
-#mc-robot .mc-dron::before, #mc-robot .mc-dron::after {
-  content: ""; position: absolute; top: -2px;
-  width: 6px; height: 6px; border-radius: 50%;
-  background: rgba(72,208,255,.6);
-  animation: mc-prop .15s linear infinite;
+#mc-robot .mc-pierna.izq { left: 28%; transform-origin: 50% 0%; animation: mc-step 0.9s ease-in-out infinite alternate; }
+#mc-robot .mc-pierna.der { right: 28%; transform-origin: 50% 0%; animation: mc-step 0.9s ease-in-out infinite alternate-reverse; }
+@keyframes mc-step {
+  0%   { transform: rotate(-14deg); }
+  100% { transform: rotate(14deg); }
 }
-#mc-robot .mc-dron::before { left: -2px; }
-#mc-robot .mc-dron::after  { right: -2px; }
-@keyframes mc-prop {
-  0%,100% { transform: scaleX(1) }
-  50%     { transform: scaleX(.2) }
-}
-@keyframes mc-fly {
-  0%   { transform: translate(0,0) rotate(0deg) }
-  25%  { transform: translate(70px, -50px) rotate(15deg) }
-  50%  { transform: translate(110px, 10px) rotate(-8deg) }
-  75%  { transform: translate(30px, -60px) rotate(10deg) }
-  100% { transform: translate(0,0) rotate(0deg) }
+/* Pie/bota */
+#mc-robot .mc-pierna::after {
+  content: ""; position: absolute; bottom: -2px; left: -2px;
+  width: calc(100% + 8px); height: 18%;
+  background: linear-gradient(180deg, #333 0%, #111 100%);
+  border-radius: 30% 30% 30% 30% / 50% 50% 50% 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,.5);
 }
 
-/* Sombra elíptica que se comprime con el paso */
+/* Sombra elíptica que se comprime con cada paso */
 #mc-robot .mc-floor-shadow {
-  position: absolute; bottom: -6px; left: 50%;
-  width: 80%; height: 12px;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 70%);
+  position: absolute; bottom: -8px; left: 50%;
+  width: 90%; height: 14px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 70%);
   border-radius: 50%; transform: translateX(-50%);
-  animation: mc-shadow-pulse 1.2s ease-in-out infinite alternate;
+  animation: mc-shadow-pulse 0.9s ease-in-out infinite alternate;
   pointer-events: none; z-index: -1;
+  filter: blur(1px);
 }
 @keyframes mc-shadow-pulse {
-  0%   { transform: translateX(-50%) scale(1) }
-  100% { transform: translateX(-50%) scale(.75) }
+  0%   { transform: translateX(-50%) scale(1, 1); opacity: .55; }
+  100% { transform: translateX(-50%) scale(.68, .8); opacity: .35; }
 }
 
-@keyframes mc-blink  { 0%,92%,100% { opacity: 1 } 95% { opacity: .15 } }
-@keyframes mc-flash  { 0%,89%,100% { opacity: 1 } 91% { opacity: .3 } }
+/* Drones con luces parpadeantes */
+#mc-robot .mc-dron {
+  position: absolute; width: 18px; height: 6px;
+  background: linear-gradient(90deg, #333 0%, #111 50%, #333 100%);
+  border-radius: 2px; opacity: .85;
+  box-shadow: 0 2px 4px rgba(0,0,0,.4);
+  animation: mc-fly 7s linear infinite;
+}
+#mc-robot .mc-dron::before, #mc-robot .mc-dron::after {
+  content: ""; position: absolute; top: -3px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(72,208,255,.7), rgba(72,208,255,.1) 70%);
+  animation: mc-prop 0.12s linear infinite;
+}
+#mc-robot .mc-dron::before { left: -3px; }
+#mc-robot .mc-dron::after  { right: -3px; }
+#mc-robot .mc-dron.d1 { top: 5%; left: 65%; animation-delay: 0s; }
+#mc-robot .mc-dron.d2 { top: 18%; left: 10%; animation-delay: 2.3s; }
+#mc-robot .mc-dron.d3 { top: 30%; right: 5%; animation-delay: 4.5s; }
+@keyframes mc-prop {
+  0%,100% { transform: scaleX(1); }
+  50%     { transform: scaleX(.2); }
+}
+@keyframes mc-fly {
+  0%   { transform: translate(0,0) rotate(0deg); }
+  25%  { transform: translate(60px, -45px) rotate(12deg); }
+  50%  { transform: translate(100px, 5px) rotate(-6deg); }
+  75%  { transform: translate(20px, -60px) rotate(8deg); }
+  100% { transform: translate(0,0) rotate(0deg); }
+}
+
+/* Chispas / partículas brillantes */
+#mc-robot .mc-spark {
+  position: absolute; width: 4px; height: 4px;
+  background: radial-gradient(circle, #ffd166 0%, transparent 70%);
+  border-radius: 50%;
+  animation: mc-spark-fly 2.4s ease-out infinite;
+  opacity: 0;
+}
+#mc-robot .mc-spark.s1 { top: 35%; left: 20%; animation-delay: 0s; }
+#mc-robot .mc-spark.s2 { top: 28%; right: 18%; animation-delay: 0.8s; }
+#mc-robot .mc-spark.s3 { top: 42%; right: 35%; animation-delay: 1.6s; }
+@keyframes mc-spark-fly {
+  0%   { opacity: 0; transform: scale(0) translateY(0); }
+  20%  { opacity: 1; transform: scale(1.4) translateY(-6px); }
+  100% { opacity: 0; transform: scale(.3) translateY(-26px); }
+}
+
+@keyframes mc-blink  { 0%,92%,100% { opacity: 1; } 95% { opacity: .15; } }
+@keyframes mc-flash  { 0%,89%,100% { opacity: 1; } 91% { opacity: .3; } }
 
 /* Bocadillo del robot — fijo arriba del robot caminante */
 #mc-speech-balloon {
@@ -822,12 +912,13 @@ body.mc-chat-open #mc-speech-balloon { opacity: 0; pointer-events: none; transit
   #mc-robot .mc-antena::before, #mc-speech-balloon .mc-speech-inner { animation: none !important; }
 }
 
-/* Mobile: robot más chico, drones ocultos */
+/* Mobile: robot más chico, drones+chispas ocultos */
 @media (max-width: 640px) {
-  :root { --mc-robot-size: 95px; --mc-walk-speed: 28s; }
-  #mc-robot .mc-dron { display: none; }
-  #mc-robot { bottom: 12px; }
-  #mc-speech-balloon .mc-speech-inner { font-size: 10.5px; padding: 6px 11px; max-width: 190px; min-width: 110px; }
+  :root { --mc-robot-size: 110px; --mc-walk-speed: 26s; }
+  #mc-robot .mc-dron, #mc-robot .mc-spark { display: none; }
+  #mc-robot { bottom: 10px; }
+  #mc-speech-balloon { width: var(--mc-robot-size); }
+  #mc-speech-balloon .mc-speech-inner { font-size: 10.5px; padding: 6px 11px; max-width: 180px; min-width: 100px; }
 }
 
 /* Bocadillo */
