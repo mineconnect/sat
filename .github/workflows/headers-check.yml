@@ -1,9 +1,6 @@
 name: Headers regression check
 
 on:
-  push:
-    branches: [master, main]
-  pull_request:
   schedule:
     - cron: "33 7 * * *"
   workflow_dispatch:
