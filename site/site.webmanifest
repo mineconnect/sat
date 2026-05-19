@@ -1,0 +1,51 @@
+{
+  "name": "MineConnect",
+  "short_name": "MineConnect",
+  "description": "Tecnología, Radiocomunicaciones e IA en Catamarca. Partner Oficial Motorola y Hytera.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#ff5a1f",
+  "background_color": "#14110f",
+  "lang": "es-AR",
+  "dir": "ltr",
+  "orientation": "portrait-primary",
+  "categories": ["business", "education", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/assets/favicon-256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/logo-robot.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Cotizar proyecto",
+      "short_name": "Cotizar",
+      "url": "/contacto.html"
+    },
+    {
+      "name": "Cursos de IA",
+      "short_name": "Cursos",
+      "url": "/cursos.html"
+    },
+    {
+      "name": "MineConnect SAT",
+      "short_name": "SAT",
+      "url": "/sat.html"
+    }
+  ]
+}
