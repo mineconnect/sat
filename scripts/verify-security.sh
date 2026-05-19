@@ -84,6 +84,39 @@ else
   pass "todos los links son https://"
 fi
 
+# 7) Auditar inline styles (deuda CSP — bloquea migración a script-src estricto)
+echo "-- inline styles"
+STYLE_BLOCKS=0
+for f in $(find site -name "*.html"); do
+  c=$(perl -0777 -ne 'while(/<style[^>]*>(.*?)<\/style>/gs){print "1\n"}' "$f" 2>/dev/null | wc -l | tr -d ' ')
+  STYLE_BLOCKS=$((STYLE_BLOCKS + c))
+done
+STYLE_ATTRS=$(grep -rhoE 'style="[^"]+"' --include='*.html' site/ 2>/dev/null | wc -l | tr -d ' ')
+STYLE_ATTRS=${STYLE_ATTRS:-0}
+# Baseline conocido al momento de medirlo. Si crece, warning.
+BL_BLOCKS=12
+BL_ATTRS=110
+if [ "$STYLE_BLOCKS" -gt "$BL_BLOCKS" ] || [ "$STYLE_ATTRS" -gt "$BL_ATTRS" ]; then
+  warn "inline styles aumentaron — blocks=$STYLE_BLOCKS (BL=$BL_BLOCKS), attrs=$STYLE_ATTRS (BL=$BL_ATTRS). Si CSP migra a strict style-src, esto rompe."
+else
+  pass "inline styles dentro de baseline (blocks=${STYLE_BLOCKS}<=${BL_BLOCKS}, attrs=${STYLE_ATTRS}<=${BL_ATTRS})"
+fi
+
+# 8) Auditar archivos > 5 MB (alertan deploys lentos / costos egress)
+echo "-- archivos grandes"
+LARGE=$(find site -type f -size +5M 2>/dev/null | wc -l | tr -d ' ')
+if [ "$LARGE" -gt 0 ]; then
+  warn "$LARGE archivos > 5MB:"; find site -type f -size +5M -exec ls -lh {} \;
+else
+  pass "ningún archivo > 5MB"
+fi
+
+# 9) Verificar que SECURITY.md y DEPLOY-SECURITY.md existen
+echo "-- docs de seguridad"
+for f in SECURITY.md DEPLOY-SECURITY.md; do
+  [ -f "$f" ] && pass "$f presente" || fail "$f falta"
+done
+
 echo "==================================================="
 if [ $RC -eq 0 ]; then
   printf "${GREEN}OK${NC} — todos los checks pasaron\n"

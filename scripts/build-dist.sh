@@ -13,6 +13,13 @@ mkdir -p "$OUT"
 echo "→ Copiando site/ a dist/"
 cp -R "$ROOT/site/." "$OUT/"
 
+# Auto cache-busting: reemplaza ?v=YYYYMMDDHHMM por el timestamp del build.
+# Garantiza que cada deploy invalida CSS/JS cacheados en browsers.
+NEW_VER=$(date +%Y%m%d%H%M)
+echo "→ Cache-busting → v=$NEW_VER"
+find "$OUT" -name "*.html" -type f -exec \
+  perl -i -pe "s/\?v=\d+/?v=$NEW_VER/g" {} +
+
 # Asegurar que los archivos de hosting están en raíz del dist
 echo "→ Copiando configs de hosting"
 [ -f "$ROOT/netlify.toml" ] && cp "$ROOT/netlify.toml" "$OUT/" || true

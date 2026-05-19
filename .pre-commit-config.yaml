@@ -1,0 +1,47 @@
+# Pre-commit hooks — instalación opcional para devs.
+# Setup: pip install pre-commit && pre-commit install
+# Corre automáticamente antes de cada commit. CI sigue siendo la fuente de verdad.
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=5120]
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: csp-hashes-sync
+        name: CSP hashes ↔ HTML sync
+        entry: bash -c 'diff <(bash scripts/compute-csp-hashes.sh site | sort -u) <(grep -oE "'\''sha256-[A-Za-z0-9+/=]+'\''" site/_headers | sort -u)'
+        language: system
+        files: '^(site/.*\.html|site/_headers|netlify\.toml|vercel\.json|site/\.htaccess)$'
+        pass_filenames: false
+
+      - id: no-event-handlers
+        name: No inline event handlers (rompe CSP estricta)
+        entry: bash -c 'if grep -rnE "on(click|load|submit|change|input|focus|blur|mouseover|keydown|keyup)=" --include="*.html" site/; then echo "::error::inline event handler detected"; exit 1; fi'
+        language: system
+        files: '^site/.*\.html$'
+        pass_filenames: false
+
+      - id: no-http
+        name: No links http:// hardcodeados
+        entry: bash -c 'if grep -rnE "href=\"http://|src=\"http://" --include="*.html" site/; then echo "::error::http:// hardcodeado"; exit 1; fi'
+        language: system
+        files: '^site/.*\.html$'
+        pass_filenames: false
