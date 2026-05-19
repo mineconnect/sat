@@ -1,0 +1,76 @@
+name: Edge functions smoke
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - "supabase/functions/**"
+
+permissions:
+  contents: read
+
+env:
+  EDGE_BASE: https://mgeukotlgrjyauwgdjxv.supabase.co/functions/v1
+  ORIGIN_OK: https://mineconnect.com.ar
+  ORIGIN_BAD: https://evil.example.com
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: leads-submit — payload válido
+        run: |
+          code=$(curl -s -o /tmp/r.txt -w "%{http_code}" -X POST "$EDGE_BASE/leads-submit" \
+            -H 'Content-Type: application/json' -H "Origin: $ORIGIN_OK" \
+            -d '{"nombre":"CI Smoke","email":"smoke@mineconnect.com.ar","mensaje":"Automated CI smoke test - safe to ignore.","_ts":1}')
+          test "$code" = "204" || (echo "::error::leads-submit válido = $code (esperado 204)"; cat /tmp/r.txt; exit 1)
+          echo "OK"
+
+      - name: leads-submit — origin bloqueado
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$EDGE_BASE/leads-submit" \
+            -H 'Content-Type: application/json' -H "Origin: $ORIGIN_BAD" \
+            -d '{"nombre":"x","email":"x@x.com","mensaje":"hola hola"}')
+          test "$code" = "403" || (echo "::error::leads-submit origin bloqueado = $code (esperado 403)"; exit 1)
+          echo "OK"
+
+      - name: leads-submit — honeypot lleno (204 silencioso)
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$EDGE_BASE/leads-submit" \
+            -H 'Content-Type: application/json' -H "Origin: $ORIGIN_OK" \
+            -d '{"nombre":"x","email":"x@x.com","mensaje":"hola","website":"http://spam","_ts":1}')
+          test "$code" = "204" || (echo "::error::honeypot = $code (esperado 204)"; exit 1)
+          echo "OK"
+
+      - name: leads-submit — email inválido
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$EDGE_BASE/leads-submit" \
+            -H 'Content-Type: application/json' -H "Origin: $ORIGIN_OK" \
+            -d '{"nombre":"x","email":"no-email","mensaje":"prueba","_ts":1}')
+          test "$code" = "400" || (echo "::error::email inválido = $code (esperado 400)"; exit 1)
+          echo "OK"
+
+      - name: leads-submit — OPTIONS preflight
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X OPTIONS "$EDGE_BASE/leads-submit" \
+            -H "Origin: $ORIGIN_OK" -H 'Access-Control-Request-Method: POST')
+          test "$code" = "204" || (echo "::error::OPTIONS = $code (esperado 204)"; exit 1)
+          echo "OK"
+
+      - name: csp-report — violación válida
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$EDGE_BASE/csp-report" \
+            -H 'Content-Type: application/csp-report' -H "Origin: $ORIGIN_OK" \
+            -d '{"csp-report":{"document-uri":"https://mineconnect.com.ar/ci","violated-directive":"script-src","blocked-uri":"https://ci-test/x.js"}}')
+          test "$code" = "204" || (echo "::error::csp-report = $code (esperado 204)"; exit 1)
+          echo "OK"
+
+      - name: csp-report — método inválido
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X GET "$EDGE_BASE/csp-report" \
+            -H "Origin: $ORIGIN_OK")
+          test "$code" = "405" || (echo "::error::csp-report GET = $code (esperado 405)"; exit 1)
+          echo "OK"
