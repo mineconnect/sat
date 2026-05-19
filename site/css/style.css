@@ -478,9 +478,9 @@ button { font-family: inherit; }
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity .8s ease, transform .8s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ============== WhatsApp floating ============== */
+/* ============== WhatsApp floating — esquina sup-derecha del viewport bajo, fuera del paso del robot ============== */
 .wa {
-  position: fixed; left: 24px; bottom: 24px; z-index: 40;
+  position: fixed; right: 24px; bottom: 160px; z-index: 40;
   width: 52px; height: 52px; border-radius: 50%;
   background: var(--live); color: var(--bg);
   display: grid; place-items: center;
@@ -488,6 +488,7 @@ button { font-family: inherit; }
   transition: transform .25s;
 }
 .wa:hover { transform: scale(1.08); }
+@media (max-width: 640px) { .wa { bottom: 142px; right: 14px; width: 46px; height: 46px; } }
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }
@@ -628,105 +629,206 @@ button { font-family: inherit; }
 .course-sidebar .btn + .btn { margin-top: 10px; }
 
 
-/* ============== Robot MC: walk cycle + personalidades ============== */
+/* ============== Robot MC flotante (CSS puro, vive en toda la página) ============== */
 
-/* Stage: pista por donde camina el robot */
-.mc-hero-stage {
-  position: relative;
-  width: 100%; max-width: 520px;
-  height: 320px;
-  margin: 0 auto 32px;
-  perspective: 800px;
-  contain: layout paint;
+:root { --mc-robot-size: 140px; --mc-walk-speed: 38s; }
+
+#mc-robot {
+  position: fixed; z-index: 50;
+  bottom: 16px; left: 0;
+  width: var(--mc-robot-size); aspect-ratio: 1;
+  pointer-events: none;
+  animation: mc-walk-screen var(--mc-walk-speed) linear infinite alternate;
 }
-
-/* Carro interno: hace el paseo horizontal */
-.mc-walker {
-  position: absolute; left: 50%; bottom: 18px;
-  width: 200px; transform: translate3d(-50%, 0, 0);
-  animation: mc-patrol 16s ease-in-out infinite;
-  will-change: transform;
-}
-.mc-walker.mc-flip { transform: translate3d(-50%, 0, 0) scaleX(-1); }
-
-@keyframes mc-patrol {
-  0%   { transform: translate3d(-80%, 0, 0); }
-  48%  { transform: translate3d( 80%, 0, 0); }
-  50%  { transform: translate3d( 80%, 0, 0) scaleX(-1); }
-  98%  { transform: translate3d(-80%, 0, 0) scaleX(-1); }
-  100% { transform: translate3d(-80%, 0, 0); }
-}
-
-/* Walk cycle: bobbing vertical + leve tilt alternado (simula pasos) */
-.mc-hero-robot {
-  display: block; width: 100%; height: auto; margin: 0 !important;
-  transform-origin: 50% 100%;
-  animation: mc-walk 0.65s ease-in-out infinite;
-  cursor: pointer;
-  will-change: transform;
+#mc-robot .mc-body {
+  width: 100%; height: 100%; position: relative;
+  cursor: pointer; pointer-events: auto;
+  animation: mc-bounce 1.2s ease-in-out infinite alternate;
   -webkit-tap-highlight-color: transparent;
 }
-@keyframes mc-walk {
-  0%   { transform: translate3d(0,  0, 0) rotate(-2.2deg); }
-  25%  { transform: translate3d(0, -8px, 0) rotate( 1.5deg); }
-  50%  { transform: translate3d(0, -2px, 0) rotate( 2.5deg); }
-  75%  { transform: translate3d(0, -8px, 0) rotate(-1.5deg); }
-  100% { transform: translate3d(0,  0, 0) rotate(-2.2deg); }
+#mc-robot .mc-body:hover { transform: scale(1.05); transition: transform .25s; }
+@keyframes mc-walk-screen {
+  0%   { transform: translateX(0) }
+  45%  { transform: translateX(calc(100vw - var(--mc-robot-size))) scaleX(1) }
+  50%  { transform: translateX(calc(100vw - var(--mc-robot-size))) scaleX(-1) }
+  95%  { transform: translateX(0) scaleX(-1) }
+  100% { transform: translateX(0) scaleX(1) }
+}
+@keyframes mc-bounce {
+  0%   { transform: translateY(0) rotate(-1deg) }
+  100% { transform: translateY(-7px) rotate(1deg) }
 }
 
-/* One-shot personalidades (JS toggles class por 1.6s) */
-.mc-hero-robot.mc-salute { animation: mc-salute 1.6s cubic-bezier(.34,1.4,.64,1) 1; }
-.mc-hero-robot.mc-jump   { animation: mc-jump   1.2s cubic-bezier(.36,.07,.19,.97) 1; }
-.mc-hero-robot.mc-spin   { animation: mc-spin   1.4s ease-in-out 1; }
-.mc-hero-robot.mc-dance  { animation: mc-dance  1.8s ease-in-out 1; }
-
-@keyframes mc-salute {
-  0%   { transform: translate3d(0,0,0) rotate(-2deg)  scale(1); }
-  20%  { transform: translate3d(0,-14px,0) rotate(12deg) scale(1.06); }
-  40%  { transform: translate3d(0,-12px,0) rotate(-10deg) scale(1.05); }
-  60%  { transform: translate3d(0,-14px,0) rotate(14deg) scale(1.07); }
-  80%  { transform: translate3d(0,-6px,0)  rotate(2deg) scale(1.02); }
-  100% { transform: translate3d(0,0,0) rotate(-2deg) scale(1); }
+/* Casco con linterna y ojos */
+#mc-robot .mc-casco {
+  width: 78%; height: 55%;
+  background: linear-gradient(180deg, #ffffff 0%, #e6e6e6 100%);
+  border-radius: 22% 22% 30% 30%;
+  margin: 0 auto; position: relative;
+  box-shadow: 0 3px 12px rgba(0,0,0,.18), inset 0 2px 4px rgba(255,255,255,.6);
 }
-@keyframes mc-jump {
-  0%   { transform: translate3d(0,0,0) scaleX(1) scaleY(1); }
-  15%  { transform: translate3d(0,4px,0) scaleX(1.12) scaleY(.88); }
-  45%  { transform: translate3d(0,-44px,0) scaleX(.92) scaleY(1.1); }
-  70%  { transform: translate3d(0,-36px,0) scaleX(.95) scaleY(1.06); }
-  88%  { transform: translate3d(0,6px,0) scaleX(1.14) scaleY(.86); }
-  100% { transform: translate3d(0,0,0) scaleX(1) scaleY(1); }
-}
-@keyframes mc-spin {
-  0%   { transform: rotateY(0deg) translate3d(0,0,0); }
-  50%  { transform: rotateY(180deg) translate3d(0,-6px,0); }
-  100% { transform: rotateY(360deg) translate3d(0,0,0); }
-}
-@keyframes mc-dance {
-  0%,100% { transform: translate3d(0,0,0) rotate(0); }
-  15%     { transform: translate3d(-10px,-8px,0) rotate(-12deg); }
-  35%     { transform: translate3d(8px,-4px,0) rotate(10deg); }
-  55%     { transform: translate3d(-8px,-10px,0) rotate(-8deg); }
-  75%     { transform: translate3d(10px,-6px,0) rotate(12deg); }
-}
-
-/* Sombra debajo del robot, se comprime con cada paso */
-.mc-hero-shadow {
-  position: absolute; left: 50%; bottom: 4px;
-  width: 140px; height: 16px;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 70%);
-  border-radius: 50%;
+#mc-robot .mc-linterna {
+  position: absolute; top: 10%; left: 50%;
   transform: translateX(-50%);
-  animation: mc-walk-shadow 0.65s ease-in-out infinite;
-  pointer-events: none;
+  width: 26%; aspect-ratio: 1; border-radius: 50%;
+  background: #eaffff;
+  box-shadow: 0 0 14px #48bcff, 0 0 24px rgba(72,188,255,.4);
+  animation: mc-flash 3s infinite;
 }
-@keyframes mc-walk-shadow {
-  0%,100% { transform: translateX(-50%) scale(1, 1);   opacity: .5; }
-  50%     { transform: translateX(-50%) scale(.7, .8); opacity: .3; }
+#mc-robot .mc-antena {
+  position: absolute; top: -4%; width: 2px; height: 14%;
+  background: #888;
+}
+#mc-robot .mc-antena.izq { left: 18%; transform: rotate(-18deg); }
+#mc-robot .mc-antena.der { right: 18%; transform: rotate(18deg); }
+#mc-robot .mc-antena::before {
+  content: ""; position: absolute; top: -4px; left: -3px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #ff5a1f; box-shadow: 0 0 8px #ff5a1f;
+  animation: mc-flash 1.8s infinite;
+}
+#mc-robot .mc-ojos {
+  position: absolute; bottom: 16%; left: 6%;
+  width: 88%; height: 42%;
+  background: #121212; border-radius: 18px;
+  display: flex; justify-content: space-around; align-items: center;
+}
+#mc-robot .mc-ojo {
+  width: 28%; aspect-ratio: 1; border-radius: 50%;
+  background: #48d0ff;
+  box-shadow: 0 0 12px #1890ff, inset 0 -2px 4px rgba(255,255,255,.4);
+  animation: mc-blink 4.2s infinite;
 }
 
-/* Hover: el robot acelera el walk + leve scale */
-.mc-walker:hover .mc-hero-robot { animation-duration: 0.4s; }
-.mc-walker:hover { animation-play-state: paused; }
+/* Chaleco reflectante */
+#mc-robot .mc-chaleco {
+  width: 64%; height: 38%;
+  background: linear-gradient(180deg, #ff7a40 0%, #ff5a1f 100%);
+  margin: 4px auto; border-radius: 6px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(255,90,31,.4);
+}
+#mc-robot .mc-chaleco::before, #mc-robot .mc-chaleco::after {
+  content: ""; position: absolute;
+  width: 70%; height: 3px; left: 15%;
+  background: rgba(255,255,255,.75);
+  border-radius: 2px;
+}
+#mc-robot .mc-chaleco::before { top: 22%; }
+#mc-robot .mc-chaleco::after  { bottom: 22%; }
+#mc-robot .mc-logo-m {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; font-weight: 900;
+  font-size: calc(var(--mc-robot-size) * .19);
+  font-family: var(--f-display, system-ui);
+  text-shadow: 0 2px 4px rgba(0,0,0,.3);
+}
+
+/* Mano saludando con emoji rotativo */
+#mc-robot .mc-mano {
+  position: absolute; left: 4%; top: 48%;
+  font-size: calc(var(--mc-robot-size) * .18);
+  animation: mc-wave 2.8s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+}
+@keyframes mc-wave {
+  0%   { transform: rotate(-15deg) }
+  100% { transform: rotate(35deg) }
+}
+
+/* Drones orbitando */
+#mc-robot .mc-dron {
+  position: absolute; width: 14px; height: 8px;
+  background: #1a1a1a; border-radius: 3px;
+  opacity: .7;
+  box-shadow: 0 0 4px rgba(0,0,0,.5);
+  animation: mc-fly 6s linear infinite;
+}
+#mc-robot .mc-dron::before, #mc-robot .mc-dron::after {
+  content: ""; position: absolute; top: -2px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(72,208,255,.6);
+  animation: mc-prop .15s linear infinite;
+}
+#mc-robot .mc-dron::before { left: -2px; }
+#mc-robot .mc-dron::after  { right: -2px; }
+@keyframes mc-prop {
+  0%,100% { transform: scaleX(1) }
+  50%     { transform: scaleX(.2) }
+}
+@keyframes mc-fly {
+  0%   { transform: translate(0,0) rotate(0deg) }
+  25%  { transform: translate(70px, -50px) rotate(15deg) }
+  50%  { transform: translate(110px, 10px) rotate(-8deg) }
+  75%  { transform: translate(30px, -60px) rotate(10deg) }
+  100% { transform: translate(0,0) rotate(0deg) }
+}
+
+/* Sombra elíptica que se comprime con el paso */
+#mc-robot .mc-floor-shadow {
+  position: absolute; bottom: -6px; left: 50%;
+  width: 80%; height: 12px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 70%);
+  border-radius: 50%; transform: translateX(-50%);
+  animation: mc-shadow-pulse 1.2s ease-in-out infinite alternate;
+  pointer-events: none; z-index: -1;
+}
+@keyframes mc-shadow-pulse {
+  0%   { transform: translateX(-50%) scale(1) }
+  100% { transform: translateX(-50%) scale(.75) }
+}
+
+@keyframes mc-blink  { 0%,92%,100% { opacity: 1 } 95% { opacity: .15 } }
+@keyframes mc-flash  { 0%,89%,100% { opacity: 1 } 91% { opacity: .3 } }
+
+/* Bocadillo del robot — fijo arriba del robot caminante */
+#mc-speech-balloon {
+  position: fixed; z-index: 51;
+  bottom: calc(var(--mc-robot-size) + 28px); left: 0;
+  pointer-events: none;
+  animation: mc-walk-screen var(--mc-walk-speed) linear infinite alternate;
+  width: var(--mc-robot-size);
+  display: flex; justify-content: center;
+}
+#mc-speech-balloon .mc-speech-inner {
+  pointer-events: auto; cursor: pointer;
+  background: var(--hi, #ff5a1f); color: #1a0a02;
+  padding: 8px 14px; border-radius: 16px;
+  font-family: var(--f-mono, monospace); font-size: 11.5px;
+  font-weight: 600; max-width: 240px; min-width: 140px;
+  text-align: center; line-height: 1.3;
+  box-shadow: 0 6px 18px rgba(255,90,31,.4);
+  position: relative;
+  animation: mc-bubble-float 3.2s ease-in-out infinite;
+}
+#mc-speech-balloon .mc-speech-inner::after {
+  content: ""; position: absolute; bottom: -8px; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 8px solid transparent; border-right: 8px solid transparent;
+  border-top: 10px solid var(--hi, #ff5a1f);
+}
+
+body.mc-chat-open #mc-robot,
+body.mc-chat-open #mc-speech-balloon { opacity: 0; pointer-events: none; transition: opacity .2s; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #mc-robot, #mc-speech-balloon { animation: none !important; }
+  #mc-robot .mc-body, #mc-robot .mc-linterna, #mc-robot .mc-ojo,
+  #mc-robot .mc-mano, #mc-robot .mc-dron, #mc-robot .mc-floor-shadow,
+  #mc-robot .mc-antena::before, #mc-speech-balloon .mc-speech-inner { animation: none !important; }
+}
+
+/* Mobile: robot más chico, drones ocultos */
+@media (max-width: 640px) {
+  :root { --mc-robot-size: 95px; --mc-walk-speed: 28s; }
+  #mc-robot .mc-dron { display: none; }
+  #mc-robot { bottom: 12px; }
+  #mc-speech-balloon .mc-speech-inner { font-size: 10.5px; padding: 6px 11px; max-width: 190px; min-width: 110px; }
+}
 
 /* Bocadillo */
 @keyframes mc-pop { from { transform: scale(.7) translateY(8px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }

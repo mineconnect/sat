@@ -592,65 +592,63 @@
     }
   }
 
-  function bindHeroRobot() {
-    const existing = document.querySelector('.hero-logo');
-    if (!existing) return;
-    const prefix = pathPrefix();
+  // Inyecta el robot CSS puro flotante (vive en TODAS las páginas)
+  function injectFloatingRobot() {
+    // Si había un robot viejo del hero, lo escondemos (sigue existiendo para no romper layout)
+    const oldHero = document.querySelector('.hero-logo, .mc-hero-stage');
+    if (oldHero) oldHero.style.display = 'none';
 
-    // Reemplazo el <img> grande estático por una pista de animación
-    const stage = el('div', { class: 'mc-hero-stage', 'aria-label': 'MC, asistente de MineConnect' });
-
-    const walker = el('div', { class: 'mc-walker' });
-    const robotPic = picture(prefix, 'logo-robot-walk', 'MC, asistente de MineConnect', 200, 156);
-    const robotImg = robotPic.querySelector('img');
-    robotImg.classList.add('mc-hero-robot');
-    robotImg.setAttribute('role', 'button');
-    robotImg.setAttribute('tabindex', '0');
-    robotImg.addEventListener('click', () => toggle(true));
-    robotImg.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(true); }
-    });
-    walker.appendChild(robotPic);
-
-    const shadow = el('div', { class: 'mc-hero-shadow', 'aria-hidden': 'true' });
-
-    const bubble = el('div', { class: 'mc-speech', onclick: () => toggle(true) }, [
-      el('span', { class: 'mc-speech-text' }, [SPEECH_PHRASES[0]]),
-      el('span', { class: 'mc-speech-tail', 'aria-hidden': 'true' }),
+    const robot = el('div', { id: 'mc-robot', 'aria-label': 'MC, asistente de MineConnect' }, [
+      el('div', { class: 'mc-body', role: 'button', tabindex: '0', onclick: () => toggle(true), onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(true); } } }, [
+        // Drones
+        el('div', { class: 'mc-dron', style: 'animation-delay:0s; top: 0; left: 30%;' }),
+        el('div', { class: 'mc-dron', style: 'animation-delay:1.7s; top: 20%; left: 10%;' }),
+        el('div', { class: 'mc-dron', style: 'animation-delay:3.4s; top: 10%; right: 10%;' }),
+        // Sombra
+        el('div', { class: 'mc-floor-shadow', 'aria-hidden': 'true' }),
+        // Casco
+        el('div', { class: 'mc-casco' }, [
+          el('div', { class: 'mc-antena izq', 'aria-hidden': 'true' }),
+          el('div', { class: 'mc-antena der', 'aria-hidden': 'true' }),
+          el('div', { class: 'mc-linterna', 'aria-hidden': 'true' }),
+          el('div', { class: 'mc-ojos' }, [
+            el('div', { class: 'mc-ojo' }),
+            el('div', { class: 'mc-ojo' }),
+          ]),
+        ]),
+        // Chaleco con M
+        el('div', { class: 'mc-chaleco' }, [
+          el('div', { class: 'mc-logo-m' }, ['M']),
+        ]),
+        // Mano saludando
+        el('div', { class: 'mc-mano', 'aria-hidden': 'true' }, ['✋']),
+      ]),
     ]);
 
-    stage.appendChild(bubble);
-    stage.appendChild(walker);
-    stage.appendChild(shadow);
-    existing.parentElement.replaceChild(stage, existing);
+    // Bocadillo separado (también animado con mismo timing para "seguir" al robot)
+    const balloon = el('div', { id: 'mc-speech-balloon', 'aria-hidden': 'true' }, [
+      el('div', { class: 'mc-speech-inner', onclick: () => toggle(true) }, [SPEECH_PHRASES[0]]),
+    ]);
 
-    // rotación del bocadillo
+    document.body.appendChild(robot);
+    document.body.appendChild(balloon);
+
+    // Rotar emoji de la mano (saluda, pulgar, laptop, antena)
+    const handIcons = ['✋', '👍', '💻', '📡', '👋', '🤖'];
+    const handEl = robot.querySelector('.mc-mano');
+    setInterval(() => {
+      handEl.textContent = handIcons[Math.floor(Math.random() * handIcons.length)];
+    }, 3200);
+
+    // Rotar frase del bocadillo
+    const inner = balloon.querySelector('.mc-speech-inner');
     let i = 0;
     setInterval(() => {
       i = (i + 1) % SPEECH_PHRASES.length;
-      const t = bubble.querySelector('.mc-speech-text');
-      t.style.transition = 'opacity .25s';
-      t.style.opacity = 0;
-      setTimeout(() => { t.textContent = SPEECH_PHRASES[i]; t.style.opacity = 1; }, 250);
+      inner.style.transition = 'opacity .25s';
+      inner.style.opacity = 0;
+      setTimeout(() => { inner.textContent = SPEECH_PHRASES[i]; inner.style.opacity = 1; }, 250);
     }, 5500);
-
-    // oculta bocadillo cuando el chat está abierto
-    const obs = new MutationObserver(() => {
-      bubble.style.display = document.body.classList.contains('mc-chat-open') ? 'none' : '';
-    });
-    obs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-
-    // Personalidades aleatorias cada 7-11s
-    const personalities = ['mc-salute', 'mc-jump', 'mc-spin', 'mc-dance'];
-    function personality() {
-      if (document.hidden) return;
-      personalities.forEach(c => robotImg.classList.remove(c));
-      const pick = personalities[Math.floor(Math.random() * personalities.length)];
-      void robotImg.offsetWidth;
-      robotImg.classList.add(pick);
-      setTimeout(() => robotImg.classList.remove(pick), 1900);
-    }
-    setInterval(personality, 7000 + Math.random() * 4000);
   }
 
   function init() {
@@ -658,7 +656,7 @@
     launcher = buildLauncher();
     document.body.appendChild(panel);
     document.body.appendChild(launcher);
-    bindHeroRobot();
+    injectFloatingRobot();
 
     if ('speechSynthesis' in window) {
       // load voices async
