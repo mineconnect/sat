@@ -1,0 +1,15 @@
+# Nixpacks config para Railway.
+# El sitio en `site/` ya está pre-generado; no necesita build paso.
+# Solo arrancar el servidor Node mínimo.
+
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["echo 'no install step (sin deps de runtime)'"]
+
+[phases.build]
+cmds = ["echo 'no build step (sitio estático en site/)'"]
+
+[start]
+cmd = "node scripts/serve.js"

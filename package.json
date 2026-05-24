@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
+    "start": "node scripts/serve.js",
     "build": "vite build",
     "build:dist": "bash scripts/build-dist.sh",
     "verify": "bash scripts/verify-security.sh",
